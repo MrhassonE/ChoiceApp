@@ -30,8 +30,6 @@
                                         <th>#</th>
                                         <th>الأسم</th>
                                         <th>البريد الالكتروني</th>
-                                        <th>رقم الهاتف</th>
-                                        <th>الورشة</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -47,23 +45,21 @@
                                                     {{$user->email}}
                                                 </td>
                                                 <td>
-                                                    {{$user->phone}}
-                                                </td>
-                                                <td>
-                                                    @if($user->Workshop)
-                                                        {{$user->Workshop->name}}
-                                                        @else
-                                                        الورشة محذوفة
-                                                    @endif
-                                                </td>
-                                                <td>
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-update'))
-                                                    <a href="{{route('Staff.edit',$user->id)}}" class="text-primary" ><i class="fa fa-pen me-1"></i></a>
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target=".password-{{$user->id}}" class="text-secondary"><i class="fa fa-user-lock m-2"></i></a>
+                                                        @if($user->is_active == 1)
+                                                        <a href="{{route('Staff.edit',$user->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target=".password-{{$user->id}}" class="btn btn-secondary btn-round"><i class="fa fa-user-lock m-2"></i>تغيير الرمز</a>
+                                                        @endif
                                                     @endif
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-delete'))
-                                                    <a href="javascript:;" onclick="DeleteContact({{$user->id}})" class="text-danger"><i class="bx bx-trash"></i></a>
+                                                        @if($user->is_active == 1)
+                                                            <a href="javascript:;" onclick="DisActiveUser({{$user->id}})" class="btn btn-danger btn-round">ايقاف</a>
+                                                        @elseif($user->is_active == 0)
+                                                            <a href="javascript:;" onclick="ActiveUser({{$user->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                                        @endif
+                                                            <a href="javascript:;" onclick="DeleteContact({{$user->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash"></i>حذف</a>
                                                     @endif
+
                                                 </td>
                                             </tr>
                                             @endif
@@ -143,30 +139,11 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">رقم الهاتف</label>
-                                        <input id="phone" required name="phone" maxlength="15" type="tel" class="form-control" placeholder="ادخل رقم الهاتف">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
                                         <label for="">الرمز</label>
                                         <input id="password" required name="password" minlength="6" maxlength="100" type="password" class="form-control" placeholder="ادخل الرمز">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">الورشة</label>
-                                        <select name="workshop" required id="workshop" class="form-control">
-                                            @foreach($workshops as $workshop)
-                                                <option value="{{$workshop->id}}">{{$workshop->name}}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-1">
@@ -257,16 +234,6 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.password[i]}</li>`
                             }
                         }
-                        if (response.responseJSON.errors.phone) {
-                            for(let i = 0; i<response.responseJSON.errors.phone.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.phone[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.workshop) {
-                            for(let i = 0; i<response.responseJSON.errors.workshop.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.workshop[i]}</li>`
-                            }
-                        }
                         if (response.responseJSON.errors.role) {
                             for(let i = 0; i<response.responseJSON.errors.role.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.role[i]}</li>`
@@ -305,9 +272,9 @@
                 },
                 error: function (response) {
                     document.getElementById('errors1').innerHTML = '';
-                    if (response.responseJSON.errors.password) {
-                        for(let i = 0; i<response.responseJSON.errors.password.length;i++){
-                            document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.password[i]}</li>`
+                    if (response.responseJSON.errors.passwordEdit) {
+                        for(let i = 0; i<response.responseJSON.errors.passwordEdit.length;i++){
+                            document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.passwordEdit[i]}</li>`
                         }
                     }
                     swal.hideLoading();
@@ -351,6 +318,97 @@
                                     window.location.reload();
                                 }
                             })
+                        }
+                    })
+                }
+            })
+        }
+
+
+        function ActiveUser(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn bg-success text-white mx-2',
+                    cancelButton: 'btn bg-danger text-white mx-2'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'هل أنت متاكد؟',
+                text: "هل تريد اعاده تفعيل هذا المستخدم!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'الغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    $.ajax({
+                        type: 'post',
+                        url : `/ActiveUser/${id}`,
+                        success : function () {
+                            Swal.fire(
+                                'تم اعاده التفعيل!',
+                                'تم اعاده تفعيل المستخدم بنجاح.',
+                                'success'
+                            ).then((results)=>{
+                                if (results.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
+                        }
+                    })
+                }
+            })
+        }
+
+        function DisActiveUser(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn bg-success text-white mx-2',
+                    cancelButton: 'btn bg-danger text-white mx-2'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'هل أنت متاكد؟',
+                text: "هل تريد الغاء تفعيل هذا المستخدم!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'الغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    $.ajax({
+                        type: 'post',
+                        url : `/DisActiveUser/${id}`,
+                        success : function () {
+                            Swal.fire(
+                                'تم الغاء التفعيل!',
+                                'تم الغاء تفعيل المستخدم بنجاح.',
+                                'success'
+                            ).then((results)=>{
+                                if (results.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
                         }
                     })
                 }

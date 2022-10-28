@@ -27,7 +27,6 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>القسم</th>
-                                                        <th>اللون</th>
                                                         <th>الشعار</th>
                                                         <th></th>
                                                     </tr>
@@ -37,7 +36,7 @@
                                                         <tr>
                                                             <td class="fw-semibold">{{$key + 1}}</td>
                                                             <td>
-                                                                {{$department->title}}
+                                                                {{$department->name}}
                                                             </td>
                                                             <td>
                                                                 <span style="background: {{$department->color}}; height: 10px; width: 20px" class="badge text-white"> </span>
@@ -47,17 +46,16 @@
                                                             </td>
                                                             <td>
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
-                                                                    <button type="button" class="btn btn-dark btn-round">
-                                                                        <a href="{{route('Department.show',$department->id)}}" class="text-light" ><i class="fa tui-full-calendar-popup-detail me-1"></i>التفاصيل</a>
-                                                                    </button>
-                                                                    <button type="button" class="btn btn-primary btn-round">
-                                                                        <a href="{{route('Department.edit',$department->id)}}" class="text-light" ><i class="fa fa-pen me-1"></i>تعديل</a>
-                                                                    </button>
+                                                                    @if($department->is_active == 1)
+                                                                        <a href="{{route('Department.edit',$department->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
+                                                                    @endif
                                                                 @endif
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-delete'))
-                                                                        <button type="button" class="btn btn-danger btn-round">
-                                                                            <a href="javascript:;" onclick="DeleteContact({{$department->id}})" class="text-light"><i class="bx bx-trash"></i>حذف</a>
-                                                                        </button>
+                                                                    @if($department->is_active == 1)
+                                                                        <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" class="btn btn-danger btn-round">ايقاف</a>
+                                                                    @elseif($department->is_active == 0)
+                                                                        <a href="javascript:;" onclick="ActiveUser({{$department->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                                                    @endif
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -98,10 +96,12 @@
                             <div class="row mt-2">
                                 <div class="col-md-5 my-1">
                                     <div class="form-group">
-                                        <label for="">
-                                            لون القسم
-                                        </label>
-                                        <input class="form-control" name="color" type="color" id="color-input-brand">
+                                        <label for="">المدينة</label>
+                                        <select class="form-control"  required name="city_id" id="city_id">
+                                            @foreach($cities as $city)
+                                            <option value="{{$city->name}}">{{$city->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-5 my-1">
@@ -176,23 +176,18 @@
                     error : function (response) {
                         if (response.responseJSON.errors.name) {
                             for(let i = 0; i<response.responseJSON.errors.name.length;i++){
-                                document.getElementById('feedbackname').innerHTML += `<div class="invalid-feedback d-block" >${response.responseJSON.errors.name[i]}</div>`
+                                document.getElementById('errors').innerHTML += `<div class="text-danger" >${response.responseJSON.errors.name[i]}</div>`
+                            }
+                        }
+                        if (response.responseJSON.errors.city_id) {
+                            for(let i = 0; i<response.responseJSON.errors.city_id.length;i++){
+                                document.getElementById('errors').innerHTML += `<div class="text-danger" >${response.responseJSON.errors.city_id[i]}</div>`
                             }
                         }
                         document.getElementById('errors').innerHTML = '';
                         if (response.responseJSON.errors.image) {
                             for(let i = 0; i<response.responseJSON.errors.image.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.image[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.title) {
-                            for(let i = 0; i<response.responseJSON.errors.title.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.title[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.color) {
-                            for(let i = 0; i<response.responseJSON.errors.color.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.color[i]}</li>`
                             }
                         }
                         swal.hideLoading();
@@ -205,7 +200,9 @@
                 })
             }
         });
-        function DeleteContact(id) {
+
+
+        function ActiveUser(id) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn bg-success text-white mx-2',
@@ -215,27 +212,80 @@
             });
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متاكد؟',
-                text: "هل تريد حذف هذا القسم!",
+                text: "هل تريد اعاده تفعيل هذا القسم!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'حذف',
+                confirmButtonText: 'تأكيد',
                 cancelButtonText: 'الغاء'
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url : `/DeleteDepartment/${id}`,
-                        success : function (response) {
+                        url : `/ActiveDepartment/${id}`,
+                        success : function () {
                             Swal.fire(
-                                'تم الحذف!',
-                                'تم حذف القسم بنجاح.',
+                                'تم اعاده التفعيل!',
+                                'تم اعاده تفعيل القسم بنجاح.',
                                 'success'
                             ).then((results)=>{
                                 if (results.isConfirmed) {
                                     window.location.reload();
                                 }
                             })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
+                        }
+                    })
+                }
+            })
+        }
+
+        function DisActiveUser(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn bg-success text-white mx-2',
+                    cancelButton: 'btn bg-danger text-white mx-2'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'هل أنت متاكد؟',
+                text: "هل تريد الغاء تفعيل هذا القسم!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'الغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    $.ajax({
+                        type: 'post',
+                        url : `/DisActiveDepartment/${id}`,
+                        success : function () {
+                            Swal.fire(
+                                'تم الغاء التفعيل!',
+                                'تم الغاء تفعيل القسم بنجاح.',
+                                'success'
+                            ).then((results)=>{
+                                if (results.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
                         }
                     })
                 }

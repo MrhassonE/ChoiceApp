@@ -1,6 +1,13 @@
 <x-appDash-layout>
     <div class="container-fluid">
         <!-- end row -->
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5 class="card-title">سجل النشاطات<span class="text-muted fw-normal ms-2"> ({{$activities->count()}})</span></h5>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="d-flex flex-wrap gap-2 mb-3">
@@ -30,15 +37,6 @@
                                                             <option value="">اختر المستخدم</option>
                                                             @foreach($users  as $user)
                                                                 <option value="{{$user->id}}">{{$user->name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="mt-0">الورشة</label>
-                                                        <select class="form-control" name="workshop" id="workshopFilter">
-                                                            <option value="">اختر الورشة</option>
-                                                            @foreach($workshops  as $workshop)
-                                                                <option value="{{$workshop->id}}">{{$workshop->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>

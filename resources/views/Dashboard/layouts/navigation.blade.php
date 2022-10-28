@@ -13,28 +13,24 @@
         </div>
         <div class="d-flex">
             @auth()
-                <div class="dropdown d-inline-block">
-                    <button type="button" class="btn header-item user text-start d-flex align-items-center" id="page-header-user-dropdown-v"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="d-none d-xl-inline-block ms-2 fw-medium font-size-18">{{\Illuminate\Support\Facades\Auth::user()->name}}</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="top: 0 !important;">
-
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item user text-start d-flex align-items-center" id="page-header-user-dropdown-v"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="d-none d-xl-inline-block ms-2 fw-medium font-size-18">{{\Illuminate\Support\Facades\Auth::user()->name}}</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end pt-0">
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('profile-read'))
+                    <div class="pt-3">
                         <a class="dropdown-item" href="{{ route('Profile') }}">
                             <i class="mdi mdi-face-profile text-muted font-size-16 align-middle me-2"></i>{{ __('عرض الملف الشخصي') }}
                         </a>
-
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                            <i class="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i>{{ __('تسجيل خروج') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-
+                    </div>
+                    @endif
+                    <div class="py-3">
+                        <button type="button" onclick="logout()" class="dropdown-item"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">تسجيل خروج</span></button>
                     </div>
                 </div>
+            </div>
             @endauth
         </div>
     </div>
@@ -49,7 +45,7 @@
             buttonsStyling: false
         });
         swalWithBootstrapButtons.fire({
-            title: 'هل نت متاكد؟',
+            title: 'هل أنت متأكد؟',
             text: "هل تريد تسجيل الخروج!",
             icon: 'warning',
             showCancelButton: true,
@@ -62,7 +58,7 @@
                     type: 'post',
                     url : '{{route('logout')}}',
                     success : function () {
-                        window.location.replace('{{route('dashboard')}}');
+                        window.location.replace('{{route('home')}}');
                     }
                 })
             }

@@ -7,56 +7,61 @@
                     <h5 class="card-title">الخدمات<span class="text-muted fw-normal ms-2"> ({{$services->count()}})</span></h5>
                 </div>
             </div>
-
-            <div class="col-md-12">
-                <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
+        </div>
+        <!-- end row -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('service-create'))
                     <div>
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('service-create'))
-                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء</a>
-                        @endif
+                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة خدمة</a>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row mt-2 d-flex" id="grid-leader">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>العنوان</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($services as $key=>$service)
+                                            <tr>
+                                                <td class="fw-semibold">{{$key + 1}}</td>
+                                                <td>
+                                                    {{$service->title_ar}}
+                                                </td>
+                                                <td>
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('service-update'))
+                                                    <a href="{{route('Services.edit',$service->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
+                                                    @endif
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('service-delete'))
+                                                    <a href="javascript:;" onclick="DeleteContact({{$service->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash"></i>حذف</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- end row -->
-
-        <div class="row mt-2 d-flex" id="grid-leader">
-            @foreach($services as $service)
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <div>
-                                    <img src="{{$service->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-lg rounded-circle img-thumbnail">
-                                </div>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    {{$service->title}}</p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    {{$service->description}}</p>
-                            </div>
-                            <div class="d-flex gap-2 pt-4">
-                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('service-delete'))
-                                <button type="button" onclick="DeleteContact({{$service->id}})" class="btn btn-soft-danger btn-sm w-50"><i class="bx bx-trash me-1"></i> حذف</button>
-                                @endif
-                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('service-update'))
-                                <a href="{{route('Service.edit',$service->id)}}"  class="btn btn-primary btn-sm w-50"><i class="bx bx-pencil me-1"></i> تعديل</a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card -->
-                </div>
-
-            @endforeach
-        </div>
 
         <!--  Extra Large modal example -->
         <div class="modal fade add-new" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="myExtraLargeModalLabel">أضافة خدمة</h5>
@@ -69,25 +74,16 @@
                                 <div class="col-md-12 my-1">
                                     <div class="form-group">
                                         <label for="">العنوان</label>
-                                        <input id="formTitle" maxlength="100" required name="title" type="text" class="form-control" placeholder="ادخل العنوان">
+                                        <textarea name="title_ar" maxlength="500" required class="form-control" cols="20" rows="5"></textarea>
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 my-1">
-                                    <div class="form-group">
-                                        <label for="">الوصف</label>
-                                        <textarea name="description"  required id="" class="form-control" cols="30" rows="10"></textarea>
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">الصورة</label>
-                                        <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
+                                    <div class="form-group" dir="ltr">
+                                        <label for="">Title</label>
+                                        <textarea name="title" maxlength="500" required class="form-control" cols="20" rows="5"></textarea>
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
@@ -140,7 +136,7 @@
                 Swal.showLoading();
                 $.ajax({
                     type: 'post',
-                    url : '{{route('Service.store')}}',
+                    url : '{{route('Services.store')}}',
                     data: formData,
                     contentType:false,
                     processData:false,
@@ -156,20 +152,14 @@
                         })
                     },
                     error: function (response) {
-                        document.getElementById('errors').innerHTML = '';
                         if (response.responseJSON.errors.title) {
                             for(let i = 0; i<response.responseJSON.errors.title.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.title[i]}</li>`
                             }
                         }
-                        if (response.responseJSON.errors.description) {
-                            for(let i = 0; i<response.responseJSON.errors.description.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.description[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.image) {
-                            for(let i = 0; i<response.responseJSON.errors.image.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.image[i]}</li>`
+                        if (response.responseJSON.errors.title_ar) {
+                            for(let i = 0; i<response.responseJSON.errors.title_ar.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.title_ar[i]}</li>`
                             }
                         }
                         swal.hideLoading();
@@ -202,8 +192,8 @@
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url : `/DeleteService/${id}`,
-                        success : function (response) {
+                        url : `/deleteServices/${id}`,
+                        success : function () {
                             Swal.fire(
                                 'تم الحذف!',
                                 'تم حذف الخدمة بنجاح.',
@@ -219,11 +209,9 @@
                             swal.hideLoading();
                             Swal.fire(
                                 'لم يتم اكمال العملية',
-                                `هناك خطأ في المدخلات`,
+                                `هناك خطأ `,
                                 'warning'
-                            ).then(()=>{
-                                window.location.reload();
-                            });
+                            );
                         }
                     })
                 }

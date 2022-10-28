@@ -3,7 +3,7 @@ Template Name: webadmin - Admin & Dashboard Template
 Author: Themesdesign
 Version: 1.0.0
 Website: https://Themesdesign.com/
-City: Themesdesign@gmail.com
+Contact: Themesdesign@gmail.com
 File: Main Css File
 */
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap");
@@ -522,11 +522,10 @@ body[data-layout-mode="dark"] .right-bar {
     z-index: 2; }
 
 .main-content {
-  margin-left: 270px;
-}
+  margin-left: 270px; }
   .main-content .content {
     padding: 0 15px 10px 15px;
-    margin-top: 75px;}
+    margin-top: 75px; }
 
 .sidebar-menu-scroll {
   height: calc(100% - calc(75px + 26px));
@@ -664,8 +663,7 @@ body[data-layout-mode="dark"] .right-bar {
     .vertical-menu .vertical-menu-btn {
       display: none; }
   .main-content {
-    margin-left: 0 !important;
-  }
+    margin-left: 0 !important; }
   body.sidebar-enable .vertical-menu {
     display: block; } }
 

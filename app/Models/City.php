@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory;
-    protected $fillable = ['id','name'];
+    protected $fillable = ['id','name','is_active'];
 
     public function Department(){
         return $this->hasMany(Department::class,'city_id');

@@ -27,15 +27,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">رقم الهاتف</label>
-                                        <input id="phone" maxlength="15" required name="phone" type="tel" value="{{$user->phone}}" class="form-control" placeholder="ادخل رقم الهاتف">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <!-- end card body -->
@@ -133,7 +124,7 @@
                         'success'
                     ).then((result)=>{
                         if(result.isConfirmed) {
-                            window.location.replace('{{route('dashboard')}}')
+                            window.location.replace('{{route('Dashboard')}}')
                         }
                     });
                 },
@@ -147,11 +138,6 @@
                     if (response.responseJSON.errors.email) {
                         for(let i = 0; i<response.responseJSON.errors.email.length;i++){
                             document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.email[i]}</li>`
-                        }
-                    }
-                    if (response.responseJSON.errors.phone) {
-                        for(let i = 0; i<response.responseJSON.errors.phone.length;i++){
-                            document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.phone[i]}</li>`
                         }
                     }
                     swal.hideLoading();
@@ -180,7 +166,7 @@
                         'success'
                     ).then((result)=>{
                         if(result.isConfirmed) {
-                            window.location.replace('{{route('dashboard')}}')
+                            window.location.replace('{{route('Dashboard')}}')
                         }
                     });
                 },
