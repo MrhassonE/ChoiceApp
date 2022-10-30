@@ -34,8 +34,15 @@ Route::middleware('auth')->group(function (){
     Route::post('/ActiveUser/{user}',[\App\Http\Controllers\StaffController::class,'Active'])->name('Staff.Active');
     Route::post('/DisActiveUser/{user}',[\App\Http\Controllers\StaffController::class,'DisActive'])->name('Staff.DisActive');
 
-// General Setting
+// Setting
+    Route::get('/setting',[\App\Http\Controllers\GeneralSettingController::class,'index'])->name('Setting');
     Route::get('/activityLog',[\App\Http\Controllers\ActivityLogController::class,'ActivityLog'])->name('Setting.activityLog');
+    Route::post('/setting/info',[\App\Http\Controllers\GeneralSettingController::class,'SettingInfo'])->name('Setting.info');
+    Route::post('/setting/policyConditions/{setting}',[\App\Http\Controllers\GeneralSettingController::class,'policyConditions'])->name('Setting.policyConditions');
+    Route::post('/setting',[\App\Http\Controllers\GeneralSettingController::class,'update'])->name('Setting.update');
+    Route::post('/setting/email',[\App\Http\Controllers\GeneralSettingController::class,'storeEmail'])->name('Setting.email');
+    Route::post('/setting/contact',[\App\Http\Controllers\GeneralSettingController::class,'updateContact'])->name('Setting.contact');
+
 
 // City
     Route::get('/city',[\App\Http\Controllers\CityController::class,'index'])->name('City');
@@ -81,6 +88,7 @@ Route::middleware('auth')->group(function (){
     Route::get('/Edit-Advertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'edit'])->name('Advertisement.edit');
     Route::post('/Edit-Advertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'update'])->name('Advertisement.update');
     Route::post('/DeleteAdvertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'destroy'])->name('Advertisement.Delete');
+
 
 });
 

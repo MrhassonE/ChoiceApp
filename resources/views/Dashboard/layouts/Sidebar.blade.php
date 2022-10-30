@@ -83,6 +83,14 @@
                     </li>
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
+                    <li class="@if(request()->routeIs('Setting')) mm-active @endif">
+                        <a href="{{route('Setting')}}">
+                            <i class="fa fa-cogs icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">الاعدادات</span>
+                        </a>
+                    </li>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
                     <li class="@if(request()->routeIs('laratrust.roles.index')) mm-active @endif">
                         <a href="{{route('laratrust.roles.index')}}">
                             <i class="fa fa-users-cog icon nav-icon"></i>

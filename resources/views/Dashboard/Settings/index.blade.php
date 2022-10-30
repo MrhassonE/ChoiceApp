@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">معلومات المكتب</h3>
+                        <h3 class="card-title">معلومات الشركة</h3>
                     </div>
                     <div class="card-body">
                         <form method="post" action="" class="needs-validation" novalidate id="infoForm" enctype="multipart/form-data">
@@ -12,35 +12,8 @@
                             <div class="row">
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">اسم المكتب</label>
-                                        <input id="company_name_ar" maxlength="500" value="{{$setting_info->company_name_ar}}" required name="company_name_ar" type="text" class="form-control" placeholder="ادخل الاسم">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Office Name</label>
-                                        <input id="company_name" maxlength="500" value="{{$setting_info->company_name}}" required name="company_name" type="text" class="form-control" placeholder="Enter Name">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1" >
-                                    <div class="form-group">
-                                        <label for="">Slogan (Ar)</label>
-                                        <input id="slogan_ar" maxlength="500" value="{{$setting_info->slogan_ar}}" required name="slogan_ar" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Slogan (En)</label>
-                                        <input id="slogan" maxlength="500" value="{{$setting_info->slogan}}" required name="slogan" type="text" class="form-control" placeholder="">
+                                        <label for="">اسم الشركة</label>
+                                        <input id="company_name" maxlength="500" value="{{$setting_info->company_name}}" required name="company_name" type="text" class="form-control" placeholder="ادخل الاسم">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -48,7 +21,7 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">شعار المكتب</label>
+                                        <label for="">شعار الشركة</label>
                                         <input name="company_logo" accept="image/png, image/jpeg, image/jpg"   type="file" class="form-control">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
@@ -72,6 +45,53 @@
                 </div>
             </div>
         </div>
+
+        <div class="container-fluid">
+            <form action="" id="UpdateForm" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">السياسة والشروط</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="">السياسة والخصوصية</label>
+                                            <textarea name="policy" required maxlength="500" id="" class="form-control" cols="30" rows="10">{{$setting_info->policy}}</textarea>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="">شروط الخدمات</label>
+                                            <textarea name="conditions"  maxlength="500" id="" class="form-control" cols="30" rows="10">{{$setting_info->conditions}}</textarea>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <ul id="errors3"></ul>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 my-1">
+                                            <button type="submit" id="submitUpdateTwo" onclick="SubmitUpdate({{$setting_info->id}})" class="btn btn-primary btn-round">تعديل</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -85,7 +105,7 @@
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
                                         <label for="">البريد الالكتروني </label>
-                                        <input id="email" value="{{$contact->email}}" required name="email" type="email" class="form-control" placeholder="">
+                                        <input id="email" value="{{$setting_info->email}}" required name="email" type="email" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -94,34 +114,7 @@
                                 <div class="col-md-6 my-1">
                                     <div class="form-group" dir="ltr">
                                         <label for="">رقم الهاتف</label>
-                                        <input id="phone" value="{{$contact->phone}}" maxlength="15" required name="phone" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">العنوان</label>
-                                        <input id="formNameAr" value="{{$contact->address_ar}}" required name="address_ar" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Address</label>
-                                        <input id="formNameAr" value="{{$contact->address}}" required name="address" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 my-1" >
-                                    <div class="form-group" dir="ltr">
-                                        <label for="">Location</label>
-                                        <textarea name="location" id="" cols="20" class="form-control" rows="5">{{$contact->location}}</textarea>
+                                        <input id="phone" value="{{$setting_info->phone}}" maxlength="15" required name="phone" type="text" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -129,8 +122,18 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group" dir="ltr">
-                                        <label for="">facebook</label>
-                                        <input id="formNameAr" value="{{$contact->facebook}}"  name="facebook" type="text" class="form-control" placeholder="">
+                                        <label for="">رقم الهاتف الثاني</label>
+                                        <input id="phone2" value="{{$setting_info->phone2}}" maxlength="15" name="phone2" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group" dir="ltr">
+                                        <label for="">Facebook</label>
+                                        <input id="facebook" value="{{$setting_info->facebook}}"  name="facebook" type="text" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -138,8 +141,8 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group" dir="ltr">
-                                        <label for="">instagram</label>
-                                        <input id="formNameAr" value="{{$contact->instagram}}"  name="instagram" type="text" class="form-control" placeholder="">
+                                        <label for="">Instagram</label>
+                                        <input id="instagram" value="{{$setting_info->instagram}}"  name="instagram" type="text" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -147,8 +150,8 @@
                                 </div>
                                 <div class="col-md-6 my-1" >
                                     <div class="form-group"  dir="ltr">
-                                        <label for="">telegram</label>
-                                        <input id="formNameAr" value="{{$contact->telegram}}"  name="telegram" type="text" class="form-control" placeholder="">
+                                        <label for="">Telegram</label>
+                                        <input id="telegram" value="{{$setting_info->telegram}}"  name="telegram" type="text" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -156,8 +159,8 @@
                                 </div>
                                 <div class="col-md-6 my-1" >
                                     <div class="form-group" dir="ltr">
-                                        <label for="">youtube</label>
-                                        <input id="formNameAr" value="{{$contact->youtube}}"  name="youtube" type="text" class="form-control" placeholder="">
+                                        <label for="">What's Up</label>
+                                        <input id="whatsapp" value="{{$setting_info->whatsapp}}"  name="whatsapp" type="text" class="form-control" >
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
                                         </div>
@@ -177,9 +180,85 @@
                 </div>
             </div>
         </div>
-
     </div>
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">معلومات البريد الالكتروني</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="needs-validation" novalidate id="emailForm" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-4 my-1">
+                                    <div class="form-group" dir="ltr">
+                                        <label for="">Driver</label>
+                                        <input id="driver" value="{{$email->driver}}" required name="driver" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-1" dir="ltr">
+                                    <div class="form-group">
+                                        <label for="">Host</label>
+                                        <input id="host" value="{{$email->host}}" required name="host" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-1" dir="ltr">
+                                    <div class="form-group">
+                                        <label for="">Port</label>
+                                        <input id="port" value="{{$email->port}}" required name="port" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-1" dir="ltr">
+                                    <div class="form-group">
+                                        <label for="">Encryption</label>
+                                        <input id="encryption" value="{{$email->encryption}}" required name="encryption" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-1" dir="ltr">
+                                    <div class="form-group">
+                                        <label for="">Email</label>
+                                        <input id="username" value="{{$email->username}}" required name="username" type="email" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-1" dir="ltr">
+                                    <div class="form-group">
+                                        <label for="">Password</label>
+                                        <input id="password" value="" required name="password" type="password" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <ul id="errors2"></ul>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <button type="submit" class="btn btn-primary btn-round">تعديل</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         let validateForm = false;
         (function () {
@@ -202,7 +281,6 @@
                 })
         })();
         $(`#infoForm`).on('submit',function (event) {
-
             event.preventDefault();
             if (validateForm !== false)
             {
@@ -236,21 +314,6 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.company_name[i]}</li>`
                             }
                         }
-                        if (response.responseJSON.errors.company_name_ar) {
-                            for(let i = 0; i<response.responseJSON.errors.company_name_ar.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.company_name_ar[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.slogan) {
-                            for(let i = 0; i<response.responseJSON.errors.slogan.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.slogan[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.slogan_ar) {
-                            for(let i = 0; i<response.responseJSON.errors.slogan_ar.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.slogan_ar[i]}</li>`
-                            }
-                        }
                         Swal.fire(
                             'لم يتم اكمال العملية',
                             `هناك خطأ في المدخلات`,
@@ -260,6 +323,65 @@
                 })
             }
         });
+
+        let validateFormPolicy = false;
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('#infoForm');
+            Array.from(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            validateFormPolicy = false;
+                        }
+                        else {
+                            validateFormPolicy = true;
+
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })();
+
+        function SubmitUpdate(id) {
+            event.preventDefault();
+            let formData = new FormData($('#UpdateForm')[0]);
+            Swal.showLoading();
+            $.ajax({
+                type: 'post',
+                url: `/setting/policyConditions/${id}`,
+                data: formData,
+                contentType:false,
+                processData:false,
+                success : function () {
+                    Swal.fire(
+                        'تم',
+                        'تم تعديل السياسة والشروط بنجاح',
+                        'success'
+                    ).then((result)=>{
+                        if(result.isConfirmed) {
+                            window.location.replace('{{route('Setting')}}')
+                        }
+                    });
+                },
+                error: function (response) {
+                    document.getElementById('errors3').innerHTML = '';
+                    if(response.responseJSON.errors.policy) {
+                        document.getElementById('errors3').innerHTML += `<li>${response.responseJSON.errors.policy}</li>`
+                    }
+                    if(response.responseJSON.errors.conditions) {
+                        document.getElementById('errors3').innerHTML += `<li>${response.responseJSON.errors.conditions}</li>`
+                    }
+                    Swal.fire(
+                        'لم يتم اكمال العملية',
+                        `هناك خطأ في المدخلات`,
+                        'warning'
+                    )
+                }
+            })
+        }
         let validateFormContact = false;
         (function () {
             'use strict';
@@ -357,7 +479,87 @@
                     }
                 })
             }
-        })
+        });
 
+        let validateFormEmail = false;
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('#emailForm');
+            Array.from(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            validateFormEmail = false;
+                        }
+                        else {
+                            validateFormEmail = true;
+
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })();
+        $(`#emailForm`).on('submit',function (event) {
+            event.preventDefault();
+            if (validateFormEmail !== false)
+            {
+                let formData = new FormData($(`#emailForm`)[0]);
+                Swal.showLoading();
+                $.ajax({
+                    type: 'post',
+                    url : `{{route('Setting.email')}}`,
+                    data: formData,
+                    contentType:false,
+                    processData:false,
+                    success : function (response) {
+                        Swal.fire(
+                            'تم تعديل',
+                            'تم تعديل معلومات البريد الالكتروني بنجاح',
+                            'success'
+                        ).then((result)=>{
+                            if (result.isConfirmed) {
+                                window.location.replace('{{route('Setting')}}')
+                            }
+                        })
+                    },
+                    error: function (response) {
+                        document.getElementById('errors1').innerHTML = '';
+                        if (response.responseJSON.errors.driver) {
+                            for(let i = 0; i<response.responseJSON.errors.driver.length;i++){
+                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.driver[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.host) {
+                            for(let i = 0; i<response.responseJSON.errors.host.length;i++){
+                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.host[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.port) {
+                            for(let i = 0; i<response.responseJSON.errors.port.length;i++){
+                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.port[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.username) {
+                            for(let i = 0; i<response.responseJSON.errors.username.length;i++){
+                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.username[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.password) {
+                            for(let i = 0; i<response.responseJSON.errors.password.length;i++){
+                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.password[i]}</li>`
+                            }
+                        }
+                        swal.hideLoading();
+                        Swal.fire(
+                            'لم يتم اكمال العملية',
+                            `هناك خطأ في المدخلات`,
+                            'warning'
+                        );
+                    }
+                })
+            }
+        })
     </script>
 </x-appDash-layout>
