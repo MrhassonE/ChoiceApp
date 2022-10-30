@@ -27,6 +27,7 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>القسم</th>
+                                                        <th>المدينة</th>
                                                         <th>الشعار</th>
                                                         <th></th>
                                                     </tr>
@@ -39,14 +40,15 @@
                                                                 {{$department->name}}
                                                             </td>
                                                             <td>
-                                                                <span style="background: {{$department->color}}; height: 10px; width: 20px" class="badge text-white"> </span>
+                                                                {{$department->City->name}}
                                                             </td>
                                                             <td>
-                                                                <img src="{{$department->img_path}}" class="rounded-circle avatar img-thumbnail" alt="">
+                                                                <img src="{{$department->img_path}}" class=" avatar img-thumbnail" alt="">
                                                             </td>
                                                             <td>
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
                                                                     @if($department->is_active == 1)
+{{--                                                                        <a href="{{route('Department.show',$department->id)}}" class="btn btn-secondary btn-round" >التفاصيل</a>--}}
                                                                         <a href="{{route('Department.edit',$department->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
                                                                     @endif
                                                                 @endif
@@ -55,6 +57,7 @@
                                                                         <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" class="btn btn-danger btn-round">ايقاف</a>
                                                                     @elseif($department->is_active == 0)
                                                                         <a href="javascript:;" onclick="ActiveUser({{$department->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                                                        <a href="javascript:;" onclick="DeleteDepartment({{$department->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -87,7 +90,7 @@
                             <div class="col-md-6 my-1">
                                 <div class="form-group">
                                     <label for="">اسم القسم</label>
-                                    <input id="title" maxlength="100" required name="title" type="text" class="form-control" placeholder="ادخل الاسم">
+                                    <input id="name" maxlength="100" required name="name" type="text" class="form-control" placeholder="ادخل الاسم">
                                     <div class="invalid-feedback">
                                         الرجاء املئ الحقل
                                     </div>
@@ -96,21 +99,21 @@
                             <div class="row mt-2">
                                 <div class="col-md-5 my-1">
                                     <div class="form-group">
-                                        <label for="">المدينة</label>
-                                        <select class="form-control"  required name="city_id" id="city_id">
-                                            @foreach($cities as $city)
-                                            <option value="{{$city->name}}">{{$city->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 my-1">
-                                    <div class="form-group">
                                         <label for="">الصورة</label>
                                         <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 my-1">
+                                    <div class="form-group">
+                                        <label for="">المدينة</label>
+                                        <select class="form-control"  required name="city_id" id="city_id">
+                                            @foreach($cities as $city)
+                                                <option value="{{$city->id}}">{{$city->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12 my-1">
@@ -272,6 +275,51 @@
                             Swal.fire(
                                 'تم الغاء التفعيل!',
                                 'تم الغاء تفعيل القسم بنجاح.',
+                                'success'
+                            ).then((results)=>{
+                                if (results.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
+                        }
+                    })
+                }
+            })
+        }
+
+        function DeleteDepartment(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn bg-success text-white mx-2',
+                    cancelButton: 'btn bg-danger text-white mx-2'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'هل أنت متاكد؟',
+                text: "هل تريد حذف هذا القسم!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'الغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    $.ajax({
+                        type: 'post',
+                        url : `/DeleteDepartment/${id}`,
+                        success : function () {
+                            Swal.fire(
+                                'تم الحذف!',
+                                'تم حذف القسم بنجاح.',
                                 'success'
                             ).then((results)=>{
                                 if (results.isConfirmed) {

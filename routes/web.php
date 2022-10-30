@@ -48,10 +48,34 @@ Route::middleware('auth')->group(function (){
 // Department
     Route::get('/department',[\App\Http\Controllers\DepartmentController::class,'index'])->name('Department');
     Route::post('/department',[\App\Http\Controllers\DepartmentController::class,'store'])->name('Department.store');
+    Route::post('/department/storeCompany/{department}',[\App\Http\Controllers\DepartmentController::class,'storeCompany'])->name('Department.storeCompany');
     Route::get('/Edit-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'edit'])->name('Department.edit');
+    Route::get('/Show-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'show'])->name('Department.show');
     Route::post('/Edit-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'update'])->name('Department.update');
     Route::post('/ActiveDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'Active'])->name('Department.Active');
     Route::post('/DisActiveDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'DisActive'])->name('Department.DisActive');
+    Route::post('/DeleteDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'destroy'])->name('Department.Delete');
+
+
+// Company
+    Route::get('/company',[\App\Http\Controllers\CompanyController::class,'index'])->name('Company');
+    Route::post('/company',[\App\Http\Controllers\CompanyController::class,'store'])->name('Company.store');
+    Route::get('/Edit-Company/{company}',[\App\Http\Controllers\CompanyController::class,'edit'])->name('Company.edit');
+    Route::get('/Show-Company/{company}',[\App\Http\Controllers\CompanyController::class,'show'])->name('Company.show');
+    Route::post('/Edit-Company/{company}',[\App\Http\Controllers\CompanyController::class,'update'])->name('Company.update');
+    Route::post('/Edit-CompanyEvaluation/{company}',[\App\Http\Controllers\CompanyController::class,'CompanyEvaluation'])->name('Company.CompanyEvaluation');
+    Route::post('/storeImage-Company/{company}',[\App\Http\Controllers\CompanyController::class,'storeImage'])->name('Company.storeImage');
+    Route::post('/deleteImage-Company/{image}',[\App\Http\Controllers\CompanyController::class,'deleteImage'])->name('Company.StoreImage');
+    Route::post('/ActiveCompany/{company}',[\App\Http\Controllers\CompanyController::class,'Active'])->name('Company.Active');
+    Route::post('/DisActiveCompany/{company}',[\App\Http\Controllers\CompanyController::class,'DisActive'])->name('Company.DisActive');
+    Route::post('/DeleteCompany/{company}',[\App\Http\Controllers\CompanyController::class,'destroy'])->name('Company.Delete');
+
+// Advertisement
+    Route::get('/advertisement',[\App\Http\Controllers\AdvertisementController::class,'index'])->name('Advertisement');
+    Route::post('/advertisement',[\App\Http\Controllers\AdvertisementController::class,'store'])->name('Advertisement.store');
+    Route::get('/Edit-Advertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'edit'])->name('Advertisement.edit');
+    Route::post('/Edit-Advertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'update'])->name('Advertisement.update');
+    Route::post('/DeleteAdvertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'destroy'])->name('Advertisement.Delete');
 
 });
 

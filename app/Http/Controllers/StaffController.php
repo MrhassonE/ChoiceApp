@@ -44,6 +44,7 @@ class StaffController extends Controller
         ]);
 
         $staff = new User([
+            'id'=>rand(100000,999999),
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),

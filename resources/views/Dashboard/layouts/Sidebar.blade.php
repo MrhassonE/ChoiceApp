@@ -50,6 +50,30 @@
                         </a>
                     </li>
                 @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-read'))
+                    <li class="@if(request()->routeIs('Department*')) mm-active @endif">
+                        <a href="{{route('Department')}}">
+                            <i class="fa fa-plane-departure icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">الاقسام</span>
+                        </a>
+                    </li>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-read'))
+                    <li class="@if(request()->routeIs('Company*')) mm-active @endif">
+                        <a href="{{route('Company')}}">
+                            <i class="fa fa-compass icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">الشركات</span>
+                        </a>
+                    </li>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-read'))
+                    <li class="@if(request()->routeIs('Advertisement*')) mm-active @endif">
+                        <a href="{{route('Advertisement')}}">
+                            <i class="fa fa-ad icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">الأعلانات</span>
+                        </a>
+                    </li>
+                @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
                     <li class="@if(request()->routeIs('Setting.ActivityLog')) mm-active @endif">
                         <a class="active" href="{{route('Setting.activityLog')}}">

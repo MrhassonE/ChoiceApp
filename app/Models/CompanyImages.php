@@ -11,7 +11,7 @@ class CompanyImages extends Model
     protected $fillable = ['id','image','company_id'];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {
-        return asset('storage/CompanyImages/'.$this->image);
+        return asset('storage/Company/'.$this->image);
     }
 
     public function Company(){

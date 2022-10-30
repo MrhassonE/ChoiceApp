@@ -19,7 +19,7 @@ class CityController extends Controller
     }
 
     public function index(){
-        $cities = City::all();
+        $cities = City::orderByDesc('created_at')->get();
         return view('Dashboard.City.index',compact('cities'));
     }
 
@@ -28,6 +28,7 @@ class CityController extends Controller
             'name'=>'required|max:100',
         ]);
         $city = City::create([
+            'id'=>rand(100000,999999),
             'name'=>$request->name
         ]);
 
@@ -49,15 +50,15 @@ class CityController extends Controller
     }
     public function Active(City $city){
 
+        $city->update(['is_active'=>1]);
         $text = 'تم تفعيل المدينة '.$city->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
-        $city->update(['is_active'=>1]);
     }
     public function DisActive(City $city){
 
+        $city->update(['is_active'=>0]);
         $text = 'تم ايقاف المدينة '.$city->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
-        $city->update(['is_active'=>0]);
     }
 
 }

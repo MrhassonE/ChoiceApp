@@ -3,79 +3,125 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <h5 class="card-title">الشركات<span class="text-muted fw-normal ms-2"> ({{$department->Company->count()}})</span></h5>
+                    <h5 class="card-title">الشركات<span class="text-muted fw-normal ms-2"> ({{$companies->count()}})</span></h5>
                 </div>
             </div>
-
-            <div class="row">
-                <h3 class="my-2"> قسم {{$department->name}}</h3>
-            </div>
-            <div class="col-md-12">
-                <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
+        </div>
+        <div class="row">
+            <div class="col-md-6" >
+                <div class="d-flex flex-wrap align-items-start justify-content-start gap-2 mb-3">
                     <div>
                         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-create'))
-                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء شركة</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء شركة</a>
                         @endif
                     </div>
-                </div>
-                <div>
-                    <a href="{{route('Department')}}" class="btn btn-secondary btn-round"><i class="bx bx-right-arrow-alt me-1"></i>رجوع</a>
                 </div>
             </div>
         </div>
         <!-- end row -->
+
         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-read'))
-        <div class="row mt-2 d-flex" id="grid-leader">
-            @foreach($companies as $co)
-                <div class="col-xl-4 col-sm-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <div>
-                                    <img src="{{$co->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xl img-thumbnail">
+            <div class="col-md-6">
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <div>
+                        <a href="#" data-bs-toggle="modal" data-bs-target=".filter" class="btn btn-primary"><i class="bx bx-filter me-1"></i>فرز حسب</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade filter" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myExtraLargeModalLabel">فرز حسب</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{route('Company')}}" method="get" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-12 my-1">
+                                        <div class="form-group">
+                                            <label class="">القسم</label>
+                                            <select class="form-control" required name="dep" id="depFilter">
+                                                <option value="">اختر القسم</option>
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-read'))
+                                                @foreach($departments  as $department)
+                                                    <option @if(request()->dep == $department->id) selected @endif value="{{$department->id}}">{{$department->name}}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 my-3">
+                                        <button id="submitButton" type="submit" class=" btn btn-primary btn-round">فرز</button>
+                                        <button type="reset" onclick="this.closest('form').reset();window.location.replace('{{route('Company')}}')" class="btn btn-primary">عرض الكل</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div class="row mt-2 d-flex" id="grid-leader">
+                @foreach($companies as $co)
+                    <div class="col-xl-4 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center">
+                                    <div>
+                                        <img src="{{$co->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xl img-thumbnail">
+                                    </div>
+                                </div>
+                                <div class="mt-3 pt-1">
+                                    <p class="mb-0 mt-2 text-black">
+                                        القسم: {{$co->Department->name}}
+                                    </p>
+                                </div>
+                                <div class="mt-3 pt-1">
+                                    <p class="mb-0 mt-2">
+                                        الاسم: {{$co->name}}
+                                    </p>
+                                </div>
+                                <div class="mt-3 pt-1">
+                                    <p class="mb-0 mt-2">
+                                        البريد الالكتروني: {{$co->email}}
+                                    </p>
+                                </div>
+                                <div class="mt-3 pt-1">
+                                    <p class="mb-0 mt-2">
+                                        رقم الهاتف: {{$co->phone}}
+                                    </p>
+                                </div>
+                                <div class="mt-3 pt-1">
+                                    <p class="mb-0 mt-2">
+                                        العنوان: {{$co->address}}
+                                    </p>
+                                </div>
+                                <div class="d-flex gap-2 pt-4">
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
+                                        @if($co->is_active == 1)
+                                        <a href="{{route('Company.show',$co->id)}}"  class="btn btn-secondary">التفاصيل</a>
+                                        <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
+                                        @endif
+                                    @endif
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
+                                        @if($co->is_active == 1)
+                                            <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" class="btn btn-danger btn-round">ايقاف</a>
+                                        @elseif($co->is_active == 0)
+                                            <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                            <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    الاسم: {{$co->name}}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    البريد الالكتروني: {{$co->email}}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    رقم الهاتف: {{$co->phone}}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    العنوان: {{$co->address}}
-                                </p>
-                            </div>
-                            <div class="d-flex gap-2 pt-4">
-                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
-                                    @if($co->is_active == 1)
-                                        <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" class="btn btn-danger btn-round">ايقاف</a>
-                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                            <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
-                                        @endif
-                                    @elseif($co->is_active == 0)
-                                        <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
-                                    @endif
-                                @endif
-                            </div>
                         </div>
+                        <!-- end card -->
                     </div>
-                    <!-- end card -->
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
         @endif
 
-        <!--  Extra Large modal example -->
+    <!--  Extra Large modal example -->
         <div class="modal fade add-new" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
@@ -106,7 +152,30 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 my-1">
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <label for="">القسم</label>
+                                        <select class="form-control" required name="department_id" id="department_id">
+                                            @foreach($departments as $department)
+                                            <option value="{{$department->id}}">{{$department->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <label for="">الصورة</label>
+                                        <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 my-1">
                                     <div class="form-group">
                                         <label for="">الريد الالكتروني</label>
                                         <input id="email" maxlength="100" required name="email" type="email" class="form-control" placeholder="ادخل الريد الالكتروني">
@@ -115,19 +184,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 my-1">
+                                <div class="col-md-6 my-1">
                                     <div class="form-group">
                                         <label for="">رقم الهاتف</label>
                                         <input id="phone" maxlength="20" required name="phone" type="text" class="form-control" placeholder="ادخل رقم الهاتف">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1">
-                                    <div class="form-group">
-                                        <label for="">الصورة</label>
-                                        <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
@@ -186,8 +246,7 @@
         </div><!-- /.modal -->
 
     </div>
-    <script >
-
+    <script>
         let validateForm = false;
         (function () {
             'use strict';
@@ -218,7 +277,7 @@
                 Swal.showLoading();
                 $.ajax({
                     type: 'post',
-                    url : '{{route('Department.storeCompany',$department->id)}}',
+                    url : '{{route('Company.store')}}',
                     data: formData,
                     contentType:false,
                     processData:false,
@@ -278,6 +337,11 @@
                         if (response.responseJSON.errors.whatsapp) {
                             for(let i = 0; i<response.responseJSON.errors.whatsapp.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.whatsapp[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.department_id) {
+                            for(let i = 0; i<response.responseJSON.errors.department_id.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.department_id[i]}</li>`
                             }
                         }
                         swal.hideLoading();
@@ -381,6 +445,49 @@
                 }
             })
         }
-
+        function DeleteCompany(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn bg-success text-white mx-2',
+                    cancelButton: 'btn bg-danger text-white mx-2'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'هل أنت متاكد؟',
+                text: "هل تريد حذف هذه الشركة!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'الغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    $.ajax({
+                        type: 'post',
+                        url : `/DeleteCompany/${id}`,
+                        success : function () {
+                            Swal.fire(
+                                'تم الحذف!',
+                                'تم حذف الشركة بنجاح.',
+                                'success'
+                            ).then((results)=>{
+                                if (results.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
+                        }
+                    })
+                }
+            })
+        }
     </script>
 </x-appDash-layout>

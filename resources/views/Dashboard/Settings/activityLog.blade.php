@@ -36,7 +36,7 @@
                                                         <select class="form-control" name="user" id="userFilter">
                                                             <option value="">اختر المستخدم</option>
                                                             @foreach($users  as $user)
-                                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                                                <option @if(request()->user == $user->id) selected @endif value="{{$user->id}}">{{$user->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>

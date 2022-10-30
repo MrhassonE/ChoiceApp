@@ -8,12 +8,15 @@ return [
 
     'Department' => 'الأقسام',
     'Department.edit' => 'تعديل القسم',
+    'Department.show' => 'الشركات',
 
-    'News' => 'الأخبار',
-    'News.edit' => 'تعديل معومات الخبر',
-    'News.show' => 'اضافة صور للخبر',
-    'Services' => 'الخدمات',
-    'Services.edit' => 'تعديل معومات الخدمة',
+    'Company' => 'الشركات',
+    'Company.edit' => 'تعديل الشركة',
+    'Company.show' => 'تفاصيل الشركة',
+
+    'Advertisement' => 'الأعلانات',
+    'Advertisement.edit' => 'تعديل الأعلان',
+
     'Setting' => 'الاعدادات',
 
     'Staff' => 'المستخدمين',

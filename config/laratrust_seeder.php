@@ -15,6 +15,10 @@ return [
         'administrator' => [
             'users' => 'c,r,u,d',
             'city' => 'c,r,u,d',
+            'department' => 'c,r,u,d',
+            'company' => 'c,r,u,d',
+            'advertisement' => 'c,r,u,d',
+            'image' => 'c,r,d',
             'profile' => 'r,u'
         ],
         'admin' => [

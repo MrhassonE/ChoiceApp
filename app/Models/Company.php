@@ -20,7 +20,9 @@ class Company extends Model
         'telegram',
         'whatsapp',
         'department_id',
-        'city_id'
+        'city_id',
+        'is_active',
+        'evaluation',
     ];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {
@@ -36,4 +38,6 @@ class Company extends Model
     public function City(){
         return $this->belongsTo(City::class,'city_id');
     }
+
+
 }

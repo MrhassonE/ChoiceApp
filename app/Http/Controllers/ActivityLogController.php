@@ -17,9 +17,9 @@ class ActivityLogController extends Controller
         })->when($request->start, function ($start) use ($request) {
             return $start->where('created_at','>=', $request->start);
         })
-            ->when($request->end, function ($end) use ($request) {
-                return $end->where('created_at','<=', $request->end);
-            })->get();
+        ->when($request->end, function ($end) use ($request) {
+            return $end->where('created_at','<=', $request->end);
+        })->get();
 
         return view('Dashboard.Settings.activityLog',compact('activities','users'));
     }

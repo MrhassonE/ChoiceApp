@@ -11,25 +11,32 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="">اسم القسم</label>
-                                <input id="title" value="{{$department->title}}" maxlength="100" required name="title" type="text" class="form-control" placeholder="ادخل الاسم">
+                                <input id="name" value="{{$department->name}}" maxlength="100" required name="name" type="text" class="form-control" placeholder="ادخل الاسم">
                                 <div class="invalid-feedback">
                                     الرجاء املئ الحقل
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5 my-1">
-                                    <label for="">
-                                         لون الخلفية
-                                    </label>
-                                    <input class="form-control" name="color" type="color" value="{{$department->color}}" id="color-input-brand">
-                                </div>
                                 <div class="col-md-7 my-1">
                                     <div class="form-group">
                                         <label for="">الصورة</label>
-                                        <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
+                                        <input name="image" type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
+                                    </div>
+                                    <div class="img-thumbnail my-3 bg-dark" style="width: 100px;">
+                                        <img class="img-fluid" src="{{$department->img_path}}" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-5 my-1">
+                                    <div class="form-group">
+                                        <label for="">المدينة</label>
+                                        <select class="form-control"  required name="city_id" id="city_id">
+                                            @foreach($cities as $city)
+                                                <option value="{{$city->id}}" @if($department->city_id == $city->id) selected @endif>{{$city->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -98,17 +105,11 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.image[i]}</li>`
                             }
                         }
-                        if (response.responseJSON.errors.title) {
-                            for(let i = 0; i<response.responseJSON.errors.title.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.title[i]}</li>`
+                        if (response.responseJSON.errors.name) {
+                            for(let i = 0; i<response.responseJSON.errors.name.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.name[i]}</li>`
                             }
                         }
-                        if (response.responseJSON.errors.color) {
-                            for(let i = 0; i<response.responseJSON.errors.color.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.color[i]}</li>`
-                            }
-                        }
-                        swal.hideLoading();
                         Swal.fire(
                             'لم يتم اكمال العملية',
                             `هناك خطأ في المدخلات`,
