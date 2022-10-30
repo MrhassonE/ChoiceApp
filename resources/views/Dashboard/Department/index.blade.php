@@ -49,15 +49,21 @@
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
                                                                     @if($department->is_active == 1)
 {{--                                                                        <a href="{{route('Department.show',$department->id)}}" class="btn btn-secondary btn-round" >التفاصيل</a>--}}
-                                                                        <a href="{{route('Department.edit',$department->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
+                                                                        <a href="{{route('Department.edit',$department->id)}}" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
                                                                     @endif
+                                                                    @if($department->is_main ==0)
+                                                                        <a href="javascript:;" onclick="MainSection({{$department->id}})" class="mx-2 btn btn-soft-success btn-round">اضافة الى القائمة الرئيسية</a>
+                                                                    @elseif($department->is_main ==1)
+                                                                        <a href="javascript:;" onclick="MainSection({{$department->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من القائمة الرئيسية</a>
+                                                                    @endif
+
                                                                 @endif
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-delete'))
                                                                     @if($department->is_active == 1)
-                                                                        <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" class="btn btn-danger btn-round">ايقاف</a>
+                                                                        <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" class="mx-2 btn btn-danger btn-round">ايقاف</a>
                                                                     @elseif($department->is_active == 0)
-                                                                        <a href="javascript:;" onclick="ActiveUser({{$department->id}})" class="btn btn-success btn-round">تفعيل</a>
-                                                                        <a href="javascript:;" onclick="DeleteDepartment({{$department->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+                                                                        <a href="javascript:;" onclick="ActiveUser({{$department->id}})" class="mx-2 btn btn-success btn-round">تفعيل</a>
+                                                                        <a href="javascript:;" onclick="DeleteDepartment({{$department->id}})" class="mx-2 btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -336,6 +342,33 @@
                             );
                         }
                     })
+                }
+            })
+        }
+
+        function MainSection(id) {
+            Swal.showLoading();
+            $.ajax({
+                type: 'post',
+                url : `/MainSection-Department/${id}`,
+                success : function (response) {
+                    Swal.fire(
+                        response.title,
+                        response.desc,
+                        'success'
+                    ).then((results)=>{
+                        if (results.isConfirmed) {
+                            window.location.reload();
+                        }
+                    })
+                },
+                error: function () {
+                    swal.hideLoading();
+                    Swal.fire(
+                        'لم يتم اكمال العملية',
+                        `هناك خطأ`,
+                        'warning'
+                    );
                 }
             })
         }

@@ -17,7 +17,7 @@ class CompanyController extends Controller
     {
         $this->middleware('permission:company-read')->only('index');
         $this->middleware('permission:company-create')->only('store');
-        $this->middleware('permission:company-update')->only('edit','update','show','CompanyEvaluation');
+        $this->middleware('permission:company-update')->only('edit','update','show','CompanyEvaluation','NewSection','MostViewedSection','mainSection');
         $this->middleware('permission:company-delete')->only('DisActive','Active','destroy');
         $this->middleware('permission:image-create')->only('storeImage');
         $this->middleware('permission:image-delete')->only('deleteImage');
@@ -27,7 +27,17 @@ class CompanyController extends Controller
         $companies = Company::orderByDesc('created_at')
             ->when($request->dep, function ($dep) use ($request){
                 return $dep->where('department_id', $request->dep);
-            })->get();
+            })
+            ->when($request->new, function ($new) use ($request){
+                return $new->where('new', 1);
+            })
+            ->when($request->most_viewed, function ($most_viewed) use ($request){
+                return $most_viewed->where('most_viewed', 1);
+            })
+            ->when($request->main, function ($main) use ($request){
+                return $main->where('is_main', 1);
+            })
+            ->get();
 
 
         $departments = Department::where('is_active',1)->get();
@@ -154,6 +164,47 @@ class CompanyController extends Controller
         Event::dispatch(new ActivityLog($text,Auth::id()));
     }
 
+    public function NewSection(Company $company){
+        if ($company->new == 0){
+            $company->update(['new'=>1]);
+            $text = 'تم الاضافة الى الجديد للشركة '.$company->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الاضافة','desc'=>' تم اضافة الشركة الى حقل الجديد']);
+        }elseif ($company->new == 1){
+            $company->update(['new'=>0]);
+            $text = 'تم الحذف من الجديد للشركة '.$company->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الحذف','desc'=>' تم حذف الشركة من حقل الجديد']);
+        }
+    }
+    public function MostViewedSection(Company $company){
+
+        if ($company->most_viewed == 0){
+            $company->update(['most_viewed'=>1]);
+            $text = 'تم الاضافة الى الاكثر مشاهدة للشركة '.$company->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الاضافة','desc'=>' تم اضافة الشركة الى حقل الاكثر مشاهدة']);
+        }elseif ($company->most_viewed == 1){
+            $company->update(['most_viewed'=>0]);
+            $text = 'تم الحذف من الاكثر مشاهدة للشركة '.$company->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الحذف','desc'=>' تم حذف الشركة من حقل الأكثر مشاهدة']);
+        }
+    }
+
+    public function mainSection(Company $company){
+        if ($company->is_main ==0){
+            $company->update(['is_main'=>1]);
+            $text = 'تم الاضافة الى الواجهة الرئيسية للشركة '.$company->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الاضافة','desc'=>' تم اضافة الشركة الى الواجهة الرئيسية']);
+        }elseif ($company->is_main ==1){
+            $company->update(['is_main'=>0]);
+            $text = 'تم الحذف من الواجهة الرئيسية للشركة '.$company->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الحذف','desc'=>' تم حذف الشركة من الواجهة الرئيسية']);
+        }
+    }
     public function destroy(Company $company){
         $path = 'storage/Company/'.$company->image;
         File::delete($path);

@@ -41,7 +41,7 @@
                                     <div class="col-md-12 my-1">
                                         <div class="form-group">
                                             <label class="">القسم</label>
-                                            <select class="form-control" required name="dep" id="depFilter">
+                                            <select class="form-control" name="dep" id="depFilter">
                                                 <option value="">اختر القسم</option>
                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-read'))
                                                 @foreach($departments  as $department)
@@ -50,6 +50,19 @@
                                                 @endif
                                             </select>
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-3 my-2">
+                                        <input name="new" @if(request()->new == 1) checked @endif class="form-check-input" type="checkbox" value="1" >
+                                        <label class="form-check-label" for="flexCheckDefault">في قسم الجديد</label>
+                                    </div>
+                                    <div class="col-md-3 my-2">
+                                        <input name="most_viewed" @if(request()->most_viewed == 1) checked @endif class="form-check-input" type="checkbox" value="1">
+                                        <label class="form-check-label" for="flexCheckDefault">في قسم الاكثر مشاهدة</label>
+                                    </div>
+                                    <div class="col-md-3 my-2">
+                                        <input name="main" @if(request()->main == 1) checked @endif class="form-check-input" type="checkbox" value="1">
+                                        <label class="form-check-label" for="flexCheckDefault">في القائمة الرئيسية</label>
                                     </div>
                                     <div class="col-md-12 my-3">
                                         <button id="submitButton" type="submit" class=" btn btn-primary btn-round">فرز</button>
@@ -100,7 +113,7 @@
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
                                         @if($co->is_active == 1)
                                         <a href="{{route('Company.show',$co->id)}}"  class="btn btn-secondary">التفاصيل</a>
-                                        <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
+                                        <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i>تعديل</a>
                                         @endif
                                     @endif
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
@@ -113,6 +126,27 @@
                                         @endif
                                     @endif
                                 </div>
+                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
+                                    <div class="d-flex gap-2 pt-4 ">
+                                        @if($co->new ==0)
+                                            <a href="javascript:;" onclick="NewSection({{$co->id}})" class="btn btn-soft-success btn-round">اضافة الى الجديد</a>
+                                        @elseif($co->new ==1)
+                                            <a href="javascript:;" onclick="NewSection({{$co->id}})" class="btn btn-soft-danger btn-round">حذف من الجديد</a>
+                                        @endif
+                                        @if($co->most_viewed ==0)
+                                            <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="btn btn-soft-info btn-round">اضافة الى الأكثر مشاهدة</a>
+                                        @elseif($co->most_viewed ==1)
+                                            <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="btn btn-soft-danger btn-round">حذف من الأكثر مشاهدة</a>
+                                        @endif
+                                    </div>
+                                    <div class="d-flex pt-4 ">
+                                        @if($co->is_main ==0)
+                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-primary btn-round">اضافة الى القائمة الرئيسية</a>
+                                        @elseif($co->is_main ==1)
+                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من القائمة الرئيسية</a>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <!-- end card -->
@@ -486,6 +520,86 @@
                             );
                         }
                     })
+                }
+            })
+        }
+
+        function NewSection(id) {
+            Swal.showLoading();
+            $.ajax({
+                type: 'post',
+                url : `/NewSection-Company/${id}`,
+                success : function (response) {
+                    Swal.fire(
+                        response.title,
+                        response.desc,
+                        'success'
+                    ).then((results)=>{
+                        if (results.isConfirmed) {
+                            window.location.reload();
+                        }
+                    })
+                },
+                error: function () {
+                    swal.hideLoading();
+                    Swal.fire(
+                        'لم يتم اكمال العملية',
+                        `هناك خطأ`,
+                        'warning'
+                    );
+                }
+            })
+        }
+
+        function MostViewedSection(id) {
+            Swal.showLoading();
+            $.ajax({
+                type: 'post',
+                url : `/MostViewedSection-Company/${id}`,
+                success : function (response) {
+                    Swal.fire(
+                        response.title,
+                        response.desc,
+                        'success'
+                    ).then((results)=>{
+                        if (results.isConfirmed) {
+                            window.location.reload();
+                        }
+                    })
+                },
+                error: function () {
+                    swal.hideLoading();
+                    Swal.fire(
+                        'لم يتم اكمال العملية',
+                        `هناك خطأ`,
+                        'warning'
+                    );
+                }
+            })
+        }
+        function MainSection(id) {
+            Swal.showLoading();
+            $.ajax({
+                type: 'post',
+                url : `/MainSection-Company/${id}`,
+                success : function (response) {
+                    Swal.fire(
+                        response.title,
+                        response.desc,
+                        'success'
+                    ).then((results)=>{
+                        if (results.isConfirmed) {
+                            window.location.reload();
+                        }
+                    })
+                },
+                error: function () {
+                    swal.hideLoading();
+                    Swal.fire(
+                        'لم يتم اكمال العملية',
+                        `هناك خطأ`,
+                        'warning'
+                    );
                 }
             })
         }

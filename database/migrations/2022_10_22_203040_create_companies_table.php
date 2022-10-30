@@ -25,6 +25,9 @@ class CreateCompaniesTable extends Migration
             $table->string('telegram')->nullable();
             $table->string('whatsapp')->nullable();
             $table->integer('is_active')->default(1);
+            $table->integer('most_viewed')->default(0);
+            $table->integer('new')->default(0);
+            $table->integer('is_main')->default(0);
             $table->longText('evaluation');
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');

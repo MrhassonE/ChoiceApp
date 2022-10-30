@@ -17,7 +17,7 @@ class DepartmentController extends Controller
     {
         $this->middleware('permission:department-read')->only('index');
         $this->middleware('permission:department-create')->only('store');
-        $this->middleware('permission:department-update')->only('edit','update','show');
+        $this->middleware('permission:department-update')->only('edit','update','show','mainSection');
         $this->middleware('permission:department-delete')->only('DisActive','Active','destroy');
         $this->middleware('permission:company-create')->only('storeCompany');
     }
@@ -131,6 +131,19 @@ class DepartmentController extends Controller
 
         $text = 'تم ايقاف القسم '.$department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
+    }
+    public function mainSection(Department $department){
+        if ($department->is_main ==0){
+            $department->update(['is_main'=>1]);
+            $text = 'تم الاضافة الى الواجهة الرئيسية القسم '.$department->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الاضافة','desc'=>' تم اضافة القسم الى الواجهة الرئيسية']);
+        }elseif ($department->is_main ==1){
+            $department->update(['is_main'=>0]);
+            $text = 'تم الحذف من الواجهة الرئيسية القسم '.$department->name;
+            Event::dispatch(new ActivityLog($text,Auth::id()));
+            return response(['title'=>'تم الحذف','desc'=>' تم حذف القسم من الواجهة الرئيسية']);
+        }
     }
 
     public function destroy(Department $department){

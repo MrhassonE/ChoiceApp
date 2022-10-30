@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
-    protected $fillable = ['id','name','image','is_active','city_id'];
+    protected $fillable = ['id','name','image','is_active','is_main','city_id'];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {
         return asset('storage/Department/'.$this->image);

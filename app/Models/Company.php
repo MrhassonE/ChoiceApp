@@ -23,6 +23,9 @@ class Company extends Model
         'city_id',
         'is_active',
         'evaluation',
+        'most_viewed',
+        'new',
+        'is_main',
     ];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {

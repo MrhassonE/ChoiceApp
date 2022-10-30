@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function (){
     Route::post('/ActiveDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'Active'])->name('Department.Active');
     Route::post('/DisActiveDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'DisActive'])->name('Department.DisActive');
     Route::post('/DeleteDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'destroy'])->name('Department.Delete');
+    Route::post('/MainSection-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'mainSection'])->name('Department.mainSection');
 
 
 // Company
@@ -69,6 +70,10 @@ Route::middleware('auth')->group(function (){
     Route::post('/ActiveCompany/{company}',[\App\Http\Controllers\CompanyController::class,'Active'])->name('Company.Active');
     Route::post('/DisActiveCompany/{company}',[\App\Http\Controllers\CompanyController::class,'DisActive'])->name('Company.DisActive');
     Route::post('/DeleteCompany/{company}',[\App\Http\Controllers\CompanyController::class,'destroy'])->name('Company.Delete');
+
+    Route::post('/MostViewedSection-Company/{company}',[\App\Http\Controllers\CompanyController::class,'MostViewedSection'])->name('Company.MostViewedSection');
+    Route::post('/NewSection-Company/{company}',[\App\Http\Controllers\CompanyController::class,'NewSection'])->name('Company.NewSection');
+    Route::post('/MainSection-Company/{company}',[\App\Http\Controllers\CompanyController::class,'mainSection'])->name('Company.mainSection');
 
 // Advertisement
     Route::get('/advertisement',[\App\Http\Controllers\AdvertisementController::class,'index'])->name('Advertisement');
