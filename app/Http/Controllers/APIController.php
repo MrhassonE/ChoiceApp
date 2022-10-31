@@ -17,7 +17,14 @@ class APIController extends Controller
     }
 
     protected function getDepartmentCityById($id){
-        return Department::where('is_active',1)->orderByDesc('created_at')->where('city_id', $id)->get(["id", "name","image"]);
+        return Department::where('is_active',1)->orderByDesc('created_at')->where('city_id', $id)
+            ->with(['Company'=>function($query) {
+            $query->with(['CompanyImages'=>function($query) {
+                $query->select('id','image','company_id')->get();
+            }])->
+            select('id','name','email','phone','address','image','products','services','latitude', 'longitude','facebook', 'instagram', 'telegram', 'whatsapp','department_id')
+                ->where('is_active',1)->get();
+        }])->select('id','name','image')->get();
     }
 
     protected function getDepartments(){
@@ -25,7 +32,11 @@ class APIController extends Controller
     }
 
     protected function getSettings(){
-        return GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions']);
+        $cities=City::where('is_active',1)->get(["id","name"]);
+        $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions']);
+        $res=Collect(["cities"=>$cities]);
+        $res=$res->merge(["settings"=>$setting]);
+        return $res->all();
     }
 
     protected function getCompanies(){
@@ -98,37 +109,26 @@ class APIController extends Controller
         return response()->json(['seccuss'=>'true'], 200);
     }
     protected function home($id){
-        $dep=Department::where('is_active',1)->where('is_main',1)->orderByDesc('created_at')->where('city_id', $id)->get(["id", "name","image"]);
-        $company1=Company::where('is_active',1)->where('most_viewed',1)->where('is_main',1)->orderByDesc('created_at')->where('city_id', $id)->get([
-            'name',
-            'email',
-            'phone',
-            'address',
-            'image',
-            'products',
-            'services',
-            'facebook',
-            'instagram',
-            'telegram',
-            'whatsapp',
-            //'department_id',
-            //'city_id'
-        ]);
-        $company2=Company::where('is_active',1)->where('new',1)->orderByDesc('created_at')->where('city_id', $id)->get([
-            'name',
-            'email',
-            'phone',
-            'address',
-            'image',
-            'products',
-            'services',
-            'facebook',
-            'instagram',
-            'telegram',
-            'whatsapp',
-            //'department_id',
-            //'city_id'
-        ]);
+        $dep= Department::where('is_active',1)->where('is_main',1)->orderByDesc('created_at')->where('city_id', $id)->with(['Company'=>function($query) {
+            $query->
+
+            with(['CompanyImages'=>function($query) {
+                $query->select('id','image','company_id')->get();
+            }])->
+            select('id','name','email','phone','address','image','products','services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp','department_id')
+                ->where('is_active',1)->where('is_main',1)->get();
+        }])->select('id','name','image')->get();
+
+
+        $company1= Company::where('is_active',1)->where('most_viewed',1)->orderByDesc('created_at')->where('is_main',1)->where('city_id', $id)->with(['CompanyImages'=>function($query) {
+            $query->select('id','image','company_id')->get();
+        }])->select('id','name','email','phone','address','image','products','services', 'latitude', 'longitude','facebook', 'instagram', 'telegram', 'whatsapp')->get();
+
+
+        $company2= Company::where('is_active',1)->where('new',1)->orderByDesc('created_at')->where('city_id', $id)->with(['CompanyImages'=>function($query) {
+            $query->select('id','image','company_id')->get();
+        }])->select('id','name','email','phone','address','image','products','services', 'latitude', 'longitude','facebook', 'instagram', 'telegram', 'whatsapp')->get();
+
         $ad=Advertisement::with(['Company'=>function($query) {
             $query->where('is_active',1)->select('id')->get();
         }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
