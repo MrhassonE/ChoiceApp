@@ -17,6 +17,9 @@ return [
     'Advertisement' => 'الأعلانات',
     'Advertisement.edit' => 'تعديل الأعلان',
 
+    'WhatsNew' => 'ما الجديد',
+    'WhatsNew.edit' => 'تعديل خبر ما الجديد',
+
     'Setting' => 'الاعدادات',
 
     'Staff' => 'المستخدمين',

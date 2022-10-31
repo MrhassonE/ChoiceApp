@@ -52,6 +52,13 @@ Route::middleware('auth')->group(function (){
     Route::post('/ActiveCity/{city}',[\App\Http\Controllers\CityController::class,'Active'])->name('City.Active');
     Route::post('/DisActiveCity/{city}',[\App\Http\Controllers\CityController::class,'DisActive'])->name('City.DisActive');
 
+// WhatsNew
+    Route::get('/news',[\App\Http\Controllers\WhatsNewController::class,'index'])->name('WhatsNew');
+    Route::post('/news',[\App\Http\Controllers\WhatsNewController::class,'store'])->name('WhatsNew.store');
+    Route::get('/Edit-WhatsNew/{new}',[\App\Http\Controllers\WhatsNewController::class,'edit'])->name('WhatsNew.edit');
+    Route::post('/Edit-WhatsNew/{new}',[\App\Http\Controllers\WhatsNewController::class,'update'])->name('WhatsNew.update');
+    Route::post('/Delete-WhatsNew/{new}',[\App\Http\Controllers\WhatsNewController::class,'destroy'])->name('WhatsNew.delete');
+
 // Department
     Route::get('/department',[\App\Http\Controllers\DepartmentController::class,'index'])->name('Department');
     Route::post('/department',[\App\Http\Controllers\DepartmentController::class,'store'])->name('Department.store');

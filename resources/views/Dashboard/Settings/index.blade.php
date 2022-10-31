@@ -46,10 +46,9 @@
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="row">
             <form action="" id="UpdateForm" class="needs-validation" novalidate>
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title mb-0">السياسة والشروط</h4>
@@ -88,7 +87,6 @@
                             <!-- end card body -->
                         </div>
                     </div>
-                </div>
             </form>
         </div>
 
@@ -102,7 +100,7 @@
                         <form method="post" class="needs-validation"  novalidate id="contactForm" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-md-6 my-1">
+                                <div class="col-md-4 my-1">
                                     <div class="form-group">
                                         <label for="">البريد الالكتروني </label>
                                         <input id="email" value="{{$setting_info->email}}" required name="email" type="email" class="form-control" placeholder="">
@@ -111,8 +109,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group" dir="ltr">
+                                <div class="col-md-4 my-1">
+                                    <div class="form-group">
                                         <label for="">رقم الهاتف</label>
                                         <input id="phone" value="{{$setting_info->phone}}" maxlength="15" required name="phone" type="text" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
@@ -120,9 +118,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group" dir="ltr">
-                                        <label for="">رقم الهاتف الثاني</label>
+                                <div class="col-md-4 my-1">
+                                    <div class="form-group">
+                                        <label for="">رقم الهاتف 2</label>
                                         <input id="phone2" value="{{$setting_info->phone2}}" maxlength="15" name="phone2" type="text" class="form-control" placeholder="">
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل
@@ -166,6 +164,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-12 my-1">
                                     <ul id="errors1">
 
@@ -180,9 +179,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid">
+
         <div class="row">
+
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -259,6 +258,8 @@
             </div>
         </div>
     </div>
+
+
     <script>
         let validateForm = false;
         (function () {

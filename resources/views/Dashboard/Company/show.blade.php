@@ -1,7 +1,7 @@
 <x-appDash-layout>
     <div class="container-fluid">
         <div class="row">
-            <h3 class="my-2"> أسم الشركة  {{$company->name}}</h3>
+            <h4 class="my-2"> أسم الشركة:  {{$company->name}}</h4>
         </div>
 
         <div class="my-3">

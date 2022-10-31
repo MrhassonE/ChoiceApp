@@ -74,6 +74,14 @@
                         </a>
                     </li>
                 @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('whats-new-read'))
+                    <li class="@if(request()->routeIs('WhatsNew*')) mm-active @endif">
+                        <a href="{{route('WhatsNew')}}">
+                            <i class="fa fa-newspaper icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">ما الجديد</span>
+                        </a>
+                    </li>
+                @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
                     <li class="@if(request()->routeIs('Setting.ActivityLog')) mm-active @endif">
                         <a class="active" href="{{route('Setting.activityLog')}}">
