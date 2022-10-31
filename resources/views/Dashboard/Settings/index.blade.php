@@ -353,6 +353,7 @@
                 type: 'post',
                 url: `/setting/policyConditions/${id}`,
                 data: formData,
+
                 contentType:false,
                 processData:false,
                 success : function () {

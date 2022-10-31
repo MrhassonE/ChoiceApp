@@ -19,6 +19,38 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-2 my-1">
+                    <div class="form-group">
+                        <label for="">عدد المنتجات</label>
+                        <input name="products" required class="form-control" value="{{$company->products}}" type="number"  id="products">
+                        <div class="invalid-tooltip">
+                            الرجاء املئ الحقل
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="">خط العرض</label>
+                        <input name="latitude" class="form-control" value="{{$company->latitude}}" type="text"  id="latitude">
+                        <div class="invalid-tooltip">
+                            الرجاء املئ الحقل
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 my-1">
+                    <div class="form-group">
+                        <label for="">عدد الخدمات</label>
+                        <input name="services" required class="form-control" value="{{$company->services}}" type="number"  id="services">
+                        <div class="invalid-tooltip">
+                            الرجاء املئ الحقل
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="">خط الطول</label>
+                        <input name="longitude" class="form-control" value="{{$company->longitude}}" type="text"  id="longitude">
+                        <div class="invalid-tooltip">
+                            الرجاء املئ الحقل
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-12 my-1">
                     <ul id="errors">
                     </ul>
@@ -127,7 +159,7 @@
                     success : function () {
                         Swal.fire(
                             'تم تعديل',
-                            'تم تعديل تقييم الشركة بنجاح',
+                            'تم تعديل معلومات الشركة بنجاح',
                             'success'
                         ).then((result)=>{
                             if (result.isConfirmed) {
@@ -139,6 +171,26 @@
                         if (response.responseJSON.errors.evaluation) {
                             for(let i = 0; i<response.responseJSON.errors.evaluation.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.evaluation[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.products) {
+                            for(let i = 0; i<response.responseJSON.errors.products.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.products[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.services) {
+                            for(let i = 0; i<response.responseJSON.errors.services.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.services[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.longitude) {
+                            for(let i = 0; i<response.responseJSON.errors.longitude.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.longitude[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.latitude) {
+                            for(let i = 0; i<response.responseJSON.errors.latitude.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.latitude[i]}</li>`
                             }
                         }
                         Swal.fire(

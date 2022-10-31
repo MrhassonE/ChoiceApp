@@ -26,6 +26,10 @@ class Company extends Model
         'most_viewed',
         'new',
         'is_main',
+        'products',
+        'services',
+        'latitude',
+        'longitude',
     ];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {

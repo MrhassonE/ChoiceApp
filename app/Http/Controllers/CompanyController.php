@@ -118,8 +118,17 @@ class CompanyController extends Controller
     public function CompanyEvaluation(Request $request, Company $company){
         $request->validate([
             'evaluation'=>'required',
+            'products'=>'required|numeric',
+            'services'=>'required|numeric',
+
         ]);
-        $company->update(['evaluation'=>$request->evaluation]);
+        $company->update([
+            'evaluation'=>$request->evaluation,
+            'products'=>$request->products,
+            'services'=>$request->services,
+            'latitude'=>$request->latitude,
+            'longitude'=>$request->longitude,
+        ]);
 
     }
     public function storeImage(Request $request, Company $company){
