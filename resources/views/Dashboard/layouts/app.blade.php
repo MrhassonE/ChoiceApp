@@ -6,14 +6,13 @@
         <link rel="shortcut icon" href="{{asset('assetsDashboard/images/favicon.ico')}}">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{\App\Models\GeneralSetting::first()->company_name}}</title>
-        <meta content="{{\App\Models\GeneralSetting::first()->slogan}}" name="description" />
+        <meta content="{{\App\Models\GeneralSetting::first()->company_name}}" name="description" />
         <!-- Google fonts -->
         <link
             href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
             rel="stylesheet"
         />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- Vendors CSS -->
         <link href="{{asset('assetsDashboard/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -38,14 +37,14 @@
             <div class="page-loader-wrapper">
                 <div class="loader">
                     <div class="m-t-30"><img src="{{asset('assetsDashboard/images/logo.svg')}}" width="48" height="48" alt="Alpino"></div>
-                    <p>Please wait...</p>
+                    <p>انتضر لحضة ...</p>
                 </div>
             </div>
             <!-- Overlay For Sidebars -->
             @include('Dashboard.layouts.navigation')
-        <?php $title = "Hello" ?>
+        <?php $title = "مرحبا" ?>
 
-                @include('Dashboard.layouts.Sidebar',['title' => 'Hello'])
+                @include('Dashboard.layouts.Sidebar',['title' => 'مرحبا'])
             <main>
                 <div class="main-content">
                     <div class="page-content pt-3">

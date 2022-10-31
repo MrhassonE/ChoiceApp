@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Choice App</title>
+    <title>{{\App\Models\GeneralSetting::first()->company_name}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('assetsDashboard/images/favicon.ico')}}">
@@ -27,7 +27,7 @@
                         <div class="card-body p-4">
                             <div class="text-center mt-2">
                                 <h5>! مرحبا بك</h5>
-                                <p class="text-muted">الدخول الى لوحة تحكم <br>  </p>
+                                <p class="text-muted">الدخول الى لوحة تحكم <br> {{\App\Models\GeneralSetting::first()->company_name}} </p>
                             </div>
                             <div class="p-2 mt-4">
                                 <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" />
@@ -60,9 +60,6 @@
     </div><!-- end container -->
 </div>
 <!-- end authentication section -->
-
-<!-- JAVASCRIPT -->
-<script src="{{asset('assetsDashboard/js/pages/pass-addon.init.js')}}"></script>
 
 </body>
 </html>

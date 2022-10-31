@@ -110,4 +110,9 @@
         </div>
         <!-- Sidebar -->
     </div>
+    <div class="mt-0 mt-md-10 row" dir="ltr">
+        <h6 class=" text-md-center mb-3 text-dark">
+            © Developed by Maxware.
+        </h6>
+    </div>
 </div>
