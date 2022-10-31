@@ -127,6 +127,7 @@
                                     @endif
                                 </div>
                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
+                                    @if($co->is_active == 1)
                                     <div class="d-flex gap-2 pt-4 ">
                                         @if($co->new ==0)
                                             <a href="javascript:;" onclick="NewSection({{$co->id}})" class="btn btn-soft-success btn-round">اضافة الى الجديد</a>
@@ -146,6 +147,7 @@
                                             <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من القائمة الرئيسية</a>
                                         @endif
                                     </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>

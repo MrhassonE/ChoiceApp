@@ -50,11 +50,11 @@
                                                                     @if($department->is_active == 1)
 {{--                                                                        <a href="{{route('Department.show',$department->id)}}" class="btn btn-secondary btn-round" >التفاصيل</a>--}}
                                                                         <a href="{{route('Department.edit',$department->id)}}" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
-                                                                    @endif
-                                                                    @if($department->is_main ==0)
-                                                                        <a href="javascript:;" onclick="MainSection({{$department->id}})" class="mx-2 btn btn-soft-success btn-round">اضافة الى القائمة الرئيسية</a>
-                                                                    @elseif($department->is_main ==1)
-                                                                        <a href="javascript:;" onclick="MainSection({{$department->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من القائمة الرئيسية</a>
+                                                                        @if($department->is_main ==0)
+                                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" class="mx-2 btn btn-soft-success btn-round">اضافة الى القائمة الرئيسية</a>
+                                                                        @elseif($department->is_main ==1)
+                                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من القائمة الرئيسية</a>
+                                                                        @endif
                                                                     @endif
 
                                                                 @endif

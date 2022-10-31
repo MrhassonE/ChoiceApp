@@ -8,19 +8,20 @@ use App\Models\ContactUs;
 use App\Models\Department;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class APIController extends Controller
 {
     protected function getCities(){
-        return City::get(["id","name"]);
+        return City::where('is_active',1)->get(["id","name"]);
     }
 
     protected function getDepartmentCityById($id){
-        return Department::where('city_id', $id)->get(["id", "name","image"]);
+        return Department::where('is_active',1)->orderByDesc('created_at')->where('city_id', $id)->get(["id", "name","image"]);
     }
 
     protected function getDepartments(){
-        return Department::get(["id","name",'image']);
+        return Department::where('is_active',1)->orderByDesc('created_at')->get(["id","name",'image']);
     }
 
     protected function getSettings(){
@@ -28,7 +29,7 @@ class APIController extends Controller
     }
 
     protected function getCompanies(){
-        return Company::get([
+        return Company::where('is_active',1)->orderByDesc('created_at')->get([
             'name',
             'email',
             'phone',
@@ -46,7 +47,7 @@ class APIController extends Controller
     }
 
     protected function getCompaniesCityById($id){
-        return Company::where('city_id', $id)->get([
+        return Company::where('is_active',1)->where('city_id', $id)->orderByDesc('created_at')->get([
             'name',
             'email',
             'phone',
@@ -65,30 +66,40 @@ class APIController extends Controller
 
 
     protected function getCompaniesCityByDep($dep){
-        return Company::where('department_id', $dep)->with(['CompanyImages'=>function($query) {
-            $query->select('id','image','company_id')->get();
-        }])->select('id','name','email','phone','address','image','products','services', 'facebook', 'instagram', 'telegram', 'whatsapp')->get();
+        return Company::where('is_active',1)->where('department_id', $dep)->with(['CompanyImages'=>function($query) {
+            $query->select('id','image','company_id')->orderByDesc('created_at')->get();
+        }])->orderByDesc('created_at')->select('id','name','email','phone','address','image','products','services', 'facebook', 'instagram', 'telegram', 'whatsapp')->get();
 
     }
 
     protected function getAdvertisements(){
-        return Advertisement::get([
-            'image',
-            'created_at'
-        ]);
+        return Advertisement::with(['Company'=>function($query) {
+            $query->where('is_active',1)->select('id')->get();
+        }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
     }
 
     protected function send(Request $request){
         //$validator =
-        $request->validate( [
-            'message' => 'required|string|max:255'
+        $request->validate([
+            'name'=>'required|max:100',
+            'email'=>'required|email|max:100',
+            'message'=>'required',
         ]);
-        ContactUs::create($request->all());
+        $contactForm = ContactUs::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'message'=>$request->message,
+        ]);
+        $admin = GeneralSetting::first();
+        try {
+            Mail::to($admin->email)->send(new \App\Mail\ContactUsForm($contactForm->name,$contactForm->email,$contactForm->message));
+        }catch (\Exception $exception){
+        }
         return response()->json(['seccuss'=>'true'], 200);
     }
     protected function home($id){
-        $dep=Department::where('city_id', $id)->get(["id", "name","image"]);
-        $company=Company::where('city_id', $id)->get([
+        $dep=Department::where('is_active',1)->where('is_main',1)->orderByDesc('created_at')->where('city_id', $id)->get(["id", "name","image"]);
+        $company1=Company::where('is_active',1)->where('most_viewed',1)->where('is_main',1)->orderByDesc('created_at')->where('city_id', $id)->get([
             'name',
             'email',
             'phone',
@@ -103,13 +114,29 @@ class APIController extends Controller
             //'department_id',
             //'city_id'
         ]);
-        $ad=Advertisement::get([
+        $company2=Company::where('is_active',1)->where('new',1)->orderByDesc('created_at')->where('city_id', $id)->get([
+            'name',
+            'email',
+            'phone',
+            'address',
             'image',
-            'created_at'
+            'products',
+            'services',
+            'facebook',
+            'instagram',
+            'telegram',
+            'whatsapp',
+            //'department_id',
+            //'city_id'
         ]);
+        $ad=Advertisement::with(['Company'=>function($query) {
+            $query->where('is_active',1)->select('id')->get();
+        }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
+
         $res=Collect(["dep"=>$dep]);
         $res=$res->merge(["ad"=>$ad]);
-        $res=$res->merge(["company"=>$company]);
+        $res=$res->merge(["company_most_viewed"=>$company1]);
+        $res=$res->merge(["company_new"=>$company2]);
         return $res->all();
     }
 }

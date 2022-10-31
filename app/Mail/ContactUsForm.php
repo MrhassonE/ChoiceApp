@@ -10,15 +10,22 @@ use Illuminate\Queue\SerializesModels;
 class ContactUsForm extends Mailable
 {
     use Queueable, SerializesModels;
+    public $name;
+    public $email;
+    public $message;
 
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $name
+     * @param $email
+     * @param $message
      */
-    public function __construct()
+    public function __construct($name,$email,$message)
     {
-        //
+        $this->name= $name;
+        $this->email= $email;
+        $this->message= $message;
     }
 
     /**
@@ -28,6 +35,10 @@ class ContactUsForm extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('Dashboard.mailContact')->with([
+            'name'=>$this->name,
+            'email'=>$this->email,
+            'message'=>$this->message,
+        ]);
     }
 }
