@@ -20,4 +20,7 @@ class Department extends Model
     public function Company(){
         return $this->hasMany(Company::class,'department_id');
     }
+    public function CompanyMostViewed(){
+        return $this->hasMany(Company::class,'department_id');
+    }
 }

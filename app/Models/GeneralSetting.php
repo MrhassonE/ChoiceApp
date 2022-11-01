@@ -22,7 +22,7 @@ class GeneralSetting extends Model
         'telegram',
         'whatsapp',
     ];
-    protected $appends = ['img_path'];
+    protected $appends = ['company_logo_path'];
     public function getCompanyLogoPathAttribute() {
         return asset('storage/Setting/'.$this->company_logo);
     }
