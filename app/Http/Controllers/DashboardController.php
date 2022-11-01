@@ -11,8 +11,11 @@ class DashboardController extends Controller
 {
     public function index(){
         $departments = Department::all()->count();
+        $departmentsMain = Department::where('is_active',1)->where('is_main',1)->count();
         $companies = Company::all()->count();
+        $companiesMostViewed = Company::where('is_active',1)->where('is_main',1)->count();
+        $companiesNew = Company::where('is_active',1)->where('new',1)->count();
         $ads = Advertisement::all()->count();
-        return view('Dashboard.dashboard',compact('departments','companies','ads'));
+        return view('Dashboard.dashboard',compact('departments','departmentsMain','companies','companiesNew','companiesMostViewed','ads'));
     }
 }

@@ -75,6 +75,7 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
             <div class="row mt-2 d-flex" id="grid-leader">
+                @if($companies->count() >0)
                 @foreach($companies as $co)
                     <div class="col-xl-4 col-sm-6">
                         <div class="card">
@@ -142,9 +143,9 @@
                                     </div>
                                     <div class="d-flex pt-4 ">
                                         @if($co->is_main ==0)
-                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-primary btn-round">اضافة الى القائمة الرئيسية</a>
+                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-primary btn-round">اضافة الى الواجهة الرئيسية</a>
                                         @elseif($co->is_main ==1)
-                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من القائمة الرئيسية</a>
+                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من الواجهة الرئيسية</a>
                                         @endif
                                     </div>
                                     @endif
@@ -154,6 +155,11 @@
                         <!-- end card -->
                     </div>
                 @endforeach
+                @else
+                    <div class="my-5">
+                       <h3 class="text-center">لا يوجد شركات</h3>
+                    </div>
+                @endif
             </div>
         @endif
 

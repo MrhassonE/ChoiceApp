@@ -34,26 +34,11 @@
                         <span class="menu-item" data-key="t-dashboard">لوحة التحكم</span>
                     </a>
                 </li>
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-read'))
-                    <li class="@if(request()->routeIs('Staff*')) mm-active @endif">
-                        <a href="{{route('Staff')}}">
-                            <i class="fa fa-users icon nav-icon"></i>
-                            <span class="menu-item" data-key="t-dashboard">المستخدمين</span>
-                        </a>
-                    </li>
-                @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('city-read'))
-                    <li class="@if(request()->routeIs('City*')) mm-active @endif">
-                        <a href="{{route('City')}}">
-                            <i class="fa fa-city icon nav-icon"></i>
-                            <span class="menu-item" data-key="t-dashboard">المدن</span>
-                        </a>
-                    </li>
-                @endif
+
                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-read'))
                     <li class="@if(request()->routeIs('Department*')) mm-active @endif">
                         <a href="{{route('Department')}}">
-                            <i class="fa fa-plane-departure icon nav-icon"></i>
+                            <i class="fa fa-building icon nav-icon"></i>
                             <span class="menu-item" data-key="t-dashboard">الاقسام</span>
                         </a>
                     </li>
@@ -61,7 +46,7 @@
                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-read'))
                     <li class="@if(request()->routeIs('Company*')) mm-active @endif">
                         <a href="{{route('Company')}}">
-                            <i class="fa fa-compass icon nav-icon"></i>
+                            <i class="bx bxs-briefcase icon nav-icon"></i>
                             <span class="menu-item" data-key="t-dashboard">الشركات</span>
                         </a>
                     </li>
@@ -79,6 +64,23 @@
                         <a href="{{route('WhatsNew')}}">
                             <i class="fa fa-newspaper icon nav-icon"></i>
                             <span class="menu-item" data-key="t-dashboard">ما الجديد</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('city-read'))
+                    <li class="@if(request()->routeIs('City*')) mm-active @endif">
+                        <a href="{{route('City')}}">
+                            <i class="fa fa-city icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">المدن</span>
+                        </a>
+                    </li>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-read'))
+                    <li class="@if(request()->routeIs('Staff*')) mm-active @endif">
+                        <a href="{{route('Staff')}}">
+                            <i class="fa fa-users icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">المستخدمين</span>
                         </a>
                     </li>
                 @endif
