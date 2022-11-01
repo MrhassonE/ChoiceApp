@@ -52,7 +52,7 @@ class AdvertisementController extends Controller
 
     public function edit(Advertisement $advertisement){
         $companies = Company::where('is_active',1)->get();
-        return view('Dashboard.Advertisement.Edit',compact('advertisement','companies'));
+        return view('Dashboard.Advertisement.edit',compact('advertisement','companies'));
     }
     public function update(Request $request, Advertisement $advertisement){
         $request->validate([

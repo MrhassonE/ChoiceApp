@@ -59,6 +59,7 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
             <div class="row mt-2 d-flex" id="grid-leader">
+                @if($ads->count()>0)
                 @foreach($ads as $ad)
                     <div class="col-xl-4 col-sm-6">
                         <div class="card">
@@ -86,6 +87,11 @@
                         <!-- end card -->
                     </div>
                 @endforeach
+                @else
+                    <div class="my-5">
+                        <h3 class="text-center">لا يوجد اعلانات</h3>
+                    </div>
+                @endif
             </div>
         @endif
 

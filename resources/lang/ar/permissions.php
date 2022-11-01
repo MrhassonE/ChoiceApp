@@ -17,6 +17,11 @@ return [
     'company-update' => 'تعديل الشركات',
     'company-delete' => 'حذف الشركات',
 
+    'whats-new-read' => 'عرض ما الجديد',
+    'whats-new-create' => 'انشاء ما الجديد',
+    'whats-new-update' => 'تعديل ما الجديد',
+    'whats-new-delete' => 'حذف ما الجديد',
+
     'image-read' => 'عرض الصور',
     'image-create' => 'انشاء الصور',
     'image-delete' => 'حذف الصور',
