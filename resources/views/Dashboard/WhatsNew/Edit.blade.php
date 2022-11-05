@@ -62,9 +62,7 @@
                         'تم التعديل بنجاح',
                         'success'
                     ).then((result)=>{
-                        if(result.isConfirmed) {
-                            window.location.replace('{{route('WhatsNew')}}')
-                        }
+                        window.location.replace('{{route('WhatsNew')}}')
                     });
                 },
                 error : function (response) {

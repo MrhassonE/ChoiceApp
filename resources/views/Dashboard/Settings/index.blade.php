@@ -299,9 +299,7 @@
                             'تم تعديل المعلومات بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.replace('{{route('Setting')}}')
-                            }
+                            window.location.replace('{{route('Setting')}}')
                         })
                     },
                     error: function (response) {
@@ -363,9 +361,7 @@
                         'تم تعديل السياسة والشروط بنجاح',
                         'success'
                     ).then((result)=>{
-                        if(result.isConfirmed) {
-                            window.location.replace('{{route('Setting')}}')
-                        }
+                        window.location.replace('{{route('Setting')}}')
                     });
                 },
                 error: function (response) {
@@ -422,9 +418,7 @@
                             'تم تعديل معلومات التواصل بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.replace('{{route('Setting')}}')
-                            }
+                            window.location.replace('{{route('Setting')}}')
                         })
                     },
                     error: function (response) {
@@ -521,9 +515,7 @@
                             'تم تعديل معلومات البريد الالكتروني بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.replace('{{route('Setting')}}')
-                            }
+                            window.location.replace('{{route('Setting')}}')
                         })
                     },
                     error: function (response) {

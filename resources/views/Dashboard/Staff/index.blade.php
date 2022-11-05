@@ -212,9 +212,7 @@
                             'تم انشاء المستخدم بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload();
-                            }
+                            window.location.reload();
                         })
                     },
                     error: function (response) {
@@ -265,9 +263,7 @@
                         'تم تغيير الرمز بنجاح',
                         'success'
                     ).then((result)=>{
-                        if(result.isConfirmed) {
-                            window.location.replace('{{route('Staff')}}')
-                        }
+                        window.location.replace('{{route('Staff')}}')
                     });
                 },
                 error: function (response) {
@@ -314,9 +310,7 @@
                                 'تم حذف المستخدم بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         }
                     })
@@ -352,9 +346,7 @@
                                 'تم اعاده تفعيل المستخدم بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -397,9 +389,7 @@
                                 'تم الغاء تفعيل المستخدم بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {

@@ -329,9 +329,7 @@
                             'تم انشاء شركة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload();
-                            }
+                            window.location.reload();
                         })
                     },
                     error : function (response) {
@@ -425,9 +423,7 @@
                                 'تم اعاده تفعيل الشركة بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -470,9 +466,7 @@
                                 'تم الغاء تفعيل الشركة بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -514,9 +508,7 @@
                                 'تم حذف الشركة بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -543,9 +535,7 @@
                         response.desc,
                         'success'
                     ).then((results)=>{
-                        if (results.isConfirmed) {
-                            window.location.reload();
-                        }
+                        window.location.reload();
                     })
                 },
                 error: function () {
@@ -570,9 +560,7 @@
                         response.desc,
                         'success'
                     ).then((results)=>{
-                        if (results.isConfirmed) {
-                            window.location.reload();
-                        }
+                        window.location.reload();
                     })
                 },
                 error: function () {
@@ -596,9 +584,7 @@
                         response.desc,
                         'success'
                     ).then((results)=>{
-                        if (results.isConfirmed) {
-                            window.location.reload();
-                        }
+                        window.location.reload();
                     })
                 },
                 error: function () {

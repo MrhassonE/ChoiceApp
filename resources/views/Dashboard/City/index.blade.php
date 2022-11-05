@@ -137,9 +137,8 @@
                             'تم انشاء المدينة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload();
-                            }
+                            window.location.reload();
+
                         })
                     },
                     error : function (response) {
@@ -187,9 +186,9 @@
                                 'تم اعاده تفعيل المدينة بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+
+                                window.location.reload();
+
                             })
                         },
                         error: function (response) {
@@ -232,9 +231,8 @@
                                 'تم الغاء تفعيل المدينة بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
+
                             })
                         },
                         error: function (response) {

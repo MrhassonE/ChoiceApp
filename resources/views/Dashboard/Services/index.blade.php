@@ -146,9 +146,7 @@
                             'تم انشاء خدمة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload();
-                            }
+                            window.location.reload();
                         })
                     },
                     error: function (response) {
@@ -199,9 +197,7 @@
                                 'تم حذف الخدمة بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {

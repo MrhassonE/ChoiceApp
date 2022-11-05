@@ -177,9 +177,7 @@
                             'تم انشاء القسم بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload();
-                            }
+                            window.location.reload();
                         })
                     },
                     error : function (response) {
@@ -238,9 +236,7 @@
                                 'تم اعاده تفعيل القسم بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -283,9 +279,7 @@
                                 'تم الغاء تفعيل القسم بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -328,9 +322,7 @@
                                 'تم حذف القسم بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {
@@ -357,9 +349,7 @@
                         response.desc,
                         'success'
                     ).then((results)=>{
-                        if (results.isConfirmed) {
-                            window.location.reload();
-                        }
+                        window.location.reload();
                     })
                 },
                 error: function () {

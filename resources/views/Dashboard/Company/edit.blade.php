@@ -154,9 +154,9 @@
                             'تم تعديل الشركة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.replace('{{url()->previous()}}')
-                            }
+
+                            window.location.replace('{{url()->previous()}}')
+
                         })
                     },
                     error: function (response) {

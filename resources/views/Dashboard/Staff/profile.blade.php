@@ -123,9 +123,7 @@
                         'تم التعديل بنجاح',
                         'success'
                     ).then((result)=>{
-                        if(result.isConfirmed) {
-                            window.location.replace('{{route('Dashboard')}}')
-                        }
+                        window.location.replace('{{route('Dashboard')}}')
                     });
                 },
                 error: function (response) {
@@ -165,9 +163,7 @@
                         'تم تغيير الرمز بنجاح',
                         'success'
                     ).then((result)=>{
-                        if(result.isConfirmed) {
-                            window.location.replace('{{route('Dashboard')}}')
-                        }
+                        window.location.replace('{{route('Dashboard')}}')
                     });
                 },
                 error: function (response) {

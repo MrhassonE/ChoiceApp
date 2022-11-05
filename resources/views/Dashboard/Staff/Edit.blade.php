@@ -83,9 +83,7 @@
                             'تم التعديل بنجاح',
                             'success'
                         ).then((result)=>{
-                            if(result.isConfirmed) {
-                                window.location.replace('{{route('Staff')}}')
-                            }
+                            window.location.replace('{{route('Staff')}}')
                         });
                     },
                     error: function (response) {

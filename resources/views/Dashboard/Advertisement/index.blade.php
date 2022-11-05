@@ -185,9 +185,7 @@
                             'تم انشاء الأعلان بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload();
-                            }
+                            window.location.reload();
                         })
                     },
                     error : function (response) {
@@ -240,9 +238,7 @@
                                 'تم حذف الأعلان بنجاح.',
                                 'success'
                             ).then((results)=>{
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         },
                         error: function (response) {

@@ -130,9 +130,7 @@
                             'تم تعديل تقييم الشركة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.replace('{{url()->previous()}}')
-                            }
+                            window.location.replace('{{url()->previous()}}')
                         })
                     },
                     error: function (response) {
@@ -189,9 +187,7 @@
                             'تم اضافة صورة للشركة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.reload()
-                            }
+                            window.location.reload()
                         })
                     },
                     error: function (response) {
@@ -237,9 +233,7 @@
                                 'تم حذف الصورة بنجاح.',
                                 'success'
                             ).then((results) => {
-                                if (results.isConfirmed) {
-                                    window.location.reload();
-                                }
+                                window.location.reload();
                             })
                         }
                     })

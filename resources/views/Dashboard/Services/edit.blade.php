@@ -70,9 +70,7 @@
                             'تم تعديل الخدمة بنجاح',
                             'success'
                         ).then((result)=>{
-                            if (result.isConfirmed) {
-                                window.location.replace('{{route('Services')}}')
-                            }
+                            window.location.replace('{{route('Services')}}')
                         })
                     },
                     error: function (response) {

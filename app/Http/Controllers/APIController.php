@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\ContactUs;
 use App\Models\Department;
 use App\Models\GeneralSetting;
+use App\Models\WhatsNew;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -40,8 +41,10 @@ class APIController extends Controller
     protected function getSettings(){
         $cities=City::where('is_active',1)->get(["id","name"]);
         $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions']);
+        $whatsNew = WhatsNew::get(['title']);
         $res=Collect(["cities"=>$cities]);
         $res=$res->merge(["settings"=>$setting]);
+        $res=$res->merge(["whatsNew"=>$whatsNew]);
         return $res->all();
     }
 
