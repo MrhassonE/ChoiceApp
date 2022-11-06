@@ -28,3 +28,5 @@ Route::get('department/company/{dep}',[\App\Http\Controllers\APIController::clas
 Route::get('advertisements',[\App\Http\Controllers\APIController::class,'getAdvertisements'])->name("Advertisements");
 Route::post('send',[\App\Http\Controllers\APIController::class,'send'])->name("send");
 Route::get('home/{id}',[\App\Http\Controllers\APIController::class,'home'])->name("home");
+
+Route::post('ipAddress',[\App\Http\Controllers\APIController::class,'ipAddress'])->name("ipAddress");

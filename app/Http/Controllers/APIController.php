@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Company;
 use App\Models\ContactUs;
 use App\Models\Department;
+use App\Models\FCMToken;
 use App\Models\GeneralSetting;
 use App\Models\WhatsNew;
 use Illuminate\Http\Request;
@@ -13,6 +14,20 @@ use Illuminate\Support\Facades\Mail;
 
 class APIController extends Controller
 {
+    protected function ipAddress(Request $request){
+        $fcm = FCMToken::where('ip_address',request()->ip())->first();
+        if ($fcm){
+            $fcm->update([
+                'fcm_token'=>$request->fcm_token,
+            ]);
+        }else{
+            $fcm = FCMToken::create([
+                'ip_address'=>request()->ip(),
+                'fcm_token'=>$request->fcm_token,
+            ]);
+        }
+    }
+
     protected function getCities(){
         return City::where('is_active',1)->get(["id","name"]);
     }
@@ -126,7 +141,7 @@ class APIController extends Controller
                 $query->select('id','image','company_id')->get();
             }])->
             select('id','name','email','phone','address','image','evaluation','products','services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp','department_id')
-                ->where('is_active',1)->where('is_main',1)->get();
+                ->where('is_active',1)->get();
         }])->with(['CompanyMostViewed'=>function($query) {
                 $query->with(['CompanyImages'=>function($query) {
                     $query->select('id','image','company_id')->get();
@@ -135,18 +150,20 @@ class APIController extends Controller
                     ->where('most_viewed',1)->where('is_active',1)->get();
             }])->select('id','name','image')->get();
 
-
         $company1= Company::where('is_active',1)->where('most_viewed',1)->orderByDesc('created_at')->where('is_main',1)->where('city_id', $id)->with(['CompanyImages'=>function($query) {
             $query->select('id','image','company_id')->get();
         }])->select('id','name','email','phone','address','image','evaluation','products','services', 'latitude', 'longitude','facebook', 'instagram', 'telegram', 'whatsapp')->get();
-
 
         $company2= Company::where('is_active',1)->where('new',1)->orderByDesc('created_at')->where('city_id', $id)->with(['CompanyImages'=>function($query) {
             $query->select('id','image','company_id')->get();
         }])->select('id','name','email','phone','address','image','evaluation','products','services', 'latitude', 'longitude','facebook', 'instagram', 'telegram', 'whatsapp')->get();
 
         $ad=Advertisement::with(['Company'=>function($query) {
-            $query->where('is_active',1)->select('id')->get();
+            $query->where('is_active',1)->with(['CompanyImages'=>function($query) {
+                $query->select('id','image','company_id')->get();
+            }])->
+            select('id','name','email','phone','address','image','evaluation','products','services','latitude', 'longitude','facebook', 'instagram', 'telegram', 'whatsapp','department_id')
+                ->get();
         }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
 
         $res=Collect(["dep"=>$dep]);
