@@ -60,33 +60,48 @@
             </div><!-- /.modal -->
             <div class="row mt-2 d-flex" id="grid-leader">
                 @if($ads->count()>0)
-                @foreach($ads as $ad)
-                    <div class="col-xl-4 col-sm-6">
+                    <div class="col-xl-12 col-sm-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-center">
-                                    <div>
-                                        <img src="{{$ad->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xxl img-thumbnail">
+                                <div class="row mt-2 d-flex" id="grid-leader">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>الصورة</th>
+                                                <th>أسم الشركة</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($ads as $key=>$ad)
+                                                <tr>
+                                                    <td class="fw-semibold">{{$key + 1}}</td>
+                                                    <td>
+                                                        <img src="{{$ad->img_path}}" class="avatar-md  card-img-top" alt="">
+                                                    </td>
+                                                    <td>
+                                                        {{$ad->Company->name}}
+                                                    </td>
+                                                    <td>
+                                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-update'))
+                                                            <a href="{{route('Advertisement.edit',$ad->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
+                                                        @endif
+                                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-delete'))
+                                                            <a href="javascript:;" onclick="DeleteAdvertisement({{$ad->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف</a>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </div>
-                                <div class="mt-3 pt-1">
-                                    <p class="mb-0 mt-2 text-black">
-                                        الشركة: {{$ad->Company->name}}
-                                    </p>
-                                </div>
-                                <div class="d-flex gap-2 pt-4">
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-update'))
-                                        <a href="{{route('Advertisement.edit',$ad->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
-                                    @endif
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-delete'))
-                                        <a href="javascript:;" onclick="DeleteAdvertisement({{$ad->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف</a>
-                                    @endif
                                 </div>
                             </div>
                         </div>
                         <!-- end card -->
                     </div>
-                @endforeach
                 @else
                     <div class="my-5">
                         <h3 class="text-center">لا يوجد اعلانات</h3>

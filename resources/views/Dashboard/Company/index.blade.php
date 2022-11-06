@@ -74,6 +74,24 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+            <style>
+                .tooltip .tooltiptext {
+                    visibility: hidden;
+                    width: 120px;
+                    background-color: black;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 6px;
+                    padding: 5px 0;
+
+                    position: absolute;
+                    z-index: 1;
+                }
+
+                .tooltip:hover .tooltiptext {
+                    visibility: visible;
+                }
+            </style>
             <div class="row mt-2 d-flex" id="grid-leader">
                 @if($companies->count() >0)
                 @foreach($companies as $co)
@@ -100,16 +118,16 @@
                                         البريد الالكتروني: {{$co->email}}
                                     </p>
                                 </div>
-                                <div class="mt-3 pt-1">
-                                    <p class="mb-0 mt-2">
-                                        رقم الهاتف: {{$co->phone}}
-                                    </p>
-                                </div>
-                                <div class="mt-3 pt-1">
-                                    <p class="mb-0 mt-2">
-                                        العنوان: {{$co->address}}
-                                    </p>
-                                </div>
+{{--                                <div class="mt-3 pt-1">--}}
+{{--                                    <p class="mb-0 mt-2">--}}
+{{--                                        رقم الهاتف: {{$co->phone}}--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
+{{--                                <div class="mt-3 pt-1">--}}
+{{--                                    <p class="mb-0 mt-2">--}}
+{{--                                        العنوان: {{$co->address}}--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
                                 <div class="d-flex gap-2 pt-4">
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
                                         @if($co->is_active == 1)
@@ -128,27 +146,25 @@
                                     @endif
                                 </div>
                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                    @if($co->is_active == 1)
                                     <div class="d-flex gap-2 pt-4 ">
-                                        @if($co->new ==0)
-                                            <a href="javascript:;" onclick="NewSection({{$co->id}})" class="btn btn-soft-success btn-round">اضافة الى الجديد</a>
-                                        @elseif($co->new ==1)
-                                            <a href="javascript:;" onclick="NewSection({{$co->id}})" class="btn btn-soft-danger btn-round">حذف من الجديد</a>
-                                        @endif
-                                        @if($co->most_viewed ==0)
-                                            <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="btn btn-soft-info btn-round">اضافة الى الأكثر مشاهدة</a>
-                                        @elseif($co->most_viewed ==1)
-                                            <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="btn btn-soft-danger btn-round">حذف من الأكثر مشاهدة</a>
+                                        @if($co->is_active == 1)
+                                            @if($co->new ==0)
+                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="اضافة الى الجديد" class="btn btn-soft-success btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                            @elseif($co->new ==1)
+                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="حذف من الجديد" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                            @endif
+                                            @if($co->most_viewed ==0)
+                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="اضافة الى الأكثر مشاهدة" class="btn btn-soft-info btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                            @elseif($co->most_viewed ==1)
+                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="حذف من الأكثر مشاهدة" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                            @endif
+                                            @if($co->is_main ==0)
+                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                            @elseif($co->is_main ==1)
+                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                            @endif
                                         @endif
                                     </div>
-                                    <div class="d-flex pt-4 ">
-                                        @if($co->is_main ==0)
-                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-primary btn-round">اضافة الى الواجهة الرئيسية</a>
-                                        @elseif($co->is_main ==1)
-                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="mx-2 btn btn-soft-danger btn-round">حذف من الواجهة الرئيسية</a>
-                                        @endif
-                                    </div>
-                                    @endif
                                 @endif
                             </div>
                         </div>
