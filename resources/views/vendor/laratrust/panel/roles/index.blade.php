@@ -23,12 +23,11 @@
                     </tr>
                     </thead>
                     <tbody class="bg-white">
-                    @foreach ($roles as $role)
+                    @foreach ($roles as $key=>$role)
                         @if($role->id != 1)
-
                             <tr>
                                 <td class="td text-sm leading-5 text-gray-900">
-                                    {{$role->getKey()}}
+                                    {{$key+1}}
                                 </td>
                                 <td class="td text-sm leading-5 text-gray-900">
                                     {{$role->display_name}}
