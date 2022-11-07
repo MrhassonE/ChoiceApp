@@ -35,7 +35,6 @@
                                     </thead>
                                     <tbody>
                                         @foreach($users as $key=>$user)
-                                            @if($user->id != \Illuminate\Support\Facades\Auth::id())
                                             <tr>
                                                 <td class="fw-semibold">{{$key + 1}}</td>
                                                 <td>
@@ -56,13 +55,13 @@
                                                             <a href="javascript:;" onclick="DisActiveUser({{$user->id}})" class="btn btn-danger btn-round">ايقاف</a>
                                                         @elseif($user->is_active == 0)
                                                             <a href="javascript:;" onclick="ActiveUser({{$user->id}})" class="btn btn-success btn-round">تفعيل</a>
-                                                        @endif
                                                             <a href="javascript:;" onclick="DeleteContact({{$user->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash"></i>حذف</a>
+                                                        @endif
                                                     @endif
 
                                                 </td>
                                             </tr>
-                                            @endif
+
                                             <!--  Extra Large modal example -->
                                             <div class="modal fade password-{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg modal-dialog-centered">

@@ -33,6 +33,7 @@
                         </thead>
                         <tbody class="bg-white">
                         @foreach($users as $key=>$user)
+                            @if($user->id != 1)
                             <tr>
                                 <td class="td text-sm leading-5 text-gray-900">
                                     {{$key + 1}}
@@ -57,6 +58,7 @@
                                     </button>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                         </tbody>
                     </table>

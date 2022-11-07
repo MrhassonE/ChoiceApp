@@ -6,6 +6,8 @@ use App\Events\ActivityLog;
 use App\Models\Company;
 use App\Models\CompanyImages;
 use App\Models\Department;
+use App\Models\FCMToken;
+use App\Notifications\AddCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -81,6 +83,13 @@ class CompanyController extends Controller
         ]);
         $text = 'تم اضافة شركة بعنوان '.$company->name.' الى قسم '.$company->Department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
+        try {
+            foreach (FCMToken::all() as $user){
+                $user->notify(new AddCompany($company->name));
+            }
+        }catch (\Exception $exception){
+
+        }
     }
 
     public function edit(Company $company){
@@ -220,6 +229,8 @@ class CompanyController extends Controller
 
         $text = 'تم حذف الشركة '.$company->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
+        $company->Advertisement()->delete();
+        $company->CompanyImages()->delete();
         $company->delete();
     }
 }

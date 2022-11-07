@@ -6,6 +6,8 @@ use App\Events\ActivityLog;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Department;
+use App\Models\FCMToken;
+use App\Notifications\AddDepartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -49,6 +51,15 @@ class DepartmentController extends Controller
         ]);
         $text = 'تم اضافة قسم بعنوان '.$department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
+
+        try {
+            foreach (FCMToken::all() as $user){
+                $user->notify(new AddDepartment($department->name));
+            }
+        }catch (\Exception $exception){
+
+        }
+
     }
 
     public function edit(Department $department){
@@ -152,6 +163,7 @@ class DepartmentController extends Controller
 
         $text = 'تم حذف القسم '.$department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
+        $department->Company()->delete();
         $department->delete();
     }
 }

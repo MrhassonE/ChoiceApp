@@ -52,6 +52,38 @@
                     </div>
                 </div>
             </main>
+
+        <a href="#" data-bs-toggle="modal" data-bs-target=".support"
+           style="background:#213A75;padding: 20px;font-size: 20px;position: fixed; opacity: 0.8; bottom: 30px;left: 20px;color: #fff;border-radius: 50%;z-index: 10000;"
+           class="d-flex justify-content-center">
+            <i class="fa fa-headset" aria-hidden="true"></i>
+        </a>
+
+        <div class="modal fade support" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myExtraLargeModalLabel">للتواصل مع فريق الدعم الفني</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 my-1">
+                                <div class="form-group text-md-center">
+                                    <h4 class="text-dark"> 07838255584 <i class="fa fa-phone-alt"></i></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 my-1">
+
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
             <script src="{{asset('assetsDashboard/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
             <script src="{{asset('assetsDashboard/libs/metismenujs/metismenujs.min.js')}}"></script>
             <script src="{{asset('assetsDashboard/libs/simplebar/simplebar.min.js')}}"></script>
@@ -61,6 +93,46 @@
 
             <script src="{{asset('assetsDashboard/js/app.js')}}"></script>
             <!-- Theme scripts -->
+
+
+
+        {{--            <script>--}}
+        {{--            var firebaseConfig = {--}}
+        {{--                apiKey: "AIzaSyCqbRcHleZ6KieCklcsSXoPb14_XokjjnE",--}}
+        {{--                authDomain: "test-notification-a.firebaseapp.com",--}}
+        {{--                projectId: "test-notification-a",--}}
+        {{--                storageBucket: "test-notification-a.appspot.com",--}}
+        {{--                messagingSenderId: "239124097894",--}}
+        {{--                appId: "1:239124097894:web:a86672b06e9cb0cf9776a7",--}}
+        {{--                measurementId: "G-XQ1NNH632T"--}}
+        {{--            };--}}
+        {{--             Initialize Firebase--}}
+        {{--            firebase.initializeApp(firebaseConfig);--}}
+        {{--            const messaging = firebase.messaging();--}}
+        {{--            function initFirebaseMessagingRegistration() {--}}
+        {{--                messaging.requestPermission().then(function () {--}}
+        {{--                    return messaging.getToken()--}}
+        {{--                }).then(function(token) {--}}
+        {{--                    console.log(token);--}}
+        {{--                    axios.post('/send',{--}}
+        {{--                        _method:"GET",--}}
+        {{--                        token--}}
+        {{--                    }).then(({data})=>{--}}
+        {{--                        console.log(data)--}}
+        {{--                    }).catch(({response:{data}})=>{--}}
+        {{--                        console.error(data)--}}
+        {{--                    })--}}
+        {{--                }).catch(function (err) {--}}
+        {{--                    console.log(`Token Error :: ${err}`);--}}
+        {{--                });--}}
+        {{--            }--}}
+        {{--            initFirebaseMessagingRegistration();--}}
+        {{--            messaging.onMessage(function({data:{body,title}}){--}}
+        {{--                new Notification(title, {body});--}}
+        {{--            });--}}
+        {{--        </script>--}}
+
+
     </div>
     </body>
 </html>

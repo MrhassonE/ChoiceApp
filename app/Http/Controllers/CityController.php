@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\ActivityLog;
 use App\Models\City;
+use App\Models\FCMToken;
+use App\Notifications\AddCity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -34,6 +36,13 @@ class CityController extends Controller
 
         $text = 'تم اضافة مدينة بأسم '.$city->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
+        try {
+            foreach (FCMToken::all() as $user){
+                $user->notify(new AddCity($city->name));
+            }
+        }catch (\Exception $exception){
+
+        }
     }
 
     public function edit(City $city){

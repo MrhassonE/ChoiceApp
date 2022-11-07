@@ -30,7 +30,7 @@ class StaffController extends Controller
     }
 
     public function index(){
-        $users = User::all()->except([1,Auth::id()]);
+        $users = User::all();
         $roles = Role::all()->except(1);
         return view('Dashboard.Staff.index',compact('users','roles'));
     }

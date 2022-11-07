@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FCMToken extends Model
+class CustomNotification extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'fcm_token',
+        'title',
+        'body',
     ];
 }

@@ -39,6 +39,9 @@ class Company extends Model
     public function CompanyImages(){
         return $this->hasMany(CompanyImages::class,'company_id');
     }
+    public function Advertisement(){
+        return $this->hasMany(Advertisement::class,'company_id');
+    }
     public function Department(){
         return $this->belongsTo(Department::class,'department_id');
     }

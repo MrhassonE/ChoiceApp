@@ -96,6 +96,9 @@ Route::middleware('auth')->group(function (){
     Route::post('/Edit-Advertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'update'])->name('Advertisement.update');
     Route::post('/DeleteAdvertisement/{advertisement}',[\App\Http\Controllers\AdvertisementController::class,'destroy'])->name('Advertisement.Delete');
 
+// Notification
+    Route::get('/notifications',[\App\Http\Controllers\CustomNotificationController::class,'index'])->name('CustomNotification');
+    Route::post('/notifications',[\App\Http\Controllers\CustomNotificationController::class,'store'])->name('CustomNotification.store');
 
 });
 

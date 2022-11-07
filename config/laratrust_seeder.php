@@ -18,6 +18,7 @@ return [
             'department' => 'c,r,u,d',
             'company' => 'c,r,u,d',
             'advertisement' => 'c,r,u,d',
+            'notification' => 'c,r',
             'whats-new' => 'c,r,u,d',
             'image' => 'c,r,d',
             'profile' => 'r,u'

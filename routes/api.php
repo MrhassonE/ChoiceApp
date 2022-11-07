@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +32,5 @@ Route::get('advertisements',[\App\Http\Controllers\APIController::class,'getAdve
 Route::post('send',[\App\Http\Controllers\APIController::class,'send'])->name("send");
 Route::get('home/{id}',[\App\Http\Controllers\APIController::class,'home'])->name("home");
 
-Route::post('ipAddress',[\App\Http\Controllers\APIController::class,'ipAddress'])->name("ipAddress");
+Route::post('fcmToken',[\App\Http\Controllers\APIController::class,'fcmToken'])->name("fcmToken");
+

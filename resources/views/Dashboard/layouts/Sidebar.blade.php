@@ -59,6 +59,14 @@
                         </a>
                     </li>
                 @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('notification-read'))
+                    <li class="@if(request()->routeIs('CustomNotification*')) mm-active @endif">
+                        <a href="{{route('CustomNotification')}}">
+                            <i class="fa fa-solid fa-bell"></i>
+                            <span class="menu-item" data-key="t-dashboard">الأشعارات</span>
+                        </a>
+                    </li>
+                @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('whats-new-read'))
                     <li class="@if(request()->routeIs('WhatsNew*')) mm-active @endif">
                         <a href="{{route('WhatsNew')}}">

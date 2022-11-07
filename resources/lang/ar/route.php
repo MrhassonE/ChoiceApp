@@ -22,6 +22,8 @@ return [
 
     'Setting' => 'الاعدادات',
 
+    'CustomNotification' => 'الأشعارات',
+
     'Staff' => 'المستخدمين',
     'Staff.edit' => 'تغيير معلومات المستخدم',
     'Profile' => 'الملف الشخصي',

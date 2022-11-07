@@ -14,15 +14,10 @@ use Illuminate\Support\Facades\Mail;
 
 class APIController extends Controller
 {
-    protected function ipAddress(Request $request){
-        $fcm = FCMToken::where('ip_address',request()->ip())->first();
-        if ($fcm){
-            $fcm->update([
-                'fcm_token'=>$request->fcm_token,
-            ]);
-        }else{
+    protected function fcmToken(Request $request){
+        $fcm = FCMToken::where('fcm_token',$request->fcm_token)->first();
+        if (!$fcm){
             $fcm = FCMToken::create([
-                'ip_address'=>request()->ip(),
                 'fcm_token'=>$request->fcm_token,
             ]);
         }
@@ -172,4 +167,6 @@ class APIController extends Controller
         $res=$res->merge(["company_new"=>$company2]);
         return $res->all();
     }
+
+
 }

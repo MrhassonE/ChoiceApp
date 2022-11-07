@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFCMTokensTable extends Migration
+class CreateCustomNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateFCMTokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('f_c_m_tokens', function (Blueprint $table) {
+        Schema::create('custom_notifications', function (Blueprint $table) {
             $table->id();
-            $table->longText('fcm_token');
+            $table->string('title');
+            $table->string('body');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateFCMTokensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('f_c_m_tokens');
+        Schema::dropIfExists('custom_notifications');
     }
 }

@@ -132,41 +132,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
-
-    <a href="#" data-bs-toggle="modal" data-bs-target=".support"
-       style="background:#213A75;padding: 20px;font-size: 20px;position: fixed; opacity: 0.8; bottom: 30px;left: 20px;color: #fff;border-radius: 50%;z-index: 10000;"
-       class="d-flex justify-content-center">
-        <i class="fa fa-headset" aria-hidden="true"></i>
-    </a>
-
-    <div class="modal fade support" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myExtraLargeModalLabel">للتواصل مع فريق الدعم الفني</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 my-1">
-                            <div class="form-group text-md-center">
-                                <h4 class="text-dark"> 07838255584 <i class="fa fa-phone-alt"></i></h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 my-1">
-
-                        </div>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 </x-appDash-layout>
