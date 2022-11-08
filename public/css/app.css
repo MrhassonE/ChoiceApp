@@ -782,9 +782,6 @@ select {
   border-color: transparent;
   background-color: currentColor;
 }
-.visible {
-  visibility: visible;
-}
 .collapse {
   visibility: collapse;
 }
@@ -811,9 +808,6 @@ select {
 }
 .z-50 {
   z-index: 50;
-}
-.m-2 {
-  margin: 0.5rem;
 }
 .my-1 {
   margin-top: 0.25rem;
@@ -850,10 +844,6 @@ select {
 .my-5 {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-}
-.my-0 {
-  margin-top: 0px;
-  margin-bottom: 0px;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -1409,10 +1399,6 @@ select {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
-.text-black {
-  --tw-text-opacity: 1;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
-}
 .text-green-600 {
   --tw-text-opacity: 1;
   color: rgb(22 163 74 / var(--tw-text-opacity));
@@ -1420,6 +1406,10 @@ select {
 .text-indigo-700 {
   --tw-text-opacity: 1;
   color: rgb(67 56 202 / var(--tw-text-opacity));
+}
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 .underline {
   text-decoration-line: underline;
