@@ -15,12 +15,16 @@ use Illuminate\Support\Facades\Mail;
 class APIController extends Controller
 {
     protected function fcmToken(Request $request){
+        $request->validate([
+            'fcm_token'=>'required|min:10'
+        ]);
         $fcm = FCMToken::where('fcm_token',$request->fcm_token)->first();
         if (!$fcm){
             $fcm = FCMToken::create([
                 'fcm_token'=>$request->fcm_token,
             ]);
         }
+        return response()->json(['success'=>'true'], 200);
     }
 
     protected function getCities(){

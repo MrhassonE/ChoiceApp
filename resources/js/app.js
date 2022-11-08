@@ -8,11 +8,7 @@ Alpine.start();
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyD1Wt493BiW49sF5vmQ4NJMjvp4RpVWL10",
     authDomain: "choice-app-cc51f.firebaseapp.com",
@@ -23,6 +19,29 @@ const firebaseConfig = {
     measurementId: "G-NXTK6N3V1Q"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+
+
+// // Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
+//
+// // Your web app's Firebase configuration
+// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//     apiKey: "AIzaSyDuJpiuFYbC_f1_9VkiA5ZDRy61C7HVdNU",
+//     authDomain: "choiceapp-8e83d.firebaseapp.com",
+//     projectId: "choiceapp-8e83d",
+//     storageBucket: "choiceapp-8e83d.appspot.com",
+//     messagingSenderId: "273457438729",
+//     appId: "1:273457438729:web:4bdc9ed1552dc21e8658d8",
+//     measurementId: "G-1EN5BX387Q"
+// };
+//
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
