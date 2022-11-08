@@ -46,19 +46,18 @@
                                                 <td>
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-update'))
                                                         @if($user->is_active == 1)
-                                                        <a href="{{route('Staff.edit',$user->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
-                                                        <a href="#" data-bs-toggle="modal" data-bs-target=".password-{{$user->id}}" class="btn btn-secondary btn-round"><i class="fa fa-user-lock m-2"></i>تغيير الرمز</a>
+                                                            <a href="{{route('Staff.edit',$user->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
+                                                            <a href="#" data-bs-toggle="modal" title="تغيير الرمز" data-bs-target=".password-{{$user->id}}" class="btn btn-secondary btn-round"><i class="fa fa-user-lock"></i></a>
                                                         @endif
                                                     @endif
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-delete'))
                                                         @if($user->is_active == 1)
-                                                            <a href="javascript:;" onclick="DisActiveUser({{$user->id}})" class="btn btn-danger btn-round">ايقاف</a>
+                                                                <a href="javascript:;" onclick="DisActiveUser({{$user->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
                                                         @elseif($user->is_active == 0)
                                                             <a href="javascript:;" onclick="ActiveUser({{$user->id}})" class="btn btn-success btn-round">تفعيل</a>
                                                             <a href="javascript:;" onclick="DeleteContact({{$user->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash"></i>حذف</a>
                                                         @endif
                                                     @endif
-
                                                 </td>
                                             </tr>
 

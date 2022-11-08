@@ -74,50 +74,105 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-            <style>
-                .tooltip .tooltiptext {
-                    visibility: hidden;
-                    width: 120px;
-                    background-color: black;
-                    color: #fff;
-                    text-align: center;
-                    border-radius: 6px;
-                    padding: 5px 0;
-
-                    position: absolute;
-                    z-index: 1;
-                }
-
-                .tooltip:hover .tooltiptext {
-                    visibility: visible;
-                }
-            </style>
             <div class="row mt-2 d-flex" id="grid-leader">
                 @if($companies->count() >0)
-                @foreach($companies as $co)
-                    <div class="col-xl-4 col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-center">
-                                    <div>
-                                        <img src="{{$co->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xl img-thumbnail">
-                                    </div>
-                                </div>
-                                <div class="mt-3 pt-1">
-                                    <p class="mb-0 mt-2 text-black">
-                                        القسم: {{$co->Department->name}}
-                                    </p>
-                                </div>
-                                <div class="mt-3 pt-1">
-                                    <p class="mb-0 mt-2">
-                                        الاسم: {{$co->name}}
-                                    </p>
-                                </div>
-                                <div class="mt-3 pt-1">
-                                    <p class="mb-0 mt-2">
-                                        البريد الالكتروني: {{$co->email}}
-                                    </p>
-                                </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الصورة</th>
+                                <th>أسم الشركة</th>
+                                <th>البريد الالكتروني</th>
+                                <th>القسم</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($companies as $key=>$co)
+                                <tr>
+                                    <td class="fw-semibold">{{$key + 1}}</td>
+                                    <td>
+                                        <img src="{{$co->img_path}}" class="avatar  card-img-top" alt="">
+                                    </td>
+                                    <td>
+                                        {{$co->name}}
+                                    </td>
+                                    <td>
+                                        {{$co->email}}
+                                    </td>
+                                    <td>
+                                        {{$co->Department->name}}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 pt-4">
+                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
+                                                @if($co->is_active == 1)
+                                                    <a href="{{route('Company.show',$co->id)}}" title="عرض التفاصيل" class="btn btn-secondary"><i class="bx bxs-show"></i></a>
+                                                    <a href="{{route('Company.edit',$co->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
+                                                @endif
+                                            @endif
+                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
+                                                @if($co->is_active == 1)
+                                                        <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
+                                                @elseif($co->is_active == 0)
+                                                    <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                                    <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+
+                                                @endif
+                                            @endif
+                                        </div>
+                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
+                                            <div class="d-flex gap-2 pt-4 ">
+                                                @if($co->is_active == 1)
+                                                    @if($co->new ==0)
+                                                        <a href="javascript:;" onclick="NewSection({{$co->id}})" title="اضافة الى الجديد" class="btn btn-soft-success btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                                    @elseif($co->new ==1)
+                                                        <a href="javascript:;" onclick="NewSection({{$co->id}})" title="حذف من الجديد" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                                    @endif
+                                                    @if($co->most_viewed ==0)
+                                                        <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="اضافة الى الأكثر مشاهدة" class="btn btn-soft-info btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                                    @elseif($co->most_viewed ==1)
+                                                        <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="حذف من الأكثر مشاهدة" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                                    @endif
+                                                    @if($co->is_main ==0)
+                                                        <a href="javascript:;" onclick="MainSection({{$co->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                                    @elseif($co->is_main ==1)
+                                                        <a href="javascript:;" onclick="MainSection({{$co->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+{{--                @foreach($companies as $key=>$co)--}}
+{{--                    <div class="col-xl-4 col-sm-6">--}}
+{{--                        <div class="card">--}}
+{{--                            <div class="card-body">--}}
+{{--                                <div class="d-flex justify-content-center">--}}
+{{--                                    <div>--}}
+{{--                                        <img src="{{$co->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xl img-thumbnail">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="mt-3 pt-1">--}}
+{{--                                    <p class="mb-0 mt-2 text-black">--}}
+{{--                                        القسم: {{$co->Department->name}}--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
+{{--                                <div class="mt-3 pt-1">--}}
+{{--                                    <p class="mb-0 mt-2">--}}
+{{--                                        الاسم: {{$co->name}}--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
+{{--                                <div class="mt-3 pt-1">--}}
+{{--                                    <p class="mb-0 mt-2">--}}
+{{--                                        البريد الالكتروني: {{$co->email}}--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
 {{--                                <div class="mt-3 pt-1">--}}
 {{--                                    <p class="mb-0 mt-2">--}}
 {{--                                        رقم الهاتف: {{$co->phone}}--}}
@@ -128,49 +183,49 @@
 {{--                                        العنوان: {{$co->address}}--}}
 {{--                                    </p>--}}
 {{--                                </div>--}}
-                                <div class="d-flex gap-2 pt-4">
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                        @if($co->is_active == 1)
-                                        <a href="{{route('Company.show',$co->id)}}"  class="btn btn-secondary">التفاصيل</a>
-                                        <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i>تعديل</a>
-                                        @endif
-                                    @endif
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
-                                        @if($co->is_active == 1)
-                                            <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" class="btn btn-danger btn-round">ايقاف</a>
-                                        @elseif($co->is_active == 0)
-                                            <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
-                                            <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+{{--                                <div class="d-flex gap-2 pt-4">--}}
+{{--                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))--}}
+{{--                                        @if($co->is_active == 1)--}}
+{{--                                        <a href="{{route('Company.show',$co->id)}}"  class="btn btn-secondary">التفاصيل</a>--}}
+{{--                                        <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i>تعديل</a>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
+{{--                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))--}}
+{{--                                        @if($co->is_active == 1)--}}
+{{--                                            <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" class="btn btn-danger btn-round">ايقاف</a>--}}
+{{--                                        @elseif($co->is_active == 0)--}}
+{{--                                            <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>--}}
+{{--                                            <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>--}}
 
-                                        @endif
-                                    @endif
-                                </div>
-                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                    <div class="d-flex gap-2 pt-4 ">
-                                        @if($co->is_active == 1)
-                                            @if($co->new ==0)
-                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="اضافة الى الجديد" class="btn btn-soft-success btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                            @elseif($co->new ==1)
-                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="حذف من الجديد" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                            @endif
-                                            @if($co->most_viewed ==0)
-                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="اضافة الى الأكثر مشاهدة" class="btn btn-soft-info btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                            @elseif($co->most_viewed ==1)
-                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="حذف من الأكثر مشاهدة" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                            @endif
-                                            @if($co->is_main ==0)
-                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                            @elseif($co->is_main ==1)
-                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                            @endif
-                                        @endif
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                        <!-- end card -->
-                    </div>
-                @endforeach
+{{--                                        @endif--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+{{--                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))--}}
+{{--                                    <div class="d-flex gap-2 pt-4 ">--}}
+{{--                                        @if($co->is_active == 1)--}}
+{{--                                            @if($co->new ==0)--}}
+{{--                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="اضافة الى الجديد" class="btn btn-soft-success btn-round"><i class="fa fa-solid fa-plus"></i></a>--}}
+{{--                                            @elseif($co->new ==1)--}}
+{{--                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="حذف من الجديد" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>--}}
+{{--                                            @endif--}}
+{{--                                            @if($co->most_viewed ==0)--}}
+{{--                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="اضافة الى الأكثر مشاهدة" class="btn btn-soft-info btn-round"><i class="fa fa-solid fa-plus"></i></a>--}}
+{{--                                            @elseif($co->most_viewed ==1)--}}
+{{--                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="حذف من الأكثر مشاهدة" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>--}}
+{{--                                            @endif--}}
+{{--                                            @if($co->is_main ==0)--}}
+{{--                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>--}}
+{{--                                            @elseif($co->is_main ==1)--}}
+{{--                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>--}}
+{{--                                            @endif--}}
+{{--                                        @endif--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <!-- end card -->--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
                 @else
                     <div class="my-5">
                        <h3 class="text-center">لا يوجد شركات</h3>

@@ -86,10 +86,11 @@
                                                     </td>
                                                     <td>
                                                         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-update'))
-                                                            <a href="{{route('Advertisement.edit',$ad->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
+                                                            <a href="{{route('Advertisement.edit',$ad->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
+
                                                         @endif
                                                         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-delete'))
-                                                            <a href="javascript:;" onclick="DeleteAdvertisement({{$ad->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف</a>
+                                                            <a href="javascript:;" onclick="DeleteAdvertisement({{$ad->id}})" title="حذف" class="btn btn-danger btn-round"><i class="bx bx-trash"></i></a>
                                                         @endif
                                                     </td>
                                                 </tr>

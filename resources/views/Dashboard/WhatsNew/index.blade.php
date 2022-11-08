@@ -71,10 +71,10 @@
                                                 </td>
                                                 <td>
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('whats-new-update'))
-                                                            <a href="{{route('WhatsNew.edit',$n->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
+                                                        <a href="{{route('WhatsNew.edit',$n->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
                                                     @endif
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('whats-new-delete'))
-                                                            <a href="javascript:;" onclick="Delete({{$n->id}})" class="btn btn-danger btn-round">حذف</a>
+                                                            <a href="javascript:;" onclick="Delete({{$n->id}})" title="حذف" class="btn btn-danger btn-round"><i class="bx bx-trash"></i></a>
                                                     @endif
                                                 </td>
                                             </tr>

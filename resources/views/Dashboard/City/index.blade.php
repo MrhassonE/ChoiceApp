@@ -72,12 +72,12 @@
                                                 <td>
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('city-update'))
                                                         @if($city->is_active == 1)
-                                                            <a href="{{route('City.edit',$city->id)}}" class="btn btn-primary btn-round" ><i class="fa fa-pen me-1"></i>تعديل</a>
+                                                            <a href="{{route('City.edit',$city->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
                                                         @endif
                                                     @endif
                                                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('city-delete'))
                                                         @if($city->is_active == 1)
-                                                            <a href="javascript:;" onclick="DisActiveUser({{$city->id}})" class="btn btn-danger btn-round">ايقاف</a>
+                                                            <a href="javascript:;" onclick="DisActiveUser({{$city->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
                                                         @elseif($city->is_active == 0)
                                                             <a href="javascript:;" onclick="ActiveUser({{$city->id}})" class="btn btn-success btn-round">تفعيل</a>
                                                         @endif
