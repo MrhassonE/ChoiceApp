@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="col-md-6 my-1" >
                                     <div class="form-group" dir="ltr">
-                                        <label for="">What's Up</label>
+                                        <label for="">WhatsApp</label>
                                         <input id="whatsapp" value="{{$setting_info->whatsapp}}"  name="whatsapp" type="text" class="form-control" >
                                         <div class="invalid-tooltip">
                                             الرجاء املئ الحقل

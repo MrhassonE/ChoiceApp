@@ -15,7 +15,7 @@
                 <div class="col-md-6 my-1">
                     <div class="form-group">
                         <label for="">العنوان </label>
-                        <input id="address" value="{{$company->address}}" required name="address" type="text" class="form-control" placeholder="العنوان">
+                        <input id="address" maxlength="100" value="{{$company->address}}" required name="address" type="text" class="form-control" placeholder="العنوان">
                         <div class="invalid-tooltip">
                             الرجاء املئ الحقل
                         </div>
@@ -183,6 +183,11 @@
                         if (response.responseJSON.errors.name_ar) {
                             for(let i = 0; i<response.responseJSON.errors.name_ar.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.name_ar[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.address) {
+                            for(let i = 0; i<response.responseJSON.errors.address.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.address[i]}</li>`
                             }
                         }
                         Swal.fire(

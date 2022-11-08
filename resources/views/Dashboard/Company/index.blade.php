@@ -290,8 +290,8 @@
 
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">الريد الالكتروني</label>
-                                        <input id="email" maxlength="100" required name="email" type="email" class="form-control" placeholder="ادخل الريد الالكتروني">
+                                        <label for="">البريد الالكتروني</label>
+                                        <input id="email" maxlength="100" required name="email" type="email" class="form-control" placeholder="ادخل البريد الالكتروني">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
