@@ -35,4 +35,5 @@ Route::middleware('apiToken')->group(function () {
     Route::get('home/{id}',[\App\Http\Controllers\APIController::class,'home'])->name("home");
 
     Route::post('fcmToken',[\App\Http\Controllers\APIController::class,'fcmToken'])->name("fcmToken");
+    Route::post('visit',[\App\Http\Controllers\APIController::class,'visit'])->name("visit");
 });
