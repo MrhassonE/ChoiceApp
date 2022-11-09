@@ -135,5 +135,141 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar">
+                                            <div class="avatar-title rounded bg-soft-primary">
+                                                <img src="{{asset('assetsDashboard/images/android.png')}}" class="avatar-md" alt="">
+                                            </div>
+                                        </div>
+
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="d-flex mb-0 font-size-15">الزيارات لهذا اليوم</h6>
+                                            <h4 class="d-flex font-size-20">{{$advisit}}</h4>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar">
+                                            <div class="avatar-title rounded bg-soft-primary">
+                                                <img src="{{asset('assetsDashboard/images/android.png')}}" class="avatar-md" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="d-flex mb-0 font-size-15">الزيارات لهذا الشهر</h6>
+                                            <h4 class="d-flex font-size-20">{{$amvisit}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar">
+                                            <div class="avatar-title rounded bg-soft-primary">
+                                                <img src="{{asset('assetsDashboard/images/apple.png')}}" class="avatar-md" alt="">
+                                            </div>
+                                        </div>
+
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="d-flex mb-0 font-size-15">الزيارات لهذا اليوم</h6>
+                                            <h4 class="d-flex font-size-20">{{$idvisit}}</h4>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar">
+                                            <div class="avatar-title rounded bg-soft-primary">
+                                                <img src="{{asset('assetsDashboard/images/apple.png')}}" class="avatar-md" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="d-flex mb-0 font-size-15">الزيارات لهذا الشهر</h6>
+                                            <h4 class="d-flex font-size-20">{{$imvisit}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar">
+                                            <div class="avatar-title rounded bg-soft-primary">
+                                                <img src="{{asset('assetsDashboard/images/android.png')}}" class="avatar-md" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="d-flex mb-0 font-size-15">عدد الزيارات الكلي</h6>
+                                            <h4 class="d-flex font-size-20">{{$aavisit}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar">
+                                            <div class="avatar-title rounded bg-soft-primary">
+                                                <img src="{{asset('assetsDashboard/images/apple.png')}}" class="avatar-md" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="d-flex mb-0 font-size-15">عدد الزيارات الكلي</h6>
+                                            <h4 class="d-flex font-size-20">{{$iavisit}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </x-appDash-layout>
