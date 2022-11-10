@@ -12,15 +12,18 @@ class AddCompany extends Notification
 {
     use Queueable;
     public $name;
+    public $data;
 
     /**
      * Create a new notification instance.
      *
      * @param $name
+     * @param $data
      */
-    public function __construct($name)
+    public function __construct($name,$data)
     {
         $this->name = $name;
+        $this->data = $data;
     }
 
     /**
@@ -44,6 +47,7 @@ class AddCompany extends Notification
     {
         return Larafirebase::withTitle(' مرحبا ')
             ->withBody('تم اضافة شركة جديدة بأسم '.$this->name)
+            ->withAdditionalData(['Co'=>$this->data])
             ->sendNotification([$notifiable->fcm_token]);
     }
 }

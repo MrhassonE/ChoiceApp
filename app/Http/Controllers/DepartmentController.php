@@ -53,7 +53,7 @@ class DepartmentController extends Controller
         Event::dispatch(new ActivityLog($text,Auth::id()));
 
         foreach (FCMToken::all() as $user){
-            $user->notify(new AddDepartment($department->name));
+            $user->notify(new AddDepartment($department->name,$department));
         }
 
     }

@@ -10,15 +10,18 @@ class AddDepartment extends Notification
 {
     use Queueable;
     public $name;
+    public $data;
 
     /**
      * Create a new notification instance.
      *
      * @param $name
+     * @param $data
      */
-    public function __construct($name)
+    public function __construct($name,$data)
     {
         $this->name = $name;
+        $this->data = $data;
     }
 
     /**
@@ -43,6 +46,7 @@ class AddDepartment extends Notification
     {
         return Larafirebase::withTitle(' مرحبا ')
             ->withBody('تم اضافة قسم جديد بعنوان '.$this->name)
+            ->withAdditionalData(['De'=>$this->data])
             ->sendNotification([$notifiable->fcm_token]);
     }
 }

@@ -44,6 +44,7 @@ class AddCity extends Notification
     {
         return Larafirebase::withTitle(' مرحبا ')
             ->withBody('تم اضافة مدينة جديدة بأسم '.$this->name)
+            ->withAdditionalData(['Ci'=>''])
             ->sendNotification([$notifiable->fcm_token]);
     }
 }

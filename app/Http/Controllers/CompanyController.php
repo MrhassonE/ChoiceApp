@@ -85,7 +85,7 @@ class CompanyController extends Controller
         Event::dispatch(new ActivityLog($text,Auth::id()));
         try {
             foreach (FCMToken::all() as $user){
-                $user->notify(new AddCompany($company->name));
+                $user->notify(new AddCompany($company->name, $company));
             }
         }catch (\Exception $exception){
 

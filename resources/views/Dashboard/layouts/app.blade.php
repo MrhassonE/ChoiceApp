@@ -33,9 +33,6 @@
             });
         </script>
 
-        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
-        <script src="{{asset('js/app.js')}}"></script>
-
     </head>
     <body >
     <div id="layout-wrapper">
