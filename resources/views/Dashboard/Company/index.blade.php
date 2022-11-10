@@ -118,17 +118,17 @@
                                                                 @if($co->new ==0)
                                                                     <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">اضافة الى الجديد</a>
                                                                 @elseif($co->new ==1)
-                                                                    <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">حذف من الجديد</a>
+                                                                    <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">أخفاء من الجديد</a>
                                                                 @endif
                                                                 @if($co->most_viewed ==0)
                                                                     <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">اضافة الى الأكثر مشاهدة</a>
                                                                 @elseif($co->most_viewed ==1)
-                                                                    <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">حذف من الأكثر مشاهدة</a>
+                                                                    <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">أخفاء من الأكثر مشاهدة</a>
                                                                 @endif
                                                                 @if($co->is_main ==0)
                                                                     <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">اضافة الى الواجهة الرئيسية</a>
                                                                 @elseif($co->is_main ==1)
-                                                                    <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">حذف من الواجهة الرئيسية</a>
+                                                                    <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">أخفاء من الواجهة الرئيسية</a>
                                                                 @endif
                                                             </div>
                                                         </div>

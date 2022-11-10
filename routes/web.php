@@ -100,6 +100,9 @@ Route::middleware('auth')->group(function (){
     Route::get('/notifications',[\App\Http\Controllers\CustomNotificationController::class,'index'])->name('CustomNotification');
     Route::post('/notifications',[\App\Http\Controllers\CustomNotificationController::class,'store'])->name('CustomNotification.store');
 
+    Route::post('/fcmToken',function (\Illuminate\Http\Request $request) {
+       return $request->all();
+    })->name('fcmToken');
 });
 
 

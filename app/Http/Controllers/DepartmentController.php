@@ -147,9 +147,9 @@ class DepartmentController extends Controller
             return response(['title'=>'تم الاضافة','desc'=>' تم اضافة القسم الى الواجهة الرئيسية']);
         }elseif ($department->is_main ==1){
             $department->update(['is_main'=>0]);
-            $text = 'تم الحذف من الواجهة الرئيسية القسم '.$department->name;
+            $text = 'تم الأخفاء من الواجهة الرئيسية القسم '.$department->name;
             Event::dispatch(new ActivityLog($text,Auth::id()));
-            return response(['title'=>'تم الحذف','desc'=>' تم حذف القسم من الواجهة الرئيسية']);
+            return response(['title'=>'تم الأخفاء','desc'=>' تم الأخفاء القسم من الواجهة الرئيسية']);
         }
     }
 

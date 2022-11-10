@@ -7234,7 +7234,7 @@ var messaging = firebase.messaging();
 //             _method:"POST",
 //             token
 //         }).then(({data})=>{
-//             console.log(data)
+//             console.log(token)
 //         }).catch(({response:{data}})=>{
 //             console.error(data)
 //         })
@@ -7244,8 +7244,8 @@ var messaging = firebase.messaging();
 //     });
 // }
 //
-// initFirebaseMessagingRegistration();
-//
+//  initFirebaseMessagingRegistration();
+
 messaging.onMessage(function (_ref) {
   var _ref$data = _ref.data,
     body = _ref$data.body,

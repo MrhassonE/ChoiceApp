@@ -35,7 +35,7 @@ const messaging = firebase.messaging();
 //             _method:"POST",
 //             token
 //         }).then(({data})=>{
-//             console.log(data)
+//             console.log(token)
 //         }).catch(({response:{data}})=>{
 //             console.error(data)
 //         })
@@ -45,8 +45,9 @@ const messaging = firebase.messaging();
 //     });
 // }
 //
-// initFirebaseMessagingRegistration();
-//
+//  initFirebaseMessagingRegistration();
+
+
 messaging.onMessage(function({data:{body,title}}){
     new Notification(title, {body});
 });

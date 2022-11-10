@@ -190,9 +190,9 @@ class CompanyController extends Controller
             return response(['title'=>'تم الاضافة','desc'=>' تم اضافة الشركة الى حقل الجديد']);
         }elseif ($company->new == 1){
             $company->update(['new'=>0]);
-            $text = 'تم الحذف من الجديد للشركة '.$company->name;
+            $text = 'تم الأخفاء من الجديد للشركة '.$company->name;
             Event::dispatch(new ActivityLog($text,Auth::id()));
-            return response(['title'=>'تم الحذف','desc'=>' تم حذف الشركة من حقل الجديد']);
+            return response(['title'=>'تم الأخفاء','desc'=>' تم أخفاء الشركة من حقل الجديد']);
         }
     }
     public function MostViewedSection(Company $company){
@@ -204,9 +204,9 @@ class CompanyController extends Controller
             return response(['title'=>'تم الاضافة','desc'=>' تم اضافة الشركة الى حقل الاكثر مشاهدة']);
         }elseif ($company->most_viewed == 1){
             $company->update(['most_viewed'=>0]);
-            $text = 'تم الحذف من الاكثر مشاهدة للشركة '.$company->name;
+            $text = 'تم الأخفاء من الاكثر مشاهدة للشركة '.$company->name;
             Event::dispatch(new ActivityLog($text,Auth::id()));
-            return response(['title'=>'تم الحذف','desc'=>' تم حذف الشركة من حقل الأكثر مشاهدة']);
+            return response(['title'=>'تم الأخفاء','desc'=>' تم أخفاء الشركة من حقل الأكثر مشاهدة']);
         }
     }
 
@@ -218,9 +218,9 @@ class CompanyController extends Controller
             return response(['title'=>'تم الاضافة','desc'=>' تم اضافة الشركة الى الواجهة الرئيسية']);
         }elseif ($company->is_main ==1){
             $company->update(['is_main'=>0]);
-            $text = 'تم الحذف من الواجهة الرئيسية للشركة '.$company->name;
+            $text = 'تم الأخفاء من الواجهة الرئيسية للشركة '.$company->name;
             Event::dispatch(new ActivityLog($text,Auth::id()));
-            return response(['title'=>'تم الحذف','desc'=>' تم حذف الشركة من الواجهة الرئيسية']);
+            return response(['title'=>'تم الأخفاء','desc'=>' تم أخفاء الشركة من الواجهة الرئيسية']);
         }
     }
     public function destroy(Company $company){
