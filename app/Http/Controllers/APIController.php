@@ -6,11 +6,9 @@ use App\Models\AllVisit;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\ContactUs;
-use App\Models\DailyVisit;
 use App\Models\Department;
 use App\Models\FCMToken;
 use App\Models\GeneralSetting;
-use App\Models\MonthlyVisit;
 use App\Models\WhatsNew;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -179,14 +177,6 @@ class APIController extends Controller
         $request->validate([
             'ip_address'=>'required',
             'phone_type'=>'required',
-        ]);
-        DailyVisit::create([
-            'ip_address'=>$request->ip_address,
-            'phone_type'=>$request->phone_type,
-        ]);
-        MonthlyVisit::create([
-            'ip_address'=>$request->ip_address,
-            'phone_type'=>$request->phone_type,
         ]);
         AllVisit::create([
             'ip_address'=>$request->ip_address,

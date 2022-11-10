@@ -304,8 +304,8 @@
                 buttonsStyling: false
             });
             swalWithBootstrapButtons.fire({
-                title: 'هل أنت متاكد؟',
-                text: "هل تريد حذف هذا القسم!",
+                title: 'هل تريد حذف هذا القسم؟',
+                text: "سيتم حذف  جميع شركات القسم واعلاناتها !",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'تأكيد',

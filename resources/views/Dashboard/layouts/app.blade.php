@@ -22,6 +22,8 @@
         <!-- Icons Css -->
         <link href="{{asset('assetsDashboard/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
+        <script src="{{asset('assetsDashboard/js/plugins/chartjs.min.js')}}"></script>
+
         <link href="{{asset('assetsDashboard/css/app-rtl.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
         <script>
             $.ajaxSetup({
@@ -30,6 +32,10 @@
                 }
             });
         </script>
+
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
+        <script src="{{asset('js/app.js')}}"></script>
+
     </head>
     <body >
     <div id="layout-wrapper">

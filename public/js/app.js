@@ -7184,44 +7184,11 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
-/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/app */ "./node_modules/firebase/app/dist/index.esm.js");
-/* harmony import */ var firebase_analytics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! firebase/analytics */ "./node_modules/firebase/analytics/dist/index.esm.js");
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
-
-
-var firebaseConfig = {
-  apiKey: "AIzaSyD1Wt493BiW49sF5vmQ4NJMjvp4RpVWL10",
-  authDomain: "choice-app-cc51f.firebaseapp.com",
-  projectId: "choice-app-cc51f",
-  storageBucket: "choice-app-cc51f.appspot.com",
-  messagingSenderId: "999397640871",
-  appId: "1:999397640871:web:57551c65ecfe4d675ea982",
-  measurementId: "G-NXTK6N3V1Q"
-};
-var app = (0,firebase_app__WEBPACK_IMPORTED_MODULE_2__.initializeApp)(firebaseConfig);
-var analytics = (0,firebase_analytics__WEBPACK_IMPORTED_MODULE_3__.getAnalytics)(app);
-
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-
-// const firebaseConfig = {
-//     apiKey: "AIzaSyDuJpiuFYbC_f1_9VkiA5ZDRy61C7HVdNU",
-//     authDomain: "choiceapp-8e83d.firebaseapp.com",
-//     projectId: "choiceapp-8e83d",
-//     storageBucket: "choiceapp-8e83d.appspot.com",
-//     messagingSenderId: "273457438729",
-//     appId: "1:273457438729:web:4bdc9ed1552dc21e8658d8",
-//     measurementId: "G-1EN5BX387Q"
-// };
-//
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
 /***/ }),
 
@@ -7229,8 +7196,12 @@ var analytics = (0,firebase_analytics__WEBPACK_IMPORTED_MODULE_3__.getAnalytics)
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ "./node_modules/firebase/app/dist/index.esm.js");
+/* harmony import */ var firebase_analytics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/analytics */ "./node_modules/firebase/analytics/dist/index.esm.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 /**
@@ -7242,21 +7213,42 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
 
-// import Echo from 'laravel-echo';
+var firebaseConfig = {
+  apiKey: "AIzaSyD1Wt493BiW49sF5vmQ4NJMjvp4RpVWL10",
+  authDomain: "choice-app-cc51f.firebaseapp.com",
+  projectId: "choice-app-cc51f",
+  storageBucket: "choice-app-cc51f.appspot.com",
+  messagingSenderId: "999397640871",
+  appId: "1:999397640871:web:57551c65ecfe4d675ea982",
+  measurementId: "G-NXTK6N3V1Q"
+};
+firebase.initializeApp(firebaseConfig);
 
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
+// const messaging = firebase.messaging();
+//
+// function initFirebaseMessagingRegistration() {
+//     messaging.requestPermission().then(function () {
+//         return messaging.getToken()
+//     }).then(function(token) {
+//         axios.post("/fcmToken",{
+//             _method:"POST",
+//             token
+//         }).then(({data})=>{
+//             console.log(data)
+//         }).catch(({response:{data}})=>{
+//             console.error(data)
+//         })
+//
+//     }).catch(function (err) {
+//         console.log(`Token Error :: ${err}`);
+//     });
+// }
+//
+// initFirebaseMessagingRegistration();
+//
+// messaging.onMessage(function({data:{body,title}}){
+//     new Notification(title, {body});
 // });
 
 /***/ }),
@@ -29184,18 +29176,6 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
 /******/ 		};
 /******/ 	})();
 /******/ 	

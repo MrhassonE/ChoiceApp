@@ -52,12 +52,8 @@ class DepartmentController extends Controller
         $text = 'تم اضافة قسم بعنوان '.$department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
 
-        try {
-            foreach (FCMToken::all() as $user){
-                $user->notify(new AddDepartment($department->name));
-            }
-        }catch (\Exception $exception){
-
+        foreach (FCMToken::all() as $user){
+            $user->notify(new AddDepartment($department->name));
         }
 
     }
