@@ -25,8 +25,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-// const messaging = firebase.messaging();
-//
+const messaging = firebase.messaging();
+
 // function initFirebaseMessagingRegistration() {
 //     messaging.requestPermission().then(function () {
 //         return messaging.getToken()
@@ -47,6 +47,6 @@ firebase.initializeApp(firebaseConfig);
 //
 // initFirebaseMessagingRegistration();
 //
-// messaging.onMessage(function({data:{body,title}}){
-//     new Notification(title, {body});
-// });
+messaging.onMessage(function({data:{body,title}}){
+    new Notification(title, {body});
+});

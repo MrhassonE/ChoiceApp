@@ -108,7 +108,31 @@
                                         <div class="d-flex gap-2 pt-4">
                                             @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
                                                 @if($co->is_active == 1)
-                                                    <a href="{{route('Company.show',$co->id)}}" title="عرض التفاصيل" class="btn btn-secondary"><i class="bx bxs-show"></i></a>
+                                                    <div class="ms-auto">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-link text-secondary ps-0 pe-2" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-ellipsis-v text-lg"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end me-sm-n4 me-n3" aria-labelledby="navbarDropdownMenuLink">
+                                                                <a href="{{route('Company.show',$co->id)}}" class="dropdown-item">عرض التفاصيل</a>
+                                                                @if($co->new ==0)
+                                                                    <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">اضافة الى الجديد</a>
+                                                                @elseif($co->new ==1)
+                                                                    <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">حذف من الجديد</a>
+                                                                @endif
+                                                                @if($co->most_viewed ==0)
+                                                                    <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">اضافة الى الأكثر مشاهدة</a>
+                                                                @elseif($co->most_viewed ==1)
+                                                                    <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">حذف من الأكثر مشاهدة</a>
+                                                                @endif
+                                                                @if($co->is_main ==0)
+                                                                    <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">اضافة الى الواجهة الرئيسية</a>
+                                                                @elseif($co->is_main ==1)
+                                                                    <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">حذف من الواجهة الرئيسية</a>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <a href="{{route('Company.edit',$co->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
                                                 @endif
                                             @endif
@@ -122,27 +146,6 @@
                                                 @endif
                                             @endif
                                         </div>
-                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                            <div class="d-flex gap-2 pt-4 ">
-                                                @if($co->is_active == 1)
-                                                    @if($co->new ==0)
-                                                        <a href="javascript:;" onclick="NewSection({{$co->id}})" title="اضافة الى الجديد" class="btn btn-soft-success btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                                    @elseif($co->new ==1)
-                                                        <a href="javascript:;" onclick="NewSection({{$co->id}})" title="حذف من الجديد" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                                    @endif
-                                                    @if($co->most_viewed ==0)
-                                                        <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="اضافة الى الأكثر مشاهدة" class="btn btn-soft-info btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                                    @elseif($co->most_viewed ==1)
-                                                        <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="حذف من الأكثر مشاهدة" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                                    @endif
-                                                    @if($co->is_main ==0)
-                                                        <a href="javascript:;" onclick="MainSection({{$co->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                                    @elseif($co->is_main ==1)
-                                                        <a href="javascript:;" onclick="MainSection({{$co->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                                    @endif
-                                                @endif
-                                            </div>
-                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

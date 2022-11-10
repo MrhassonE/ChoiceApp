@@ -7224,9 +7224,8 @@ var firebaseConfig = {
   measurementId: "G-NXTK6N3V1Q"
 };
 firebase.initializeApp(firebaseConfig);
+var messaging = firebase.messaging();
 
-// const messaging = firebase.messaging();
-//
 // function initFirebaseMessagingRegistration() {
 //     messaging.requestPermission().then(function () {
 //         return messaging.getToken()
@@ -7247,9 +7246,14 @@ firebase.initializeApp(firebaseConfig);
 //
 // initFirebaseMessagingRegistration();
 //
-// messaging.onMessage(function({data:{body,title}}){
-//     new Notification(title, {body});
-// });
+messaging.onMessage(function (_ref) {
+  var _ref$data = _ref.data,
+    body = _ref$data.body,
+    title = _ref$data.title;
+  new Notification(title, {
+    body: body
+  });
+});
 
 /***/ }),
 

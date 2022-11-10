@@ -26,9 +26,9 @@
                                                     <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>الشعار</th>
                                                         <th>القسم</th>
                                                         <th>المدينة</th>
-                                                        <th>الشعار</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
@@ -37,24 +37,23 @@
                                                         <tr>
                                                             <td class="fw-semibold">{{$key + 1}}</td>
                                                             <td>
+                                                                <img src="{{$department->img_path}}" class=" avatar img-thumbnail" alt="">
+                                                            </td>
+                                                            <td>
                                                                 {{$department->name}}
                                                             </td>
                                                             <td>
                                                                 {{$department->City->name}}
                                                             </td>
                                                             <td>
-                                                                <img src="{{$department->img_path}}" class=" avatar img-thumbnail" alt="">
-                                                            </td>
-                                                            <td>
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
                                                                     @if($department->is_active == 1)
-{{--                                                                        <a href="{{route('Department.show',$department->id)}}" class="btn btn-secondary btn-round" >التفاصيل</a>--}}
-                                                                        <a href="{{route('Department.edit',$department->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>
                                                                         @if($department->is_main ==0)
                                                                             <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
                                                                         @elseif($department->is_main ==1)
                                                                             <a href="javascript:;" onclick="MainSection({{$department->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
                                                                         @endif
+                                                                            <a href="{{route('Department.edit',$department->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>
                                                                     @endif
 
                                                                 @endif
