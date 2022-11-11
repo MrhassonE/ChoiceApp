@@ -14,17 +14,24 @@ class CustomNotify extends Notification
     use Queueable;
     public $title;
     public $body;
+    public $data;
+    public $type;
 
     /**
      * Create a new notification instance.
      *
      * @param $title
      * @param $body
+     * @param $data
+     * @param $type
      */
-    public function __construct($title,$body)
+    public function __construct($title,$body,$data,$type)
     {
         $this->title = $title;
         $this->body = $body;
+        $this->data = $data;
+        $this->type = $type;
+
     }
 
     /**
@@ -49,6 +56,7 @@ class CustomNotify extends Notification
     {
         return Larafirebase::withTitle($this->title)
             ->withBody($this->body)
+            ->withAdditionalData(['Ty'=>$this->type,'Cu'=>$this->data])
             ->sendNotification([$notifiable->fcm_token]);
     }
 }

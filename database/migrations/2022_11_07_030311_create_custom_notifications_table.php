@@ -17,6 +17,11 @@ class CreateCustomNotificationsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('body');
+            $table->integer('type')->default(0);
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });
     }

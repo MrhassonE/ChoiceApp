@@ -11,5 +11,15 @@ class CustomNotification extends Model
     protected $fillable = [
         'title',
         'body',
+        'type',
+        'department_id',
+        'company_id'
     ];
+
+    public function Department(){
+        return $this->belongsTo(Department::class,'department_id');
+    }
+    public function Company(){
+        return $this->belongsTo(Company::class,'company_id');
+    }
 }

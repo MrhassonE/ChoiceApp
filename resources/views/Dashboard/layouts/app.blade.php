@@ -96,46 +96,6 @@
 
             <script src="{{asset('assetsDashboard/js/app.js')}}"></script>
             <!-- Theme scripts -->
-
-
-
-        {{--            <script>--}}
-        {{--            var firebaseConfig = {--}}
-        {{--                apiKey: "AIzaSyCqbRcHleZ6KieCklcsSXoPb14_XokjjnE",--}}
-        {{--                authDomain: "test-notification-a.firebaseapp.com",--}}
-        {{--                projectId: "test-notification-a",--}}
-        {{--                storageBucket: "test-notification-a.appspot.com",--}}
-        {{--                messagingSenderId: "239124097894",--}}
-        {{--                appId: "1:239124097894:web:a86672b06e9cb0cf9776a7",--}}
-        {{--                measurementId: "G-XQ1NNH632T"--}}
-        {{--            };--}}
-        {{--             Initialize Firebase--}}
-        {{--            firebase.initializeApp(firebaseConfig);--}}
-        {{--            const messaging = firebase.messaging();--}}
-        {{--            function initFirebaseMessagingRegistration() {--}}
-        {{--                messaging.requestPermission().then(function () {--}}
-        {{--                    return messaging.getToken()--}}
-        {{--                }).then(function(token) {--}}
-        {{--                    console.log(token);--}}
-        {{--                    axios.post('/send',{--}}
-        {{--                        _method:"GET",--}}
-        {{--                        token--}}
-        {{--                    }).then(({data})=>{--}}
-        {{--                        console.log(data)--}}
-        {{--                    }).catch(({response:{data}})=>{--}}
-        {{--                        console.error(data)--}}
-        {{--                    })--}}
-        {{--                }).catch(function (err) {--}}
-        {{--                    console.log(`Token Error :: ${err}`);--}}
-        {{--                });--}}
-        {{--            }--}}
-        {{--            initFirebaseMessagingRegistration();--}}
-        {{--            messaging.onMessage(function({data:{body,title}}){--}}
-        {{--                new Notification(title, {body});--}}
-        {{--            });--}}
-        {{--        </script>--}}
-
-
     </div>
     </body>
 </html>

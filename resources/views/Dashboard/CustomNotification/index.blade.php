@@ -30,6 +30,7 @@
                                         <th>#</th>
                                         <th>العنوان</th>
                                         <th>الوصف</th>
+                                        <th>تابع الى</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -41,6 +42,16 @@
                                                 </td>
                                                 <td>
                                                     {{$customNotification->body}}
+                                                </td>
+
+                                                <td>
+                                                    @if($customNotification->type ==1)
+                                                        قسم
+                                                    {{$customNotification->Department->name}}
+                                                    @elseif($customNotification->type ==2)
+                                                        شركو
+                                                    {{$customNotification->Company->name}}
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -83,6 +94,48 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <label for="">اختر النوع</label>
+                                        <select class="form-control" name="type" id="type" required>
+                                            <option value="0" readonly>اختر النوع</option>
+                                            <option value="1">الاقسام</option>
+                                            <option value="2">الشركات</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="Departments" class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <label for="">اختر القسم</label>
+                                        <select class="form-control" name="department">
+                                            @foreach($deps as $dep)
+                                                <option value="{{$dep->id}}">{{$dep->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="Companies" class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <label for="">اختر الشركة</label>
+                                        <select class="form-control" name="company">
+                                            @foreach($cos as $co)
+                                                <option value="{{$co->id}}">{{$co->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-12 my-1">
                                     <ul id="errors"></ul>
                                 </div>
@@ -98,8 +151,25 @@
 
         <!--  Extra Large modal example -->
     </div>
-    <script >
+    <script>
+        $('#Companies').hide();
+        $('#Departments').hide();
+        $(function () {
+            $("#type").change(function () {
+                if ($(this).val() == "1") {
+                    $("#Departments").show();
+                    $('#Companies').hide();
 
+                } else if ($(this).val() == "2") {
+                    $("#Companies").show();
+                    $('#Departments').hide();
+
+                }else if ($(this).val() == "0") {
+                    $("#Companies").hide();
+                    $('#Departments').hide();
+                }
+            });
+        });
         let validateForm = false;
         (function () {
             'use strict';
