@@ -1,79 +1,77 @@
 <x-appDash-layout>
     <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5 class="card-title">الأقسام<span class="text-muted fw-normal ms-2"> ({{$departments->count()}})</span></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" >
+                <div class="d-flex flex-wrap align-items-start justify-content-start gap-2 mb-3">
+                    <div>
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-create'))
+                            <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة قسم</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">الأقسام</h3>
-                    </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <div>
-                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-create'))
-                                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة قسم</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row mt-2 d-flex" id="grid-leader">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>الشعار</th>
-                                                        <th>القسم</th>
-                                                        <th>المدينة</th>
-                                                        <th></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($departments as $key=>$department)
-                                                        <tr>
-                                                            <td class="fw-semibold">{{$key + 1}}</td>
-                                                            <td>
-                                                                <img src="{{$department->img_path}}" class=" avatar img-thumbnail" alt="">
-                                                            </td>
-                                                            <td>
-                                                                {{$department->name}}
-                                                            </td>
-                                                            <td>
-                                                                {{$department->City->name}}
-                                                            </td>
-                                                            <td>
-                                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
-                                                                    @if($department->is_active == 1)
-                                                                        @if($department->is_main ==0)
-                                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
-                                                                        @elseif($department->is_main ==1)
-                                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اخفاء من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
-                                                                        @endif
-                                                                            <a href="{{route('Department.edit',$department->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>
-                                                                    @endif
+                        <div class="row mt-2 d-flex" id="grid-leader">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الشعار</th>
+                                        <th>القسم</th>
+                                        <th>المدينة</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($departments as $key=>$department)
+                                        <tr>
+                                            <td class="fw-semibold">{{$key + 1}}</td>
+                                            <td>
+                                                <img src="{{$department->img_path}}" class=" avatar img-thumbnail" alt="">
+                                            </td>
+                                            <td>
+                                                {{$department->name}}
+                                            </td>
+                                            <td>
+                                                {{$department->City->name}}
+                                            </td>
+                                            <td>
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
+                                                    @if($department->is_active == 1)
+                                                        @if($department->is_main ==0)
+                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
+                                                        @elseif($department->is_main ==1)
+                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اخفاء من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                                        @endif
+                                                        <a href="{{route('Department.edit',$department->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>
+                                                    @endif
 
-                                                                @endif
-                                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-delete'))
-                                                                    @if($department->is_active == 1)
-                                                                        <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" title="أيقاف القسم" class="mx-2 btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
-                                                                    @elseif($department->is_active == 0)
-                                                                        <a href="javascript:;" onclick="ActiveUser({{$department->id}})" class="mx-2 btn btn-success btn-round">تفعيل</a>
-                                                                        <a href="javascript:;" onclick="DeleteDepartment({{$department->id}})" class="mx-2 btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
-                                                                    @endif
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                @endif
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-delete'))
+                                                    @if($department->is_active == 1)
+                                                        <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" title="أيقاف القسم" class="mx-2 btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
+                                                    @elseif($department->is_active == 0)
+                                                        <a href="javascript:;" onclick="ActiveUser({{$department->id}})" class="mx-2 btn btn-success btn-round">تفعيل</a>
+                                                        <a href="javascript:;" onclick="DeleteDepartment({{$department->id}})" class="mx-2 btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

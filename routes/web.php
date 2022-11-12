@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function (){
 
 // Setting
     Route::get('/setting',[\App\Http\Controllers\GeneralSettingController::class,'index'])->name('Setting');
+    Route::get('/policy',[\App\Http\Controllers\GeneralSettingController::class,'policyConditionsPage'])->name('Setting.policy');
     Route::get('/activityLog',[\App\Http\Controllers\ActivityLogController::class,'ActivityLog'])->name('Setting.activityLog');
     Route::post('/setting/info',[\App\Http\Controllers\GeneralSettingController::class,'SettingInfo'])->name('Setting.info');
     Route::post('/setting/policyConditions/{setting}',[\App\Http\Controllers\GeneralSettingController::class,'policyConditions'])->name('Setting.policyConditions');

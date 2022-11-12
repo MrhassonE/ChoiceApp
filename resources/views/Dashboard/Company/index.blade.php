@@ -74,7 +74,11 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-            <div class="row mt-2 d-flex" id="grid-leader">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mt-2 d-flex" id="grid-leader">
                 @if($companies->count() >0)
                     <div class="table-responsive">
                         <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
@@ -234,6 +238,9 @@
                        <h3 class="text-center">لا يوجد شركات</h3>
                     </div>
                 @endif
+            </div>
+                    </div>
+                </div>
             </div>
         @endif
 

@@ -21,6 +21,11 @@ class GeneralSettingController extends Controller
         return view('Dashboard.Settings.index',compact('setting_info','email'));
     }
 
+    public function policyConditionsPage(){
+        $setting_info = GeneralSetting::first();
+        return view('Dashboard.Settings.policy',compact('setting_info'));
+    }
+
     public function SettingInfo(Request $request) {
         $request->validate([
             'company_name'=>'required|max:500',

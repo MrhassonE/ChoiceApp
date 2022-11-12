@@ -40,4 +40,8 @@ return [
     'profile-update' => 'تعديل الملف الشخصي',
 
 
+    'notification-read' => 'عرض الأشعارات',
+    'notification-create' => 'انشاء الأشعارات',
+
+
 ];

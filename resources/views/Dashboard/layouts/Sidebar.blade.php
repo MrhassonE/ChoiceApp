@@ -107,6 +107,12 @@
                             <span class="menu-item" data-key="t-dashboard">الاعدادات</span>
                         </a>
                     </li>
+                    <li class="@if(request()->routeIs('Setting.policy')) mm-active @endif">
+                        <a href="{{route('Setting.policy')}}">
+                            <i class="fa fa-user-shield icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">السياسة والشروط</span>
+                        </a>
+                    </li>
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
                     <li class="@if(request()->routeIs('laratrust.roles.index')) mm-active @endif">
