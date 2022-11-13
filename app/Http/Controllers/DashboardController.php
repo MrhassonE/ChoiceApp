@@ -10,12 +10,21 @@ use App\Models\Department;
 class DashboardController extends Controller
 {
     public function index(){
-        $departments = Department::all()->count();
-        $departmentsMain = Department::where('is_active',1)->where('is_main',1)->count();
-        $companies = Company::all()->count();
-        $companiesMostViewed = Company::where('is_active',1)->where('is_main',1)->count();
-        $companiesNew = Company::where('is_active',1)->where('new',1)->count();
-        $ads = Advertisement::all()->count();
+        if (auth()->user()->hasRole('superAdministrator')) {
+            $departments = Department::all()->count();
+            $departmentsMain = Department::where('is_active', 1)->where('is_main', 1)->count();
+            $companies = Company::all()->count();
+            $companiesMostViewed = Company::where('is_active', 1)->where('is_main', 1)->count();
+            $companiesNew = Company::where('is_active', 1)->where('new', 1)->count();
+            $ads = Advertisement::all()->count();
+        }else{
+            $departments = Department::where('country_id',auth()->user()->country_id)->count();
+            $departmentsMain = Department::where('country_id',auth()->user()->country_id)->where('is_active', 1)->where('is_main', 1)->count();
+            $companies = Company::where('country_id',auth()->user()->country_id)->count();
+            $companiesMostViewed = Company::where('country_id',auth()->user()->country_id)->where('is_active', 1)->where('is_main', 1)->count();
+            $companiesNew = Company::where('country_id',auth()->user()->country_id)->where('is_active', 1)->where('new', 1)->count();
+            $ads = Advertisement::where('country_id',auth()->user()->country_id)->count();
+        }
         $month = date('m');
         $day = date('d');
 
