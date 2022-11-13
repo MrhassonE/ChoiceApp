@@ -11,7 +11,7 @@
             <div class="col-md-6" >
                 <div class="d-flex flex-wrap align-items-start justify-content-start gap-2 mb-3">
                     <div>
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-create'))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-create|country-advertisement-create'))
                             <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء اعلان</a>
                         @endif
                     </div>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <!-- end row -->
-        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-read'))
+        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-read|country-advertisement-read'))
             <div class="col-md-6">
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     <div>
@@ -85,11 +85,11 @@
                                                         {{$ad->Company->name}}
                                                     </td>
                                                     <td>
-                                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-update'))
+                                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-update|country-advertisement-update'))
                                                             <a href="{{route('Advertisement.edit',$ad->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
 
                                                         @endif
-                                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-delete'))
+                                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-delete|country-advertisement-delete'))
                                                             <a href="javascript:;" onclick="DeleteAdvertisement({{$ad->id}})" title="حذف" class="btn btn-danger btn-round"><i class="bx bx-trash"></i></a>
                                                         @endif
                                                     </td>

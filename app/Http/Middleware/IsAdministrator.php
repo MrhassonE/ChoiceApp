@@ -16,7 +16,7 @@ class IsAdministrator
      */
     public function handle(Request $request, Closure $next)
     {
-        if (\Illuminate\Support\Facades\Auth::user()->hasRole('administrator')){
+        if (\Illuminate\Support\Facades\Auth::user()->hasRole('superAdministrator|administrator')){
             return $next($request);
         }else{
             return redirect()->back();

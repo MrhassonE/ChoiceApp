@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMonthlyVisitsTable extends Migration
+class CreateCountriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateMonthlyVisitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('monthly_visits', function (Blueprint $table) {
+        Schema::create('countries', function (Blueprint $table) {
             $table->id();
-            $table->string('ip_address');
-            $table->string('phone_type');
+            $table->string('name');
+            $table->integer('is_active')->default(1);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateMonthlyVisitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('monthly_visits');
+        Schema::dropIfExists('countries');
     }
 }

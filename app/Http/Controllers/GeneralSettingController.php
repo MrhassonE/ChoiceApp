@@ -13,19 +13,18 @@ class GeneralSettingController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:administrator');
+        $this->middleware('role:superAdministrator');
     }
+
     public function index() {
         $setting_info = GeneralSetting::first();
         $email = ConfigEmail::first();
         return view('Dashboard.Settings.index',compact('setting_info','email'));
     }
-
     public function policyConditionsPage(){
         $setting_info = GeneralSetting::first();
         return view('Dashboard.Settings.policy',compact('setting_info'));
     }
-
     public function SettingInfo(Request $request) {
         $request->validate([
             'company_name'=>'required|max:500',
@@ -44,8 +43,14 @@ class GeneralSettingController extends Controller
             $file->storeAs('Setting',$fileName,'public');
             $g->company_logo = $fileName;
         }
-
-        $g->update($request->except('company_logo','uot_image'));
+        $notify = 0;
+        if ($request->notification){
+            $notify = 1;
+        }
+        $g->update([
+            'company_name'=>$request->company_name,
+            'notification'=>$notify,
+        ]);
 
         $text = 'تم تعديل معلومات الشركة ';
         Event::dispatch(new \App\Events\ActivityLog($text,Auth::id()));
@@ -56,6 +61,18 @@ class GeneralSettingController extends Controller
             'conditions' => 'max:500',
         ]);
         $setting->update($request->all());
+
+        $text = 'تم تعديل سياسة الخصوصية وشروط الخدمات ';
+        Event::dispatch(new \App\Events\ActivityLog($text,Auth::id()));
+    }
+    public function appUrl(Request $request) {
+        $request->validate([
+            'android_app'=>'max:190',
+            'ios_app' => 'max:190',
+        ]);
+
+        $g = GeneralSetting::first();
+        $g->update($request->all());
 
         $text = 'تم تعديل سياسة الخصوصية وشروط الخدمات ';
         Event::dispatch(new \App\Events\ActivityLog($text,Auth::id()));

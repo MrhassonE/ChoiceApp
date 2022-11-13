@@ -38,7 +38,7 @@
                     <input
                         class="form-input mt-1 block w-full"
                         name="display_name"
-                        placeholder="تعديل الاسم"
+                        placeholder="أدخل الاسم"
                         x-model="displayName"
                         autocomplete="off"
                     >

@@ -31,6 +31,15 @@
                                         <img class="img-fluid" src="{{$setting_info->company_logo_path}}" alt="">
                                     </div>
                                 </div>
+
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <div class="form-check form-switch">
+                                            <label class="form-check-label" for="notification">أشعارات التطبيق</label>
+                                            <input class="form-check-input" name="notification" @if($setting_info->notification) checked @endif type="checkbox" id="notification">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-12 my-1">
                                     <ul id="errors">
 
@@ -135,6 +144,51 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">روابط التطبيق</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="needs-validation"  novalidate id="appUrlForm" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <label for="">رابط تطبيق الأندرويد</label>
+                                        <input id="android_app" dir="ltr" value="{{$setting_info->android_app}}" name="android_app" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group" >
+                                        <label for="">رابط تطبيق الأيفون</label>
+                                        <input id="ios_app" dir="ltr" value="{{$setting_info->ios_app}}" name="ios_app" type="text" class="form-control" placeholder="">
+                                        <div class="invalid-tooltip">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <ul id="errors3">
+
+                                    </ul>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <button type="submit" class="btn btn-primary btn-round">تعديل</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="row">
 
@@ -375,6 +429,70 @@
             }
         });
 
+
+        let validateFormApp = false;
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('#appUrlForm');
+            Array.from(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            validateFormApp = false;
+                        }
+                        else {
+                            validateFormApp = true;
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })();
+        $(`#appUrlForm`).on('submit',function (event) {
+            event.preventDefault();
+            if (validateFormApp !== false)
+            {
+                let formData = new FormData($(`#appUrlForm`)[0]);
+                Swal.showLoading();
+                $.ajax({
+                    type: 'post',
+                    url : `{{route('Setting.appUrl')}}`,
+                    data: formData,
+                    contentType:false,
+                    processData:false,
+                    success : function () {
+                        Swal.fire(
+                            'تم تعديل',
+                            'تم تعديل روابط التطبيق بنجاح',
+                            'success'
+                        ).then((result)=>{
+                            window.location.replace('{{route('Setting')}}')
+                        })
+                    },
+                    error: function (response) {
+                        if (response.responseJSON.errors.android_app) {
+                            for(let i = 0; i<response.responseJSON.errors.android_app.length;i++){
+                                document.getElementById('errors3').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.android_app[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.ios_app) {
+                            for(let i = 0; i<response.responseJSON.errors.ios_app.length;i++){
+                                document.getElementById('errors3').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.ios_app[i]}</li>`
+                            }
+                        }
+                        Swal.fire(
+                            'لم يتم اكمال العملية',
+                            `هناك خطأ في المدخلات`,
+                            'warning'
+                        );
+                    }
+                })
+            }
+        });
+
+
+
         let validateFormEmail = false;
         (function () {
             'use strict';
@@ -417,30 +535,30 @@
                         })
                     },
                     error: function (response) {
-                        document.getElementById('errors1').innerHTML = '';
+                        document.getElementById('errors2').innerHTML = '';
                         if (response.responseJSON.errors.driver) {
                             for(let i = 0; i<response.responseJSON.errors.driver.length;i++){
-                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.driver[i]}</li>`
+                                document.getElementById('errors2').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.driver[i]}</li>`
                             }
                         }
                         if (response.responseJSON.errors.host) {
                             for(let i = 0; i<response.responseJSON.errors.host.length;i++){
-                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.host[i]}</li>`
+                                document.getElementById('errors2').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.host[i]}</li>`
                             }
                         }
                         if (response.responseJSON.errors.port) {
                             for(let i = 0; i<response.responseJSON.errors.port.length;i++){
-                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.port[i]}</li>`
+                                document.getElementById('errors2').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.port[i]}</li>`
                             }
                         }
                         if (response.responseJSON.errors.username) {
                             for(let i = 0; i<response.responseJSON.errors.username.length;i++){
-                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.username[i]}</li>`
+                                document.getElementById('errors2').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.username[i]}</li>`
                             }
                         }
                         if (response.responseJSON.errors.password) {
                             for(let i = 0; i<response.responseJSON.errors.password.length;i++){
-                                document.getElementById('errors1').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.password[i]}</li>`
+                                document.getElementById('errors2').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.password[i]}</li>`
                             }
                         }
                         swal.hideLoading();

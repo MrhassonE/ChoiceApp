@@ -3,16 +3,14 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <h5 class="card-title">المدن<span class="text-muted fw-normal ms-2"> ({{$cities->count()}})</span></h5>
+                    <h5 class="card-title">الدول<span class="text-muted fw-normal ms-2"> ({{$countries->count()}})</span></h5>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="d-flex flex-wrap gap-2 mb-3">
                 <div>
-                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-create|country-city-create'))
-                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة مدينة</a>
-                    @endif
+                    <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة دولة</a>
                 </div>
             </div>
         </div>
@@ -20,36 +18,21 @@
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myExtraLargeModalLabel">أضافة مدينة</h5>
+                        <h5 class="modal-title" id="myExtraLargeModalLabel">أضافة دولة</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form method="post" class="needs-validation" novalidate id="CreateForm" enctype="multipart/form-data">
                             @csrf
-                            <div class="col-md-6 my-2">
+                            <div class="col-md-6 my-1">
                                 <div class="form-group">
-                                    <label for="">اسم المدينة</label>
+                                    <label for="">اسم الدولة</label>
                                     <input id="name" maxlength="100" required name="name" type="text" class="form-control" placeholder="ادخل الاسم">
                                     <div class="invalid-feedback">
                                         الرجاء املئ الحقل
                                     </div>
                                 </div>
                             </div>
-                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-create'))
-                            <div class="col-md-4 my-2">
-                                <div class="form-group">
-                                    <label for="">اختر الدولة</label>
-                                    <select name="country" id="" class="form-control">
-                                        @foreach($countries as $country)
-                                            <option value="{{$country->id}}">{{$country->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        الرجاء املئ الحقل
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
                             <div class="col-md-6 my-1">
                                 <div class="form-group">
                                     <div class="form-check form-switch">
@@ -82,41 +65,29 @@
                                     <tr>
                                         <th>#</th>
                                         <th>الأسم</th>
-                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-read'))
-                                        <th>الدولة</th>
-                                        @endif
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($cities as $key=>$city)
-                                        <tr>
-                                            <td class="fw-semibold">{{$key + 1}}</td>
-                                            <td>
-                                                {{$city->name}}
-                                            </td>
-                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-read'))
+                                        @foreach($countries as $key=>$country)
+                                            <tr>
+                                                <td class="fw-semibold">{{$key + 1}}</td>
                                                 <td>
-                                                    {{$city->Country->name}}
+                                                    {{$country->name}}
                                                 </td>
-                                            @endif
-                                            <td>
-                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-update|country-city-update'))
-                                                    @if($city->is_active == 1)
-                                                        <a href="{{route('City.edit',$city->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
+                                                <td>
+                                                    @if($country->is_active == 1)
+                                                        <a href="{{route('Country.edit',$country->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
                                                     @endif
-                                                @endif
-                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-delete|country-city-delete'))
-                                                    @if($city->is_active == 1)
-                                                        <a href="javascript:;" onclick="DisActiveUser({{$city->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
-                                                    @elseif($city->is_active == 0)
-                                                        <a href="javascript:;" onclick="ActiveUser({{$city->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                                    @if($country->is_active == 1)
+                                                        <a href="javascript:;" onclick="DisActiveUser({{$country->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
+                                                    @elseif($country->is_active == 0)
+                                                        <a href="javascript:;" onclick="ActiveUser({{$country->id}})" class="btn btn-success btn-round">تفعيل</a>
                                                     @endif
-                                                @endif
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
 
-                                    @endforeach
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -158,14 +129,14 @@
                 Swal.showLoading();
                 $.ajax({
                     type: 'post',
-                    url : '{{route('City.store')}}',
+                    url : '{{route('Country.store')}}',
                     data: formData,
                     contentType:false,
                     processData:false,
                     success : function () {
                         Swal.fire(
                             'تم الانشاء',
-                            'تم انشاء المدينة بنجاح',
+                            'تم انشاء دولة بنجاح',
                             'success'
                         ).then((result)=>{
                             window.location.reload();
@@ -176,11 +147,6 @@
                         if (response.responseJSON.errors.name) {
                             for(let i = 0; i<response.responseJSON.errors.name.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.name[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.country) {
-                            for(let i = 0; i<response.responseJSON.errors.country.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.country[i]}</li>`
                             }
                         }
                         swal.hideLoading();
@@ -205,7 +171,7 @@
             });
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متاكد؟',
-                text: "هل تريد اعاده تفعيل هذه المدينة!",
+                text: "هل تريد اعاده تفعيل هذه الدولة!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'تأكيد',
@@ -215,11 +181,11 @@
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url : `/ActiveCity/${id}`,
+                        url : `/ActiveCountry/${id}`,
                         success : function () {
                             Swal.fire(
                                 'تم اعاده التفعيل!',
-                                'تم اعاده تفعيل المدينة بنجاح.',
+                                'تم اعاده تفعيل الدولة بنجاح.',
                                 'success'
                             ).then((results)=>{
 
@@ -250,7 +216,7 @@
             });
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متاكد؟',
-                text: "هل تريد الغاء تفعيل هذه المدينة!",
+                text: "هل تريد الغاء تفعيل هذه الدولة!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'تأكيد',
@@ -260,11 +226,11 @@
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url : `/DisActiveCity/${id}`,
+                        url : `/DisActiveCountry/${id}`,
                         success : function () {
                             Swal.fire(
                                 'تم الغاء التفعيل!',
-                                'تم الغاء تفعيل المدينة بنجاح.',
+                                'تم الغاء تفعيل الدولة بنجاح.',
                                 'success'
                             ).then((results)=>{
                                 window.location.reload();

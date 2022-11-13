@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Events\ActivityLog;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\Department;
 use App\Models\FCMToken;
+use App\Models\GeneralSetting;
 use App\Notifications\AddDepartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,16 +19,27 @@ class DepartmentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:department-read')->only('index');
-        $this->middleware('permission:department-create')->only('store');
-        $this->middleware('permission:department-update')->only('edit','update','show','mainSection');
-        $this->middleware('permission:department-delete')->only('DisActive','Active','destroy');
-        $this->middleware('permission:company-create')->only('storeCompany');
+        $this->middleware('permission:all-department-read|country-department-read')->only('index');
+        $this->middleware('permission:all-department-create|country-department-create')->only('store');
+        $this->middleware('permission:all-department-update|country-department-update')->only('edit','update','show','mainSection');
+        $this->middleware('permission:all-department-delete|country-department-delete')->only('DisActive','Active','destroy');
     }
 
-    public function index(){
-        $departments = Department::orderByDesc('created_at')->get();
-        $cities = City::where('is_active',1)->get();
+    public function index(Request $request){
+        if (auth()->user()->hasPermission('all-department-read')) {
+            $departments = Department::orderByDesc('created_at')
+                ->when($request->city, function ($city) use ($request) {
+                    return $city->where('city_id', $request->city);
+                })->get();
+            $cities = City::where('is_active',1)->get();
+
+        }elseif (auth()->user()->hasPermission('country-department-read')){
+            $departments = Department::orderByDesc('created_at')->where('country_id',auth()->user()->country_id)
+                ->when($request->city, function ($city) use ($request) {
+                    return $city->where('city_id', $request->city);
+                })->get();
+            $cities = City::where('is_active',1)->where('country_id',auth()->user()->country_id)->get();
+        }
         return view('Dashboard.Department.index',compact('departments','cities'));
     }
 
@@ -42,24 +55,34 @@ class DepartmentController extends Controller
             $fileName = time() . '.' .$file->getClientOriginalName();
             $store = $file->storeAs('Department',$fileName,'public');
         }
-
+        $city = City::find($request->city_id);
         $department = Department::create([
             'id'=>rand(100000,999999),
             'name'=>$request->name,
             'city_id'=>$request->city_id,
+            'country_id'=>$city->Country->id,
             'image'=>$fileName,
         ]);
         $text = 'تم اضافة قسم بعنوان '.$department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
 
-        foreach (FCMToken::all() as $user){
-            $user->notify(new AddDepartment($department->name,$department));
+        $g = GeneralSetting::first();
+        if ($request->notification && $g->notification ==1){
+            try {
+                foreach (FCMToken::all() as $user){
+                    $user->notify(new AddDepartment($department->name,$department));
+                }
+            }catch (\Exception $exception){
+            }
         }
-
     }
 
     public function edit(Department $department){
-        $cities = City::where('is_active',1)->get();
+        if (auth()->user()->hasPermission('all-department-update')) {
+            $cities = City::where('is_active', 1)->get();
+        }elseif (auth()->user()->hasPermission('country-department-update')){
+            $cities = City::where('country_id',auth()->user()->country_id)->where('is_active', 1)->get();
+        }
         return view('Dashboard.Department.Edit',compact('department','cities'));
     }
     public function update(Request $request, Department $department){
@@ -85,46 +108,7 @@ class DepartmentController extends Controller
     }
 
     public function show(Department $department){
-        $companies = Company::where('department_id',$department->id)->orderByDesc('created_at')->get();
-        return view('Dashboard.Department.show',compact('department','companies'));
-    }
-
-    public function storeCompany(Request $request, Department $department){
-        $request->validate([
-            'name'=>'required|max:100',
-            'image' => 'required|mimes:jpeg,jpg,png|max:5000',
-            'email'=>'required|email|max:100',
-            'phone'=>'required|max:30',
-            'address'=>'required|max:500',
-            'facebook'=>'max:150',
-            'instagram'=>'max:150',
-            'telegram'=>'max:150',
-            'whatsapp'=>'max:150',
-        ]);
-
-        $fileName = null;
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = time() . '.' .$file->getClientOriginalName();
-            $store = $file->storeAs('Company',$fileName,'public');
-        }
-
-        $company = Company::create([
-            'id'=>rand(100000,999999),
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'address'=>$request->address,
-            'facebook'=>$request->facebook,
-            'instagram'=>$request->instagram,
-            'telegram'=>$request->telegram,
-            'whatsapp'=>$request->whatsapp,
-            'department_id'=>$department->id,
-            'city_id'=>$department->City->id,
-            'image'=>$fileName,
-        ]);
-        $text = 'تم اضافة شركة بعنوان '.$company->name.' الى قسم '.$department->name;
-        Event::dispatch(new ActivityLog($text,Auth::id()));
+        return view('Dashboard.Department.show',compact('department'));
     }
 
     public function Active(Department $department){

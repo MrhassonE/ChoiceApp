@@ -35,7 +35,7 @@
                     </a>
                 </li>
 
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-read'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-read|country-department-read'))
                     <li class="@if(request()->routeIs('Department*')) mm-active @endif">
                         <a href="{{route('Department')}}">
                             <i class="fa fa-building icon nav-icon"></i>
@@ -43,7 +43,7 @@
                         </a>
                     </li>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-read'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-read|country-company-read'))
                     <li class="@if(request()->routeIs('Company*')) mm-active @endif">
                         <a href="{{route('Company')}}">
                             <i class="bx bxs-briefcase icon nav-icon"></i>
@@ -51,7 +51,7 @@
                         </a>
                     </li>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('advertisement-read'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-read|country-advertisement-read'))
                     <li class="@if(request()->routeIs('Advertisement*')) mm-active @endif">
                         <a href="{{route('Advertisement')}}">
                             <i class="fa fa-ad icon nav-icon"></i>
@@ -76,7 +76,7 @@
                     </li>
                 @endif
 
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('city-read'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-city-read|country-city-read'))
                     <li class="@if(request()->routeIs('City*')) mm-active @endif">
                         <a href="{{route('City')}}">
                             <i class="fa fa-city icon nav-icon"></i>
@@ -84,7 +84,16 @@
                         </a>
                     </li>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('users-read'))
+
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('superAdministrator'))
+                    <li class="@if(request()->routeIs('Country*')) mm-active @endif">
+                        <a href="{{route('Country')}}">
+                            <i class="fa fa-city icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">الدول</span>
+                        </a>
+                    </li>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-users-read|country-users-read'))
                     <li class="@if(request()->routeIs('Staff*')) mm-active @endif">
                         <a href="{{route('Staff')}}">
                             <i class="fa fa-users icon nav-icon"></i>
@@ -92,7 +101,7 @@
                         </a>
                     </li>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('superAdministrator|administrator'))
                     <li class="@if(request()->routeIs('Setting.ActivityLog')) mm-active @endif">
                         <a class="active" href="{{route('Setting.activityLog')}}">
                             <i class="fa fa-tasks icon nav-icon"></i>
@@ -100,7 +109,7 @@
                         </a>
                     </li>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('superAdministrator'))
                     <li class="@if(request()->routeIs('Setting')) mm-active @endif">
                         <a href="{{route('Setting')}}">
                             <i class="fa fa-cogs icon nav-icon"></i>
@@ -114,7 +123,7 @@
                         </a>
                     </li>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator'))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('superAdministrator|administrator'))
                     <li class="@if(request()->routeIs('laratrust.roles.index')) mm-active @endif">
                         <a href="{{route('laratrust.roles.index')}}">
                             <i class="fa fa-users-cog icon nav-icon"></i>

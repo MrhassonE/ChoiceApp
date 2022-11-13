@@ -5,11 +5,11 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">تغيير اسم المدينة</h4>
+                            <h4 class="card-title mb-0">تغيير اسم الدولة</h4>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <input name="name" required id="name" class="form-control" value="{{$city->name}}">
+                                <input name="name" required id="name" class="form-control" value="{{$country->name}}">
                                 <div class="invalid-tooltip">
                                     الرجاء املئ الحقل
                                 </div>
@@ -24,8 +24,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 my-1">
-                        <button type="button" id="submitUpdateTwo" onclick="SubmitUpdate({{$city->id}})" class="btn btn-primary btn-round">تعديل</button>
-                        <a href="{{route('City')}}" class="btn btn-secondary btn-round">ألغاء</a>
+                        <button type="button" id="submitUpdateTwo" onclick="SubmitUpdate({{$country->id}})" class="btn btn-primary btn-round">تعديل</button>
+                        <a href="{{route('Country')}}" class="btn btn-secondary btn-round">ألغاء</a>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             Swal.showLoading();
             $.ajax({
                 type: 'post',
-                url: `/Edit-City/${id}`,
+                url: `/Edit-Country/${id}`,
                 data: formData,
                 contentType:false,
                 processData:false,
@@ -66,7 +66,7 @@
                         'تم التعديل بنجاح',
                         'success'
                     ).then((result)=>{
-                        window.location.replace('{{route('City')}}')
+                        window.location.replace('{{route('Country')}}')
                     });
                 },
                 error : function (response) {

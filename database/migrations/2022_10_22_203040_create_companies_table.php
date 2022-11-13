@@ -35,8 +35,12 @@ class CreateCompaniesTable extends Migration
             $table->longText('evaluation');
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
+            $table->unsignedBigInteger('sub_department_id');
+            $table->foreign('sub_department_id')->references('id')->on('sub_departments');
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->timestamps();
         });
     }

@@ -21,6 +21,8 @@ class CreateDepartmentsTable extends Migration
             $table->integer('is_main')->default(0);
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->timestamps();
         });
     }

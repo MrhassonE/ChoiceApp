@@ -19,6 +19,7 @@ class CreateGeneralSettingsTable extends Migration
             $table->string('company_logo')->nullable();
             $table->longText('policy')->nullable();
             $table->longText('conditions')->nullable();
+            $table->boolean('notification')->default(0);
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('phone2')->nullable();
@@ -26,6 +27,8 @@ class CreateGeneralSettingsTable extends Migration
             $table->string('instagram')->nullable();
             $table->string('telegram')->nullable();
             $table->string('whatsapp')->nullable();
+            $table->string('android_app')->nullable();
+            $table->string('ios_app')->nullable();
             $table->timestamps();
         });
     }

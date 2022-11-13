@@ -13,7 +13,8 @@ class CustomNotification extends Model
         'body',
         'type',
         'department_id',
-        'company_id'
+        'company_id',
+        'country_id'
     ];
 
     public function Department(){
@@ -21,5 +22,8 @@ class CustomNotification extends Model
     }
     public function Company(){
         return $this->belongsTo(Company::class,'company_id');
+    }
+    public function Country(){
+        return $this->belongsTo(Country::class,'country_id');
     }
 }

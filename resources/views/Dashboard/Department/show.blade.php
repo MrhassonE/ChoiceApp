@@ -3,175 +3,108 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <h5 class="card-title">الشركات<span class="text-muted fw-normal ms-2"> ({{$department->Company->count()}})</span></h5>
+                    <h5 class="card-title">فروع القسم<span class="text-muted fw-normal ms-2"> ({{$department->SubDepartment->count()}})</span></h5>
                 </div>
             </div>
 
             <div class="row">
-                <h3 class="my-2"> قسم {{$department->name}}</h3>
+                <h3 class="my-2">قسم: {{$department->name}}</h3>
             </div>
             <div class="col-md-12">
                 <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
                     <div>
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-create'))
-                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء شركة</a>
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('sub-department-create'))
+                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء فرع</a>
                         @endif
                     </div>
                 </div>
-                <div>
-                    <a href="{{route('Department')}}" class="btn btn-secondary btn-round"><i class="bx bx-right-arrow-alt me-1"></i>رجوع</a>
+                <div class="col-md-6">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <div>
+                            <a href="{{route('Department')}}" class="btn btn-secondary"><i class="fa fa-arrow-circle-right me-1"></i>رجوع</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- end row -->
-        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-read'))
-        <div class="row mt-2 d-flex" id="grid-leader">
-            @foreach($companies as $co)
-                <div class="col-xl-4 col-sm-6">
+        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('sub-department-read'))
+            <div class="row">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <div>
-                                    <img src="{{$co->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xl img-thumbnail">
+                            <div class="row mt-2 d-flex" id="grid-leader">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>أسم الفرع</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($department->SubDepartment as $key=>$subDep)
+                                            <tr>
+                                                <td class="fw-semibold">{{$key + 1}}</td>
+                                                <td>
+                                                    {{$subDep->name}}
+                                                </td>
+                                                <td>
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('sub-department-update'))
+                                                        @if($subDep->is_active == 1)
+                                                            <a href="{{route('SubDepartment.edit',$subDep->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>
+                                                        @endif
+                                                    @endif
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('sub-department-delete'))
+                                                        @if($subDep->is_active == 1)
+                                                            <a href="javascript:;" onclick="DisActiveUser({{$subDep->id}})" title="أيقاف الفرع" class="mx-2 btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
+                                                        @elseif($subDep->is_active == 0)
+                                                            <a href="javascript:;" onclick="ActiveUser({{$subDep->id}})" class="mx-2 btn btn-success btn-round">تفعيل</a>
+                                                            <a href="javascript:;" onclick="DeleteDepartment({{$subDep->id}})" class="mx-2 btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    الاسم: {{$co->name}}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    البريد الالكتروني: {{$co->email}}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    رقم الهاتف: {{$co->phone}}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-1">
-                                <p class="mb-0 mt-2">
-                                    العنوان: {{$co->address}}
-                                </p>
-                            </div>
-                            <div class="d-flex gap-2 pt-4">
-                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
-                                    @if($co->is_active == 1)
-                                        <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" class="btn btn-danger btn-round">ايقاف</a>
-                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                            <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i> تعديل</a>
-                                        @endif
-                                    @elseif($co->is_active == 0)
-                                        <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
-                                    @endif
-                                @endif
                             </div>
                         </div>
                     </div>
-                    <!-- end card -->
                 </div>
-            @endforeach
-        </div>
+            </div>
         @endif
-
-        <!--  Extra Large modal example -->
+    <!--  Extra Large modal example -->
         <div class="modal fade add-new" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myExtraLargeModalLabel">أضافة شركة</h5>
+                        <h5 class="modal-title" id="myExtraLargeModalLabel">أضافة فرع</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form method="post" class="needs-validation" novalidate id="CreateForm" enctype="multipart/form-data">
                             @csrf
-                            <div class="row">
+                            <div class="col-md-6 my-1">
+                                <div class="form-group">
+                                    <label for="">اسم الفرع</label>
+                                    <input id="name" maxlength="100" required name="name" type="text" class="form-control" placeholder="ادخل الاسم">
+                                    <div class="invalid-feedback">
+                                        الرجاء املئ الحقل
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">الاسم</label>
-                                        <input id="name" maxlength="100" required name="name" type="text" class="form-control" placeholder="ادخل الاسم">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
+                                        <div class="form-check form-switch">
+                                            <label class="form-check-label" for="notification">أرسال أشعار</label>
+                                            <input class="form-check-input" name="notification" type="checkbox" id="notification" checked="">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">العنوان</label>
-                                        <input id="address" maxlength="500" required name="address" type="text" class="form-control" placeholder="ادخل العنوان">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 my-1">
-                                    <div class="form-group">
-                                        <label for="">الريد الالكتروني</label>
-                                        <input id="email" maxlength="100" required name="email" type="email" class="form-control" placeholder="ادخل الريد الالكتروني">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1">
-                                    <div class="form-group">
-                                        <label for="">رقم الهاتف</label>
-                                        <input id="phone" maxlength="20" required name="phone" type="text" class="form-control" placeholder="ادخل رقم الهاتف">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1">
-                                    <div class="form-group">
-                                        <label for="">الصورة</label>
-                                        <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <label class="my-3" for="">روابط مواقع التواصل الاجتماعي</label>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">الفيسبوك</label>
-                                        <input id="facebook"  name="facebook" type="text" class="form-control" placeholder="ادخل رابط الفيسبوك">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">الانستاغرام</label>
-                                        <input id="instagram"  name="instagram" type="text" class="form-control" placeholder="ادخل رابط الانستاغرام">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">التليجرام</label>
-                                        <input id="telegram"  name="telegram" type="text" class="form-control" placeholder="ادخل رابط التليجرام">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">رقم الواتساب</label>
-                                        <input id="whatsapp"  name="whatsapp" type="text" class="form-control" placeholder="ادخل رقم الواتساب">
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-md-12 my-1">
                                     <ul id="errors"></ul>
                                 </div>
@@ -184,10 +117,8 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
     </div>
-    <script >
-
+    <script>
         let validateForm = false;
         (function () {
             'use strict';
@@ -218,14 +149,14 @@
                 Swal.showLoading();
                 $.ajax({
                     type: 'post',
-                    url : '{{route('Department.storeCompany',$department->id)}}',
+                    url : '{{route('SubDepartment.store',$department->id)}}',
                     data: formData,
                     contentType:false,
                     processData:false,
                     success : function () {
                         Swal.fire(
                             'تم الانشاء',
-                            'تم انشاء شركة بنجاح',
+                            'تم انشاء فرع بنجاح',
                             'success'
                         ).then((result)=>{
                             window.location.reload();
@@ -236,46 +167,6 @@
                         if (response.responseJSON.errors.name) {
                             for(let i = 0; i<response.responseJSON.errors.name.length;i++){
                                 document.getElementById('errors').innerHTML += `<div class="invalid-feedback d-block" >${response.responseJSON.errors.name[i]}</div>`
-                            }
-                        }
-                        if (response.responseJSON.errors.address) {
-                            for(let i = 0; i<response.responseJSON.errors.address.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.address[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.phone) {
-                            for(let i = 0; i<response.responseJSON.errors.phone.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.phone[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.email) {
-                            for(let i = 0; i<response.responseJSON.errors.email.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.email[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.image) {
-                            for(let i = 0; i<response.responseJSON.errors.image.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.image[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.facebook) {
-                            for(let i = 0; i<response.responseJSON.errors.facebook.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.facebook[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.instagram) {
-                            for(let i = 0; i<response.responseJSON.errors.instagram.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.instagram[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.telegram) {
-                            for(let i = 0; i<response.responseJSON.errors.telegram.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.telegram[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.whatsapp) {
-                            for(let i = 0; i<response.responseJSON.errors.whatsapp.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.whatsapp[i]}</li>`
                             }
                         }
                         swal.hideLoading();
@@ -289,7 +180,6 @@
             }
         });
 
-
         function ActiveUser(id) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -300,7 +190,7 @@
             });
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متاكد؟',
-                text: "هل تريد اعاده تفعيل هذه الشركة!",
+                text: "هل تريد اعاده تفعيل هذا الفرع!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'تأكيد',
@@ -310,11 +200,11 @@
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url : `/ActiveCompany/${id}`,
+                        url : `/ActiveSubDepartment/${id}`,
                         success : function () {
                             Swal.fire(
                                 'تم اعاده التفعيل!',
-                                'تم اعاده تفعيل الشركة بنجاح.',
+                                'تم اعاده تفعيل الفرع بنجاح.',
                                 'success'
                             ).then((results)=>{
                                 window.location.reload();
@@ -343,7 +233,7 @@
             });
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متاكد؟',
-                text: "هل تريد الغاء تفعيل هذه الشركة!",
+                text: "هل تريد الغاء تفعيل هذا الفرع!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'تأكيد',
@@ -353,11 +243,54 @@
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url : `/DisActiveCompany/${id}`,
+                        url : `/DisActiveSubDepartment/${id}`,
                         success : function () {
                             Swal.fire(
                                 'تم الغاء التفعيل!',
-                                'تم الغاء تفعيل الشركة بنجاح.',
+                                'تم الغاء تفعيل الفرع بنجاح.',
+                                'success'
+                            ).then((results)=>{
+                                window.location.reload();
+                            })
+                        },
+                        error: function (response) {
+                            swal.hideLoading();
+                            Swal.fire(
+                                'لم يتم اكمال العملية',
+                                `هناك خطأ`,
+                                'warning'
+                            );
+                        }
+                    })
+                }
+            })
+        }
+
+        function DeleteDepartment(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn bg-success text-white mx-2',
+                    cancelButton: 'btn bg-danger text-white mx-2'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'هل تريد حذف هذا الفرع؟',
+                text: "سيتم حذف  جميع شركات الفرع واعلاناتها !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'الغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    $.ajax({
+                        type: 'post',
+                        url : `/DeleteSubDepartment/${id}`,
+                        success : function () {
+                            Swal.fire(
+                                'تم الحذف!',
+                                'تم حذف الفرع بنجاح.',
                                 'success'
                             ).then((results)=>{
                                 window.location.reload();

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Advertisement extends Model
 {
     use HasFactory;
-    protected $fillable = ['id','image','company_id'];
+    protected $fillable = ['id','image','company_id','country_id'];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {
         return asset('storage/Advertisement/'.$this->image);
@@ -16,6 +16,10 @@ class Advertisement extends Model
 
     public function Company(){
         return $this->belongsTo(Company::class,'company_id');
+    }
+
+    public function Country(){
+        return $this->belongsTo(Country::class,'country_id');
     }
 
 }

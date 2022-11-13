@@ -39,8 +39,6 @@ class GeneralSettingSeeder extends Seeder
             'instagram'=>'instagram',
             'telegram'=>'telegram',
             'whatsapp'=>'whatsapp',
-
         ]);
-
     }
 }

@@ -7,6 +7,8 @@ use App\Models\Company;
 use App\Models\CompanyImages;
 use App\Models\Department;
 use App\Models\FCMToken;
+use App\Models\GeneralSetting;
+use App\Models\SubDepartment;
 use App\Notifications\AddCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,32 +19,48 @@ class CompanyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:company-read')->only('index');
-        $this->middleware('permission:company-create')->only('store');
-        $this->middleware('permission:company-update')->only('edit','update','show','CompanyEvaluation','NewSection','MostViewedSection','mainSection');
-        $this->middleware('permission:company-delete')->only('DisActive','Active','destroy');
+        $this->middleware('permission:all-company-read|country-company-read')->only('index');
+        $this->middleware('permission:all-company-create|country-company-create')->only('store');
+        $this->middleware('permission:all-company-update|country-company-update')->only('edit','update','show','NewSection','MostViewedSection','mainSection');
+        $this->middleware('permission:all-company-delete|country-company-delete')->only('DisActive','Active','destroy');
         $this->middleware('permission:image-create')->only('storeImage');
         $this->middleware('permission:image-delete')->only('deleteImage');
     }
 
     public function index(Request $request){
-        $companies = Company::orderByDesc('created_at')
-            ->when($request->dep, function ($dep) use ($request){
-                return $dep->where('department_id', $request->dep);
-            })
-            ->when($request->new, function ($new) use ($request){
-                return $new->where('new', 1);
-            })
-            ->when($request->most_viewed, function ($most_viewed) use ($request){
-                return $most_viewed->where('most_viewed', 1);
-            })
-            ->when($request->main, function ($main) use ($request){
-                return $main->where('is_main', 1);
-            })
-            ->get();
-
-
-        $departments = Department::where('is_active',1)->get();
+        if (auth()->user()->hasPermission('all-company-read')) {
+            $companies = Company::orderByDesc('created_at')
+                ->when($request->dep, function ($dep) use ($request) {
+                    return $dep->where('department_id', $request->dep);
+                })
+                ->when($request->new, function ($new) use ($request) {
+                    return $new->where('new', 1);
+                })
+                ->when($request->most_viewed, function ($most_viewed) use ($request) {
+                    return $most_viewed->where('most_viewed', 1);
+                })
+                ->when($request->main, function ($main) use ($request) {
+                    return $main->where('is_main', 1);
+                })
+                ->get();
+            $departments = Department::where('is_active',1)->get();
+        }elseif (auth()->user()->hasPermission('country-company-read')){
+            $companies = Company::orderByDesc('created_at')->where('country_id',auth()->user()->country_id)
+                ->when($request->dep, function ($dep) use ($request) {
+                    return $dep->where('department_id', $request->dep);
+                })
+                ->when($request->new, function ($new) use ($request) {
+                    return $new->where('new', 1);
+                })
+                ->when($request->most_viewed, function ($most_viewed) use ($request) {
+                    return $most_viewed->where('most_viewed', 1);
+                })
+                ->when($request->main, function ($main) use ($request) {
+                    return $main->where('is_main', 1);
+                })
+                ->get();
+            $departments = Department::where('is_active',1)->where('country_id',auth()->user()->country_id)->get();
+        }
         return view('Dashboard.Company.index',compact('companies','departments'));
     }
 
@@ -57,7 +75,10 @@ class CompanyController extends Controller
             'instagram'=>'max:150',
             'telegram'=>'max:150',
             'whatsapp'=>'max:150',
+            'evaluation'=>'max:1500',
             'department_id'=>'required',
+            'products'=>'numeric|min:0',
+            'services'=>'numeric|min:0',
         ]);
 
         $fileName = null;
@@ -78,17 +99,28 @@ class CompanyController extends Controller
             'telegram'=>$request->telegram,
             'whatsapp'=>$request->whatsapp,
             'department_id'=>$department->id,
+            'sub_department_id'=>$request->subDepartment,
             'city_id'=>$department->City->id,
+            'country_id'=>$department->Country->id,
             'image'=>$fileName,
+            'evaluation'=>$request->evaluation,
+            'products'=>$request->products,
+            'services'=>$request->services,
+            'latitude'=>$request->latitude,
+            'longitude'=>$request->longitude,
         ]);
         $text = 'تم اضافة شركة بعنوان '.$company->name.' الى قسم '.$company->Department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
-        try {
-            foreach (FCMToken::all() as $user){
-                $user->notify(new AddCompany($company->name, $company));
-            }
-        }catch (\Exception $exception){
 
+
+        $g = GeneralSetting::first();
+        if ($request->notification && $g->notification ==1){
+            try {
+                foreach (FCMToken::all() as $user){
+                    $user->notify(new AddCompany($company->name, $company));
+                }
+            }catch (\Exception $exception) {
+            }
         }
     }
 
@@ -107,7 +139,10 @@ class CompanyController extends Controller
             'instagram'=>'max:150',
             'telegram'=>'max:150',
             'whatsapp'=>'max:150',
+            'evaluation'=>'max:1500',
             'department_id'=>'required',
+            'products'=>'numeric|min:0',
+            'services'=>'numeric|min:0',
         ]);
         if ($request->hasFile('image')) {
             $path = 'storage/Company/'.$company->image;
@@ -123,22 +158,6 @@ class CompanyController extends Controller
 
         $text = 'تم تعديل الشركة '.$company->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
-    }
-    public function CompanyEvaluation(Request $request, Company $company){
-        $request->validate([
-            'evaluation'=>'required',
-            'products'=>'required|numeric',
-            'services'=>'required|numeric',
-
-        ]);
-        $company->update([
-            'evaluation'=>$request->evaluation,
-            'products'=>$request->products,
-            'services'=>$request->services,
-            'latitude'=>$request->latitude,
-            'longitude'=>$request->longitude,
-        ]);
-
     }
     public function storeImage(Request $request, Company $company){
         $request->validate([

@@ -23,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_active'
+        'is_active',
+        'country_id',
     ];
 
     /**
@@ -47,4 +48,8 @@ class User extends Authenticatable
     public function ActivityLog(){
         return $this->hasMany(ActivityLog::class,'user_id');
     }
+    public function Country(){
+        return $this->belongsTo(Country::class,'country_id');
+    }
+
 }

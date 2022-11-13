@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ActivityLog;
 use App\Models\Advertisement;
+use App\Models\City;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,18 +15,26 @@ class AdvertisementController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:advertisement-read')->only('index');
-        $this->middleware('permission:advertisement-create')->only('store');
-        $this->middleware('permission:advertisement-update')->only('edit','update');
-        $this->middleware('permission:advertisement-delete')->only('destroy');
+        $this->middleware('permission:all-advertisement-read|country-advertisement-read')->only('index');
+        $this->middleware('permission:all-advertisement-create|country-advertisement-create')->only('store');
+        $this->middleware('permission:all-advertisement-update|country-advertisement-update')->only('edit','update');
+        $this->middleware('permission:all-advertisement-delete|country-advertisement-delete')->only('destroy');
     }
 
     public function index(Request $request){
-        $ads = Advertisement::orderByDesc('created_at')
-            ->when($request->company, function ($company) use ($request){
-                return $company->where('company_id', $request->company);
-            })->get();
-        $companies = Company::where('is_active',1)->get();
+        if (auth()->user()->hasPermission('all-advertisement-read')) {
+            $ads = Advertisement::orderByDesc('created_at')
+                ->when($request->company, function ($company) use ($request) {
+                    return $company->where('company_id', $request->company);
+                })->get();
+            $companies = Company::where('is_active', 1)->get();
+        }elseif (auth()->user()->hasPermission('country-advertisement-read')){
+            $ads = Advertisement::orderByDesc('created_at')->where('country_id',auth()->user()->country_id)
+                ->when($request->company, function ($company) use ($request) {
+                    return $company->where('company_id', $request->company);
+                })->get();
+            $companies = Company::where('is_active', 1)->where('country_id',auth()->user()->country_id)->get();
+        }
         return view('Dashboard.Advertisement.index',compact('ads','companies'));
     }
 
@@ -40,10 +49,12 @@ class AdvertisementController extends Controller
             $fileName = time() . '.' .$file->getClientOriginalName();
             $store = $file->storeAs('Advertisement',$fileName,'public');
         }
+        $com = Company::findOrFail($request->company_id);
         $advertisement = Advertisement::create([
             'id'=>rand(100000,999999),
-            'company_id'=>$request->company_id,
             'image'=>$fileName,
+            'company_id'=>$request->company_id,
+            'country_id'=>$com->Country->id,
         ]);
         $com = Company::findOrFail($request->company_id);
         $text = 'تم اضافة اعلان الى شركة '.$com->name;
@@ -51,7 +62,12 @@ class AdvertisementController extends Controller
     }
 
     public function edit(Advertisement $advertisement){
-        $companies = Company::where('is_active',1)->get();
+        if (auth()->user()->hasPermission('all-advertisement-update')) {
+            $companies = Company::where('is_active', 1)->get();
+        }elseif (auth()->user()->hasPermission('country-advertisement-update')){
+            $companies = Company::where('is_active', 1)->where('country_id',auth()->user()->country_id)->get();
+        }
+
         return view('Dashboard.Advertisement.edit',compact('advertisement','companies'));
     }
     public function update(Request $request, Advertisement $advertisement){

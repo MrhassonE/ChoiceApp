@@ -5,14 +5,18 @@ return [
     'About' => 'عن المكتب',
     'City' => 'المدن',
     'City.edit' => 'تعديل المدينة',
+    'Country' => 'الدول',
+    'Country.edit' => 'تعديل الدولة',
+    'Country.show' => 'المدن',
 
     'Department' => 'الأقسام',
     'Department.edit' => 'تعديل القسم',
-    'Department.show' => 'الشركات',
+    'Department.show' => 'فروع القسم',
+    'SubDepartment.edit' => 'تعديل الفرع',
 
     'Company' => 'الشركات',
     'Company.edit' => 'تعديل الشركة',
-    'Company.show' => 'تفاصيل الشركة',
+    'Company.show' => 'معرض صور الشركة',
 
     'Advertisement' => 'الأعلانات',
     'Advertisement.edit' => 'تعديل الأعلان',

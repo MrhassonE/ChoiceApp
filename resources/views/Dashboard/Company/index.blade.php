@@ -11,7 +11,7 @@
             <div class="col-md-6" >
                 <div class="d-flex flex-wrap align-items-start justify-content-start gap-2 mb-3">
                     <div>
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-create'))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-create|country-company-create'))
                             <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>انشاء شركة</a>
                         @endif
                     </div>
@@ -20,7 +20,7 @@
         </div>
         <!-- end row -->
 
-        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-read'))
+        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-read|country-company-read'))
             <div class="col-md-6">
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     <div>
@@ -43,10 +43,10 @@
                                             <label class="">القسم</label>
                                             <select class="form-control" name="dep" id="depFilter">
                                                 <option value="">اختر القسم</option>
-                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-read'))
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-read|country-department-read'))
                                                 @foreach($departments  as $department)
                                                     <option @if(request()->dep == $department->id) selected @endif value="{{$department->id}}">{{$department->name}}</option>
-                                                @endforeach
+                                                    @endforeach
                                                 @endif
                                             </select>
                                         </div>
@@ -79,164 +79,87 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row mt-2 d-flex" id="grid-leader">
-                @if($companies->count() >0)
-                    <div class="table-responsive">
-                        <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>الصورة</th>
-                                <th>أسم الشركة</th>
-                                <th>البريد الالكتروني</th>
-                                <th>القسم</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($companies as $key=>$co)
-                                <tr>
-                                    <td class="fw-semibold">{{$key + 1}}</td>
-                                    <td>
-                                        <img src="{{$co->img_path}}" class="avatar  card-img-top" alt="">
-                                    </td>
-                                    <td>
-                                        {{$co->name}}
-                                    </td>
-                                    <td>
-                                        {{$co->email}}
-                                    </td>
-                                    <td>
-                                        {{$co->Department->name}}
-                                    </td>
-                                    <td>
-                                        <div class="d-flex gap-2 pt-4">
-                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))
-                                                @if($co->is_active == 1)
-                                                    <div class="ms-auto">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-link text-secondary ps-0 pe-2" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class="fa fa-ellipsis-v text-lg"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-end me-sm-n4 me-n3" aria-labelledby="navbarDropdownMenuLink">
-                                                                <a href="{{route('Company.show',$co->id)}}" class="dropdown-item">عرض التفاصيل</a>
-                                                                @if($co->new ==0)
-                                                                    <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">اضافة الى الجديد</a>
-                                                                @elseif($co->new ==1)
-                                                                    <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">أخفاء من الجديد</a>
-                                                                @endif
-                                                                @if($co->most_viewed ==0)
-                                                                    <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">اضافة الى الأكثر مشاهدة</a>
-                                                                @elseif($co->most_viewed ==1)
-                                                                    <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">أخفاء من الأكثر مشاهدة</a>
-                                                                @endif
-                                                                @if($co->is_main ==0)
-                                                                    <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">اضافة الى الواجهة الرئيسية</a>
-                                                                @elseif($co->is_main ==1)
-                                                                    <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">أخفاء من الواجهة الرئيسية</a>
-                                                                @endif
+                        @if($companies->count() >0)
+                            <div class="table-responsive">
+                                <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الصورة</th>
+                                        <th>أسم الشركة</th>
+                                        <th>البريد الالكتروني</th>
+                                        <th>القسم</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($companies as $key=>$co)
+                                        <tr>
+                                            <td class="fw-semibold">{{$key + 1}}</td>
+                                            <td>
+                                                <img src="{{$co->img_path}}" class="avatar  card-img-top" alt="">
+                                            </td>
+                                            <td>
+                                                {{$co->name}}
+                                            </td>
+                                            <td>
+                                                {{$co->email}}
+                                            </td>
+                                            <td>
+                                                {{$co->Department->name}}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2 pt-4">
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-update|country-company-update'))
+                                                        @if($co->is_active == 1)
+                                                            <div class="ms-auto">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-link text-secondary ps-0 pe-2" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="fa fa-ellipsis-v text-lg"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end me-sm-n4 me-n3" aria-labelledby="navbarDropdownMenuLink">
+                                                                        <a href="{{route('Company.show',$co->id)}}" class="dropdown-item">معرض الصور</a>
+                                                                        @if($co->new ==0)
+                                                                            <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">اضافة الى الجديد</a>
+                                                                        @elseif($co->new ==1)
+                                                                            <a href="javascript:;" onclick="NewSection({{$co->id}})" class="dropdown-item">أخفاء من الجديد</a>
+                                                                        @endif
+                                                                        @if($co->most_viewed ==0)
+                                                                            <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">اضافة الى الأكثر مشاهدة</a>
+                                                                        @elseif($co->most_viewed ==1)
+                                                                            <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" class="dropdown-item">أخفاء من الأكثر مشاهدة</a>
+                                                                        @endif
+                                                                        @if($co->is_main ==0)
+                                                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">اضافة الى الواجهة الرئيسية</a>
+                                                                        @elseif($co->is_main ==1)
+                                                                            <a href="javascript:;" onclick="MainSection({{$co->id}})" class="dropdown-item">أخفاء من الواجهة الرئيسية</a>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <a href="{{route('Company.edit',$co->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
-                                                @endif
-                                            @endif
-                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))
-                                                @if($co->is_active == 1)
-                                                        <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
-                                                @elseif($co->is_active == 0)
-                                                    <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
-                                                    <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
+                                                            <a href="{{route('Company.edit',$co->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
+                                                        @endif
+                                                    @endif
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-delete|country-company-delete'))
+                                                        @if($co->is_active == 1)
+                                                                <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" title="أيقاف" class=" btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
+                                                        @elseif($co->is_active == 0)
+                                                            <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>
+                                                            <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>
 
-                                                @endif
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-{{--                @foreach($companies as $key=>$co)--}}
-{{--                    <div class="col-xl-4 col-sm-6">--}}
-{{--                        <div class="card">--}}
-{{--                            <div class="card-body">--}}
-{{--                                <div class="d-flex justify-content-center">--}}
-{{--                                    <div>--}}
-{{--                                        <img src="{{$co->img_path}}" alt="" style="object-fit: cover;object-position: top" class="avatar-xl img-thumbnail">--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="mt-3 pt-1">--}}
-{{--                                    <p class="mb-0 mt-2 text-black">--}}
-{{--                                        القسم: {{$co->Department->name}}--}}
-{{--                                    </p>--}}
-{{--                                </div>--}}
-{{--                                <div class="mt-3 pt-1">--}}
-{{--                                    <p class="mb-0 mt-2">--}}
-{{--                                        الاسم: {{$co->name}}--}}
-{{--                                    </p>--}}
-{{--                                </div>--}}
-{{--                                <div class="mt-3 pt-1">--}}
-{{--                                    <p class="mb-0 mt-2">--}}
-{{--                                        البريد الالكتروني: {{$co->email}}--}}
-{{--                                    </p>--}}
-{{--                                </div>--}}
-{{--                                <div class="mt-3 pt-1">--}}
-{{--                                    <p class="mb-0 mt-2">--}}
-{{--                                        رقم الهاتف: {{$co->phone}}--}}
-{{--                                    </p>--}}
-{{--                                </div>--}}
-{{--                                <div class="mt-3 pt-1">--}}
-{{--                                    <p class="mb-0 mt-2">--}}
-{{--                                        العنوان: {{$co->address}}--}}
-{{--                                    </p>--}}
-{{--                                </div>--}}
-{{--                                <div class="d-flex gap-2 pt-4">--}}
-{{--                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))--}}
-{{--                                        @if($co->is_active == 1)--}}
-{{--                                        <a href="{{route('Company.show',$co->id)}}"  class="btn btn-secondary">التفاصيل</a>--}}
-{{--                                        <a href="{{route('Company.edit',$co->id)}}"  class="btn btn-primary"><i class="bx bx-pencil me-1"></i>تعديل</a>--}}
-{{--                                        @endif--}}
-{{--                                    @endif--}}
-{{--                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-delete'))--}}
-{{--                                        @if($co->is_active == 1)--}}
-{{--                                            <a href="javascript:;" onclick="DisActiveUser({{$co->id}})" class="btn btn-danger btn-round">ايقاف</a>--}}
-{{--                                        @elseif($co->is_active == 0)--}}
-{{--                                            <a href="javascript:;" onclick="ActiveUser({{$co->id}})" class="btn btn-success btn-round">تفعيل</a>--}}
-{{--                                            <a href="javascript:;" onclick="DeleteCompany({{$co->id}})" class="btn btn-danger btn-round"><i class="bx bx-trash me-1"></i>حذف نهائي</a>--}}
-
-{{--                                        @endif--}}
-{{--                                    @endif--}}
-{{--                                </div>--}}
-{{--                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('company-update'))--}}
-{{--                                    <div class="d-flex gap-2 pt-4 ">--}}
-{{--                                        @if($co->is_active == 1)--}}
-{{--                                            @if($co->new ==0)--}}
-{{--                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="اضافة الى الجديد" class="btn btn-soft-success btn-round"><i class="fa fa-solid fa-plus"></i></a>--}}
-{{--                                            @elseif($co->new ==1)--}}
-{{--                                                <a href="javascript:;" onclick="NewSection({{$co->id}})" title="حذف من الجديد" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>--}}
-{{--                                            @endif--}}
-{{--                                            @if($co->most_viewed ==0)--}}
-{{--                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="اضافة الى الأكثر مشاهدة" class="btn btn-soft-info btn-round"><i class="fa fa-solid fa-plus"></i></a>--}}
-{{--                                            @elseif($co->most_viewed ==1)--}}
-{{--                                                <a href="javascript:;" onclick="MostViewedSection({{$co->id}})" title="حذف من الأكثر مشاهدة" class="btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>--}}
-{{--                                            @endif--}}
-{{--                                            @if($co->is_main ==0)--}}
-{{--                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>--}}
-{{--                                            @elseif($co->is_main ==1)--}}
-{{--                                                <a href="javascript:;" onclick="MainSection({{$co->id}})" title="حذف من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>--}}
-{{--                                            @endif--}}
-{{--                                        @endif--}}
-{{--                                    </div>--}}
-{{--                                @endif--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <!-- end card -->--}}
-{{--                    </div>--}}
-{{--                @endforeach--}}
-                @else
-                    <div class="my-5">
-                       <h3 class="text-center">لا يوجد شركات</h3>
-                    </div>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                        <div class="my-5">
+                           <h3 class="text-center">لا يوجد شركات</h3>
+                        </div>
                 @endif
             </div>
                     </div>
@@ -275,13 +198,24 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 my-1">
+                                <div class="col-md-3 my-1">
                                     <div class="form-group">
                                         <label for="">القسم</label>
                                         <select class="form-control" required name="department_id" id="department_id">
+                                            <option selected disabled>اختر القسم</option>
                                             @foreach($departments as $department)
                                             <option value="{{$department->id}}">{{$department->name}}</option>
                                             @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 my-1">
+                                    <div class="form-group">
+                                        <label for="">اختر الفرع</label>
+                                        <select name="subDepartment" class="form-control">
                                         </select>
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
@@ -354,7 +288,49 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="row">
+                                    <div class="col-md-6 my-1">
+                                        <div class="form-group">
+                                            <label for="">تقييم الشركة</label>
+                                            <textarea class="form-control" name="evaluation" id="evaluation" cols="20" rows="5"></textarea>
+                                            <div class="invalid-tooltip">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">عدد المنتجات</label>
+                                            <input name="products" min="0" required class="form-control" type="number"  id="products">
+                                            <div class="invalid-tooltip">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <label for="">خط العرض</label>
+                                            <input name="latitude" min="0" class="form-control" type="text" id="latitude">
+                                            <div class="invalid-tooltip">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">عدد الخدمات</label>
+                                            <input name="services" min="0" required class="form-control" type="number"  id="services">
+                                            <div class="invalid-tooltip">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <label for="">خط الطول</label>
+                                            <input name="longitude" min="0" class="form-control" type="text" id="longitude">
+                                            <div class="invalid-tooltip">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-12 my-1">
                                     <ul id="errors"></ul>
                                 </div>
@@ -370,6 +346,28 @@
 
     </div>
     <script>
+        $('select[name="subDepartment"]').hide();
+        $(document).ready(function () {
+            $('select[name="department_id"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $('select[name="subDepartment"]').show();
+                    $.ajax({
+                        url: '/subDepartment/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="subDepartment"]').empty();
+                            $.each(data,function(index,subDep){
+                                $('select[name="subDepartment"]').append('<option value ="'+subDep.id+'">'+subDep.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+        });
+
+
         let validateForm = false;
         (function () {
             'use strict';
@@ -463,6 +461,31 @@
                         if (response.responseJSON.errors.department_id) {
                             for(let i = 0; i<response.responseJSON.errors.department_id.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.department_id[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.evaluation) {
+                            for(let i = 0; i<response.responseJSON.errors.evaluation.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.evaluation[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.products) {
+                            for(let i = 0; i<response.responseJSON.errors.products.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.products[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.services) {
+                            for(let i = 0; i<response.responseJSON.errors.services.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.services[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.longitude) {
+                            for(let i = 0; i<response.responseJSON.errors.longitude.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.longitude[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.latitude) {
+                            for(let i = 0; i<response.responseJSON.errors.latitude.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.latitude[i]}</li>`
                             }
                         }
                         swal.hideLoading();

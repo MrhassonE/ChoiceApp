@@ -224,6 +224,11 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.body[i]}</li>`
                             }
                         }
+                        if (response.responseJSON.errors.type) {
+                            for(let i = 0; i<response.responseJSON.errors.type.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.type[i]}</li>`
+                            }
+                        }
                         swal.hideLoading();
                         Swal.fire(
                             'لم يتم اكمال العملية',

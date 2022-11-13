@@ -14,6 +14,7 @@ class GeneralSetting extends Model
         'company_logo',
         'policy',
         'conditions',
+        'notification',
         'email',
         'phone',
         'phone2',
@@ -21,6 +22,8 @@ class GeneralSetting extends Model
         'instagram',
         'telegram',
         'whatsapp',
+        'android_app',
+        'ios_app',
     ];
     protected $appends = ['company_logo_path'];
     public function getCompanyLogoPathAttribute() {

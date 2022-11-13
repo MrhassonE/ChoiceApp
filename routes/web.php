@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function (){
 
 // Dashboard
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class,'index'])->name('Dashboard');
+    Route::get('/lara', [\App\Http\Controllers\LaratrustController::class,'index'])->name('Lara');
 
 // Staff
     Route::get('/Staff',[\App\Http\Controllers\StaffController::class,'index'])->name('Staff');
@@ -42,10 +43,20 @@ Route::middleware('auth')->group(function (){
     Route::post('/setting/policyConditions/{setting}',[\App\Http\Controllers\GeneralSettingController::class,'policyConditions'])->name('Setting.policyConditions');
     Route::post('/setting',[\App\Http\Controllers\GeneralSettingController::class,'update'])->name('Setting.update');
     Route::post('/setting/email',[\App\Http\Controllers\GeneralSettingController::class,'storeEmail'])->name('Setting.email');
+    Route::post('/setting/appUrl',[\App\Http\Controllers\GeneralSettingController::class,'appUrl'])->name('Setting.appUrl');
     Route::post('/setting/contact',[\App\Http\Controllers\GeneralSettingController::class,'updateContact'])->name('Setting.contact');
 
 
+// Country
+    Route::get('/country',[\App\Http\Controllers\CountryController::class,'index'])->name('Country');
+    Route::post('/country',[\App\Http\Controllers\CountryController::class,'store'])->name('Country.store');
+    Route::get('/Edit-Country/{country}',[\App\Http\Controllers\CountryController::class,'edit'])->name('Country.edit');
+    Route::post('/Edit-Country/{country}',[\App\Http\Controllers\CountryController::class,'update'])->name('Country.update');
+    Route::post('/ActiveCountry/{country}',[\App\Http\Controllers\CountryController::class,'Active'])->name('Country.Active');
+    Route::post('/DisActiveCountry/{country}',[\App\Http\Controllers\CountryController::class,'DisActive'])->name('Country.DisActive');
+
 // City
+
     Route::get('/city',[\App\Http\Controllers\CityController::class,'index'])->name('City');
     Route::post('/city',[\App\Http\Controllers\CityController::class,'store'])->name('City.store');
     Route::get('/Edit-City/{city}',[\App\Http\Controllers\CityController::class,'edit'])->name('City.edit');
@@ -63,7 +74,6 @@ Route::middleware('auth')->group(function (){
 // Department
     Route::get('/department',[\App\Http\Controllers\DepartmentController::class,'index'])->name('Department');
     Route::post('/department',[\App\Http\Controllers\DepartmentController::class,'store'])->name('Department.store');
-    Route::post('/department/storeCompany/{department}',[\App\Http\Controllers\DepartmentController::class,'storeCompany'])->name('Department.storeCompany');
     Route::get('/Edit-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'edit'])->name('Department.edit');
     Route::get('/Show-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'show'])->name('Department.show');
     Route::post('/Edit-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'update'])->name('Department.update');
@@ -71,6 +81,15 @@ Route::middleware('auth')->group(function (){
     Route::post('/DisActiveDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'DisActive'])->name('Department.DisActive');
     Route::post('/DeleteDepartment/{department}',[\App\Http\Controllers\DepartmentController::class,'destroy'])->name('Department.Delete');
     Route::post('/MainSection-Department/{department}',[\App\Http\Controllers\DepartmentController::class,'mainSection'])->name('Department.mainSection');
+
+// SubDepartment
+    Route::get('/subDepartment/{department}',[\App\Http\Controllers\SubDepartmentController::class,'index'])->name('SubDepartment');
+    Route::post('/subDepartment/{department}',[\App\Http\Controllers\SubDepartmentController::class,'store'])->name('SubDepartment.store');
+    Route::get('/Edit-SubDepartment/{subDepartment}',[\App\Http\Controllers\SubDepartmentController::class,'edit'])->name('SubDepartment.edit');
+    Route::post('/Edit-SubDepartment/{subDepartment}',[\App\Http\Controllers\SubDepartmentController::class,'update'])->name('SubDepartment.update');
+    Route::post('/ActiveSubDepartment/{subDepartment}',[\App\Http\Controllers\SubDepartmentController::class,'Active'])->name('SubDepartment.Active');
+    Route::post('/DisActiveSubDepartment/{subDepartment}',[\App\Http\Controllers\SubDepartmentController::class,'DisActive'])->name('SubDepartment.DisActive');
+    Route::post('/DeleteSubDepartment/{subDepartment}',[\App\Http\Controllers\SubDepartmentController::class,'destroy'])->name('SubDepartment.Delete');
 
 
 // Company

@@ -20,7 +20,9 @@ class Company extends Model
         'telegram',
         'whatsapp',
         'department_id',
+        'sub_department_id',
         'city_id',
+        'country_id',
         'is_active',
         'evaluation',
         'most_viewed',
@@ -45,8 +47,14 @@ class Company extends Model
     public function Department(){
         return $this->belongsTo(Department::class,'department_id');
     }
+    public function SubDepartment(){
+        return $this->belongsTo(SubDepartment::class,'sub_department_id');
+    }
     public function City(){
         return $this->belongsTo(City::class,'city_id');
+    }
+    public function Country(){
+        return $this->belongsTo(Country::class,'country_id');
     }
 
 

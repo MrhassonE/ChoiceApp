@@ -11,13 +11,52 @@
             <div class="col-md-6" >
                 <div class="d-flex flex-wrap align-items-start justify-content-start gap-2 mb-3">
                     <div>
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-create'))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-create|country-department-create'))
                             <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة قسم</a>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <div>
+                    <a href="#" data-bs-toggle="modal" data-bs-target=".filter" class="btn btn-primary"><i class="bx bx-filter me-1"></i>فرز حسب</a>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade filter" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myExtraLargeModalLabel">فرز حسب</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{route('Department')}}" method="get" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-12 my-1">
+                                    <div class="form-group">
+                                        <label class="">المدينة</label>
+                                        <select class="form-control" name="city" id="cityFilter">
+                                            <option value="">اختر المدينة</option>
+                                            @foreach($cities  as $city)
+                                                <option @if(request()->city == $city->id) selected @endif value="{{$city->id}}">{{$city->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 my-3">
+                                    <button id="submitButton" type="submit" class=" btn btn-primary btn-round">فرز</button>
+                                    <button type="reset" onclick="this.closest('form').reset();window.location.replace('{{route('Department')}}')" class="btn btn-primary">عرض الكل</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -48,18 +87,19 @@
                                                 {{$department->City->name}}
                                             </td>
                                             <td>
-                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-update'))
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-update|country-department-update'))
                                                     @if($department->is_active == 1)
                                                         @if($department->is_main ==0)
                                                             <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
                                                         @elseif($department->is_main ==1)
                                                             <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اخفاء من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
                                                         @endif
+                                                        <a href="{{route('Department.show',$department->id)}}" title="عرض الفروع" class="mx-2 btn btn-secondary btn-round" ><i class="fa fa-eye"></i></a>
                                                         <a href="{{route('Department.edit',$department->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>
                                                     @endif
 
                                                 @endif
-                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('department-delete'))
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-delete|country-department-delete'))
                                                     @if($department->is_active == 1)
                                                         <a href="javascript:;" onclick="DisActiveUser({{$department->id}})" title="أيقاف القسم" class="mx-2 btn btn-danger btn-round"><i class="bx bxs-trash"></i></a>
                                                     @elseif($department->is_active == 0)
@@ -119,6 +159,15 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-6 my-1">
+                                    <div class="form-group">
+                                        <div class="form-check form-switch">
+                                            <label class="form-check-label" for="notification">أرسال أشعار</label>
+                                            <input class="form-check-input" name="notification" type="checkbox" id="notification" checked="">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-12 my-1">
                                     <ul id="errors"></ul>
                                 </div>
@@ -204,7 +253,6 @@
                 })
             }
         });
-
 
         function ActiveUser(id) {
             const swalWithBootstrapButtons = Swal.mixin({

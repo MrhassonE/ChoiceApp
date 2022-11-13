@@ -55,7 +55,7 @@ class APIController extends Controller
 
     protected function getSettings(){
         $cities=City::where('is_active',1)->get(["id","name"]);
-        $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions']);
+        $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions','android_app','ios_app']);
         $whatsNew = WhatsNew::get(['title']);
         $res=Collect(["cities"=>$cities]);
         $res=$res->merge(["settings"=>$setting]);

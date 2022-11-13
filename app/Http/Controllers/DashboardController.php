@@ -18,20 +18,17 @@ class DashboardController extends Controller
         $ads = Advertisement::all()->count();
         $month = date('m');
         $day = date('d');
-        $advisit = AllVisit::where('phone_type',1)->whereMonth('created_at','=',$month)->whereDay('created_at','=',$day)->count();
-        $amvisit = AllVisit::where('phone_type',1)->whereMonth('created_at','=',$month)->count();
-        $aavisit = AllVisit::where('phone_type',1)->count();
 
-        $idvisit = AllVisit::where('phone_type',2)->whereMonth('created_at','=',$month)->whereDay('created_at','=',$day)->count();
-        $imvisit = AllVisit::where('phone_type',2)->whereMonth('created_at','=',$month)->count();
-        $iavisit = AllVisit::where('phone_type',2)->count();
+        $idvisit = AllVisit::whereMonth('created_at','=',$month)->whereDay('created_at','=',$day)->count();
+        $imvisit = AllVisit::whereMonth('created_at','=',$month)->count();
+        $iavisit = AllVisit::count();
 
         $avisitEveryMonth = $this->AvisitEveryMonth();
         $ivisitEveryMonth = $this->IvisitEveryMonth();
 
         return view('Dashboard.dashboard',compact(
             'departments','departmentsMain','companies','companiesNew','companiesMostViewed','ads',
-                    'advisit','amvisit','aavisit','idvisit','imvisit','iavisit',
+                    'idvisit','imvisit','iavisit',
                     'avisitEveryMonth','ivisitEveryMonth'
         ));
     }

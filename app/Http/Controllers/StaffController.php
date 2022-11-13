@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ActivityLog;
+use App\Models\Country;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,42 +18,67 @@ class StaffController extends Controller
     public function __construct()
     {
         $this->middleware('permission:profile-read')->only('profile');
-        $this->middleware('permission:profile-update|users-update')->only('ChangePassword');
-        $this->middleware('permission:profile-update|users-update')->only('update');
-        $this->middleware('permission:users-read')->only('index');
-        $this->middleware('permission:users-update')->only('edit');
-        $this->middleware('permission:users-delete')->only('delete','Active','DisActive');
-        $this->middleware('permission:users-create')->only('store');
+        $this->middleware('permission:profile-update|all-users-update|country-users-update')->only('ChangePassword');
+        $this->middleware('permission:profile-update|all-users-update|country-users-update')->only('update');
+        $this->middleware('permission:all-users-read|country-users-read')->only('index');
+        $this->middleware('permission:all-users-update|country-users-update')->only('edit');
+        $this->middleware('permission:all-users-delete|country-users-delete')->only('delete','Active','DisActive');
+        $this->middleware('permission:all-users-create|country-users-create')->only('store');
     }
     public function profile(){
         $user = User::find(Auth::id());
         return view('Dashboard.Staff.profile',compact('user'));
     }
-
     public function index(){
-        $users = User::all();
-        $roles = Role::all()->except(1);
-        return view('Dashboard.Staff.index',compact('users','roles'));
+        if (auth()->user()->hasPermission('all-users-read')) {
+            $users = User::all();
+            $roles = Role::all()->except(1);
+        }elseif (auth()->user()->hasPermission('country-users-read')){
+            $users = User::where('country_id',auth()->user()->country_id)->get();
+            $roles = Role::all()->except([1,2]);
+        }
+        $countries = Country::where('is_active',1)->get();
+        return view('Dashboard.Staff.index',compact('users','roles','countries'));
     }
 
     public function store(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|unique:users|max:100|email',
-            'password' => 'required|max:100|min:6',
-            'role' => 'required',
-        ]);
+        if (auth()->user()->hasPermission('all-users-create')) {
+            $request->validate([
+                'name' => 'required|string|max:100',
+                'email' => 'required|unique:users|max:100|email',
+                'password' => 'required|max:100|min:6',
+                'role' => 'required',
+                'country' => 'required'
+            ]);
+            $staff = new User([
+                'id' => rand(100000, 999999),
+                'name' => $request->name,
+                'email' => $request->email,
+                'country_id' => $request->country,
+                'password' => Hash::make($request->password),
+                'confirm_password' => Hash::make($request->password),
+            ]);
+            $staff->save();
+            $staff->attachRole($request->role);
+        }elseif (auth()->user()->hasPermission('country-users-create')){
+            $request->validate([
+                'name' => 'required|string|max:100',
+                'email' => 'required|unique:users|max:100|email',
+                'password' => 'required|max:100|min:6',
+                'role' => 'required',
+            ]);
+            $staff = new User([
+                'id' => rand(100000, 999999),
+                'name' => $request->name,
+                'email' => $request->email,
+                'country_id' => auth()->user()->country_id,
+                'password' => Hash::make($request->password),
+                'confirm_password' => Hash::make($request->password),
+            ]);
+            $staff->save();
+            $staff->attachRole($request->role);
 
-        $staff = new User([
-            'id'=>rand(100000,999999),
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'confirm_password' => Hash::make($request->password),
-        ]);
-        $staff->save();
-        $staff->attachRole($request->role);
-
+        }
         $text = 'تم اضافة مستخدم بأسم '.$staff->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
     }
