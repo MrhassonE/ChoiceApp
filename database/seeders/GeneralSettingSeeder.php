@@ -18,7 +18,7 @@ class GeneralSettingSeeder extends Seeder
     public function run()
     {
         $user = User::create([
-            'name'=>'Administrator',
+            'name'=>'Super Administrator',
             'email'=>'Administrator@app.com',
             'password'=>Hash::make('Password'),
         ]);
