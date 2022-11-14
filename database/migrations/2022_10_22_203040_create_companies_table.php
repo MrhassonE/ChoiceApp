@@ -32,7 +32,7 @@ class CreateCompaniesTable extends Migration
             $table->integer('is_main')->default(0);
             $table->integer('products')->default(0);
             $table->integer('services')->default(0);
-            $table->longText('evaluation');
+            $table->longText('evaluation')->nullable();
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->unsignedBigInteger('sub_department_id');

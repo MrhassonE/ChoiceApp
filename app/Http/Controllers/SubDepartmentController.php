@@ -43,7 +43,7 @@ class SubDepartmentController extends Controller
         if ($request->notification && $g->notification ==1){
             try {
                 foreach (FCMToken::all() as $user){
-                    $user->notify(new AddDepartment($department->name,$department));
+                    $user->notify(new AddDepartment($subDepartment->name,$department));
                 }
             }catch (\Exception $exception){
             }

@@ -6,6 +6,7 @@ use App\Events\ActivityLog;
 use App\Models\Country;
 use App\Models\FCMToken;
 use App\Models\GeneralSetting;
+use App\Notifications\AddCity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
