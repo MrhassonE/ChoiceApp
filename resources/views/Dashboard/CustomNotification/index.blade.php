@@ -13,9 +13,15 @@
             <div class="col-md-6">
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('notification-create'))
-                    <div>
-                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة أشعار</a>
-                    </div>
+                        @if(\App\Models\GeneralSetting::first()->notification ==1)
+                            <div>
+                                <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>أضافة أشعار</a>
+                            </div>
+                            @else
+                            <div>
+                                <h5 class="my-3">تم ألغاء تفعيل الاشعارات</h5>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -204,7 +210,7 @@
                     data: formData,
                     contentType:false,
                     processData:false,
-                    success : function () {
+                    success : function (response) {
                         Swal.fire(
                             'تم الانشاء',
                             'تم انشاء أشعار بنجاح',
