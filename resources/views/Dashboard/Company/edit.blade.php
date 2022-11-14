@@ -308,6 +308,11 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.latitude[i]}</li>`
                             }
                         }
+                        if (response.responseJSON.errors.sub_department_id) {
+                            for(let i = 0; i<response.responseJSON.errors.sub_department_id.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.sub_department_id[i]}</li>`
+                            }
+                        }
                         swal.hideLoading();
                         Swal.fire(
                             'لم يتم اكمال العملية',

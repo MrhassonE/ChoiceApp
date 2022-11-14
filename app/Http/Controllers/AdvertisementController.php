@@ -54,6 +54,7 @@ class AdvertisementController extends Controller
             'id'=>rand(100000,999999),
             'image'=>$fileName,
             'company_id'=>$request->company_id,
+            'city_id'=>$com->City->id,
             'country_id'=>$com->Country->id,
         ]);
         $com = Company::findOrFail($request->company_id);

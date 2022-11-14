@@ -77,6 +77,7 @@ class CompanyController extends Controller
             'whatsapp'=>'max:150',
             'evaluation'=>'max:1500',
             'department_id'=>'required',
+            'subDepartment'=>'required',
             'products'=>'numeric|min:0',
             'services'=>'numeric|min:0',
         ]);
@@ -141,6 +142,7 @@ class CompanyController extends Controller
             'whatsapp'=>'max:150',
             'evaluation'=>'max:1500',
             'department_id'=>'required',
+            'sub_department_id'=>'required',
             'products'=>'numeric|min:0',
             'services'=>'numeric|min:0',
         ]);

@@ -183,7 +183,8 @@ return [
         'latitude'=>'خط العرض',
         'longitude'=>'خط الطول',
         'type'=>'النوع',
-
+        'subDepartment'=>'الفرع',
+        'sub_department_id'=>'الفرع',
     ],
 
 ];

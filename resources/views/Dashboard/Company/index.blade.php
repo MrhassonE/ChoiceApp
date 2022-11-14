@@ -488,6 +488,14 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.latitude[i]}</li>`
                             }
                         }
+                        if (response.responseJSON.errors.department_id) {
+                            for(let i = 0; i<response.responseJSON.errors.department_id.length;i++){
+                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.department_id[i]}</li>`
+                            }
+                        }
+                        if (response.responseJSON.errors.subDepartment) {
+                            document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.subDepartment}</li>`
+                        }
                         swal.hideLoading();
                         Swal.fire(
                             'لم يتم اكمال العملية',
