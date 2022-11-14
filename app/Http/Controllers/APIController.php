@@ -44,7 +44,21 @@ class APIController extends Controller
                         }])->
                         select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
                             ->where('is_active', 1)->get();
+                    }])
+                        ->with(['CompanyMostViewed' => function ($query) {
+                        $query->with(['CompanyImages' => function ($query) {
+                            $query->select('id', 'image', 'company_id')->get();
+                        }])->
+                        select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                            ->where('most_viewed', 1)->where('is_active', 1)->get();
                     }])->where('is_active', 1)->get();
+                }])
+                ->with(['Company'=>function($query){
+                    $query->with(['CompanyImages' => function ($query) {
+                        $query->select('id', 'image', 'company_id')->get();
+                    }])->
+                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                        ->where('is_active', 1)->get();
                 }])
                 ->with(['CompanyMostViewed' => function ($query) {
                     $query->with(['CompanyImages' => function ($query) {
@@ -63,7 +77,21 @@ class APIController extends Controller
                         }])->
                         select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
                             ->where('is_active', 1)->get();
-                    }])->where('is_active', 1)->get();
+                    }])
+                        ->with(['CompanyMostViewed' => function ($query) {
+                            $query->with(['CompanyImages' => function ($query) {
+                                $query->select('id', 'image', 'company_id')->get();
+                            }])->
+                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                                ->where('most_viewed', 1)->where('is_active', 1)->get();
+                        }])->where('is_active', 1)->get();
+                }])
+                ->with(['Company'=>function($query){
+                    $query->with(['CompanyImages' => function ($query) {
+                        $query->select('id', 'image', 'company_id')->get();
+                    }])->
+                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                        ->where('is_active', 1)->get();
                 }])
                 ->with(['CompanyMostViewed' => function ($query) {
                     $query->with(['CompanyImages' => function ($query) {
@@ -71,7 +99,8 @@ class APIController extends Controller
                     }])->
                     select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
                         ->where('most_viewed', 1)->where('is_active', 1)->get();
-                }])->select('id', 'name', 'image')->get();
+                }])
+                ->select('id', 'name', 'image')->get();
         }
     }
     protected function getDepartments($cId,$id){
@@ -161,7 +190,7 @@ class APIController extends Controller
             Mail::to($admin->email)->send(new \App\Mail\ContactUsForm($contactForm->name,$contactForm->email,$contactForm->message));
         }catch (\Exception $exception){
         }
-        return response()->json(['seccuss'=>'true'], 200);
+        return response()->json(['err'=>'true'], 200);
     }
     protected function home($cId,$id){
         if ($id == 'allcities'){
@@ -173,7 +202,21 @@ class APIController extends Controller
                         }])->
                         select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
                             ->where('is_active', 1)->get();
-                    }])->where('is_active', 1)->get();
+                    }])
+                        ->with(['CompanyMostViewed' => function ($query) {
+                            $query->with(['CompanyImages' => function ($query) {
+                                $query->select('id', 'image', 'company_id')->get();
+                            }])->
+                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                                ->where('most_viewed', 1)->where('is_active', 1)->get();
+                        }])->where('is_active', 1)->get();
+                }])
+                ->with(['Company'=>function($query){
+                    $query->with(['CompanyImages' => function ($query) {
+                        $query->select('id', 'image', 'company_id')->get();
+                    }])->
+                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                        ->where('is_active', 1)->get();
                 }])
                 ->with(['CompanyMostViewed' => function ($query) {
                     $query->with(['CompanyImages' => function ($query) {
@@ -182,6 +225,7 @@ class APIController extends Controller
                     select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
                         ->where('most_viewed', 1)->where('is_active', 1)->get();
                 }])->select('id', 'name', 'image')->get();
+
 
             $company1 = Company::where('country_id', $cId)->where('is_active', 1)->where('most_viewed', 1)->orderByDesc('created_at')->where('is_main', 1)->with(['CompanyImages' => function ($query) {
                 $query->select('id', 'image', 'company_id')->get();
@@ -209,7 +253,21 @@ class APIController extends Controller
                         }])->
                         select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
                             ->where('is_active', 1)->get();
+                    }])
+                    ->with(['CompanyMostViewed' => function ($query) {
+                        $query->with(['CompanyImages' => function ($query) {
+                            $query->select('id', 'image', 'company_id')->get();
+                        }])->
+                        select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                            ->where('most_viewed', 1)->where('is_active', 1)->get();
                     }])->where('is_active', 1)->get();
+                }])
+                ->with(['Company'=>function($query){
+                    $query->with(['CompanyImages' => function ($query) {
+                        $query->select('id', 'image', 'company_id')->get();
+                    }])->
+                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                        ->where('is_active', 1)->get();
                 }])
                 ->with(['CompanyMostViewed' => function ($query) {
                     $query->with(['CompanyImages' => function ($query) {
@@ -217,7 +275,8 @@ class APIController extends Controller
                     }])->
                     select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
                         ->where('most_viewed', 1)->where('is_active', 1)->get();
-                }])->select('id', 'name', 'image')->get();
+                }])
+                ->select('id', 'name', 'image')->get();
 
             $company1 = Company::where('country_id', $cId)->where('is_active', 1)->where('most_viewed', 1)->orderByDesc('created_at')->where('is_main', 1)->where('city_id', $id)->with(['CompanyImages' => function ($query) {
                 $query->select('id', 'image', 'company_id')->get();

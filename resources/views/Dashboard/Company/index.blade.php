@@ -493,9 +493,6 @@
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.department_id[i]}</li>`
                             }
                         }
-                        if (response.responseJSON.errors.subDepartment) {
-                            document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.subDepartment}</li>`
-                        }
                         swal.hideLoading();
                         Swal.fire(
                             'لم يتم اكمال العملية',

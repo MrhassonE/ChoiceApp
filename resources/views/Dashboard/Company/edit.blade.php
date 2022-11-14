@@ -55,9 +55,11 @@
                 <div class="col-md-3 my-1">
                     <div class="form-group">
                         <label for="">الفرع</label>
-                        <select class="form-control" required name="sub_department_id" id="subDepartment">
+                        <select class="form-control" name="sub_department_id" id="subDepartment">
                             @foreach($company->Department->SubDepartment as $subDep)
+                                @if($company->SubDepartment)
                                 <option @if( $company->SubDepartment->id == $subDep->id) selected @endif value="{{$subDep->id}}">{{$subDep->name}}</option>
+                                @endif
                             @endforeach
                         </select>
                         <div class="invalid-feedback">

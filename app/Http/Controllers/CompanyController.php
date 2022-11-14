@@ -77,7 +77,6 @@ class CompanyController extends Controller
             'whatsapp'=>'max:150',
             'evaluation'=>'max:1500',
             'department_id'=>'required',
-            'subDepartment'=>'required',
             'products'=>'numeric|min:0',
             'services'=>'numeric|min:0',
         ]);
@@ -89,6 +88,11 @@ class CompanyController extends Controller
             $store = $file->storeAs('Company',$fileName,'public');
         }
         $department = Department::find($request->department_id);
+
+        $subDepartment = null;
+        if ($request->subDepartment){
+            $subDepartment = $request->subDepartment;
+        }
         $company = Company::create([
             'id'=>rand(100000,999999),
             'name'=>$request->name,
@@ -100,7 +104,7 @@ class CompanyController extends Controller
             'telegram'=>$request->telegram,
             'whatsapp'=>$request->whatsapp,
             'department_id'=>$department->id,
-            'sub_department_id'=>$request->subDepartment,
+            'sub_department_id'=>$subDepartment,
             'city_id'=>$department->City->id,
             'country_id'=>$department->Country->id,
             'image'=>$fileName,
@@ -142,7 +146,6 @@ class CompanyController extends Controller
             'whatsapp'=>'max:150',
             'evaluation'=>'max:1500',
             'department_id'=>'required',
-            'sub_department_id'=>'required',
             'products'=>'numeric|min:0',
             'services'=>'numeric|min:0',
         ]);
@@ -157,7 +160,15 @@ class CompanyController extends Controller
             $company->image = $fileName;
         }
         $company->update($request->except('image'));
-
+        if ($request->sub_department_id){
+            $company->update([
+                'sub_department_id'=>$request->sub_department_id
+            ]);
+        }else{
+            $company->update([
+                'sub_department_id'=>null
+            ]);
+        }
         $text = 'تم تعديل الشركة '.$company->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
     }
