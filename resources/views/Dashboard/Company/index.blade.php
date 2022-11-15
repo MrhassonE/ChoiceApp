@@ -216,6 +216,7 @@
                                     <div class="form-group">
                                         <label for="">اختر الفرع</label>
                                         <select name="subDepartment" class="form-control">
+                                            <option value="0">اختيار فرع</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
@@ -346,7 +347,7 @@
 
     </div>
     <script>
-        $('select[name="subDepartment"]').hide();
+        // $('select[name="subDepartment"]').hide();
         $(document).ready(function () {
             $('select[name="department_id"]').on('change', function (e) {
                 var catId = e.target.value;
@@ -358,6 +359,7 @@
                         dataType: "json",
                         success: function (data) {
                             $('select[name="subDepartment"]').empty();
+                            $('select[name="subDepartment"]').append('<option value="null">اختر فرع</option>');
                             $.each(data,function(index,subDep){
                                 $('select[name="subDepartment"]').append('<option value ="'+subDep.id+'">'+subDep.name+'</option>');
                             });
