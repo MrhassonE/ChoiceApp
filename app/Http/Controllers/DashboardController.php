@@ -6,6 +6,7 @@ use App\Models\Advertisement;
 use App\Models\AllVisit;
 use App\Models\Company;
 use App\Models\Department;
+use App\Models\FCMToken;
 
 class DashboardController extends Controller
 {
@@ -35,10 +36,12 @@ class DashboardController extends Controller
         $avisitEveryMonth = $this->AvisitEveryMonth();
         $ivisitEveryMonth = $this->IvisitEveryMonth();
 
+        $androidInstallCount = FCMToken::where('type',1)->count();
+        $iosInstallCount = FCMToken::where('type',2)->count();
         return view('Dashboard.dashboard',compact(
             'departments','departmentsMain','companies','companiesNew','companiesMostViewed','ads',
-                    'idvisit','imvisit','iavisit',
-                    'avisitEveryMonth','ivisitEveryMonth'
+                    'idvisit','imvisit','iavisit','avisitEveryMonth','ivisitEveryMonth',
+                    'androidInstallCount','iosInstallCount'
         ));
     }
 

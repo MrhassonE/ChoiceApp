@@ -11,5 +11,6 @@ class FCMToken extends Model
     use HasFactory,Notifiable;
     protected $fillable = [
         'fcm_token',
+        'type'
     ];
 }

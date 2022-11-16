@@ -18,12 +18,14 @@ class APIController extends Controller
 {
     protected function fcmToken(Request $request){
         $request->validate([
-            'fcm_token'=>'required|min:10'
+            'fcm_token'=>'required|min:10',
+            'type'=>'required'
         ]);
         $fcm = FCMToken::where('fcm_token',$request->fcm_token)->first();
         if (!$fcm){
             $fcm = FCMToken::create([
                 'fcm_token'=>$request->fcm_token,
+                'type'=>$request->type,
             ]);
         }
         return response()->json(['success'=>'true'], 200);

@@ -16,6 +16,7 @@ class CreateFCMTokensTable extends Migration
         Schema::create('f_c_m_tokens', function (Blueprint $table) {
             $table->id();
             $table->longText('fcm_token');
+            $table->integer('type');
             $table->timestamps();
         });
     }

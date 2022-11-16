@@ -201,11 +201,36 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-4">
+            <div class="card h-100">
+                <div class="card-header pb-0 p-3">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-2">مستخدمين التطبيق</h6>
+                    </div>
+                </div>
+                <div class="card-body pb-0 mt-4">
+                    <div class="row">
+                        <div class="chart">
+                            <canvas id="chart-pie" class="chart-canvas" height="250"></canvas>
+                        </div>
+                    </div>
+                    <span class="badge badge-md badge-dot me-4 d-block text-start">
+                        <i class="mdi mdi-circle font-size-10 text-secondary"></i>
+                        <span class="text-dark text-xs">الاندرويد</span>
+                    </span>
+                    <span class="badge badge-md badge-dot me-4 d-block text-start">
+                        <i class="mdi mdi-circle font-size-10 text-primary"></i>
+                        <span class="text-dark text-xs">الايفون</span>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
     </div>
 
     <script>
         var ctx1 = document.getElementById("chart-line1").getContext("2d");
+        var ctx2 = document.getElementById("chart-pie").getContext("2d");
 
         var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
 
@@ -242,8 +267,8 @@
                         tension: 0.4,
                         borderWidth: 0,
                         pointRadius: 2,
-                        pointBackgroundColor: "#2dce89",
-                        borderColor: "#2dce89",
+                        pointBackgroundColor: "#1f58c7",
+                        borderColor: "#1f58c7",
                         borderWidth: 3,
                         backgroundColor: gradientStroke2,
                         data: dataProjectChart2,
@@ -296,5 +321,62 @@
             },
         });
 
+        let dataTaskChart2 = [];
+        dataTaskChart2.push({{$androidInstallCount}});
+        dataTaskChart2.push({{$iosInstallCount}});
+        new Chart(ctx2, {
+            type: "pie",
+            data: {
+                labels: ['الأندرويد','الأيفون'],
+                datasets: [{
+                    label: "المستخدمين",
+                    weight: 9,
+                    cutout: 0,
+                    tension: 0.9,
+                    pointRadius: 2,
+                    borderWidth: 2,
+                    backgroundColor: ['#8392ab', '#1f58c7'],
+                    data: dataTaskChart2,
+                    fill: false
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false,
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+                scales: {
+                    y: {
+                        grid: {
+                            drawBorder: false,
+                            display: false,
+                            drawOnChartArea: false,
+                            drawTicks: false,
+                        },
+                        ticks: {
+                            display: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            drawBorder: false,
+                            display: false,
+                            drawOnChartArea: false,
+                            drawTicks: false,
+                        },
+                        ticks: {
+                            display: false,
+                        }
+                    },
+                },
+            },
+        });
     </script>
 </x-appDash-layout>

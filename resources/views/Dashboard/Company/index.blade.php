@@ -359,7 +359,7 @@
                         dataType: "json",
                         success: function (data) {
                             $('select[name="subDepartment"]').empty();
-                            $('select[name="subDepartment"]').append('<option value="null">اختر فرع</option>');
+                            $('select[name="subDepartment"]').append('<option value="0">اختر فرع</option>');
                             $.each(data,function(index,subDep){
                                 $('select[name="subDepartment"]').append('<option value ="'+subDep.id+'">'+subDep.name+'</option>');
                             });

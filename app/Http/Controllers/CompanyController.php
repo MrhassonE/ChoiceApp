@@ -89,7 +89,8 @@ class CompanyController extends Controller
         }
         $department = Department::find($request->department_id);
 
-        $subDepartment = null;
+
+        $subDepartment = 0;
         if ($request->subDepartment){
             $subDepartment = $request->subDepartment;
         }
