@@ -88,6 +88,10 @@
                                         <th>الصورة</th>
                                         <th>أسم الشركة</th>
                                         <th>البريد الالكتروني</th>
+                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-read'))
+                                            <th>الدولة</th>
+                                        @endif
+                                        <th>المدينة</th>
                                         <th>القسم</th>
                                         <th></th>
                                     </tr>
@@ -104,6 +108,14 @@
                                             </td>
                                             <td>
                                                 {{$co->email}}
+                                            </td>
+                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-read'))
+                                                <td>
+                                                    {{$co->Country->name}}
+                                                </td>
+                                            @endif
+                                            <td>
+                                                {{$co->City->name}}
                                             </td>
                                             <td>
                                                 {{$co->Department->name}}
@@ -197,33 +209,79 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-create'))
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">الدولة</label>
+                                            <select class="form-control" required name="Country">
+                                                <option disabled selected value="0">اختيار الدولة</option>
+                                                @foreach($countries as $country)
+                                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    الرجاء املئ الحقل
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">المدينة</label>
+                                            <select class="form-control" required name="City">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">القسم</label>
+                                            <select class="form-control" required name="Department">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">اختر الفرع</label>
+                                            <select name="subDepartment" class="form-control">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">القسم</label>
+                                            <select class="form-control" required name="department_id" id="department_id">
+                                                    <option value="0" disabled selected>أختر قسم</option>
+                                                    @foreach($departments as $department)
+                                                    <option value="{{$department->id}}">{{$department->name}}</option>
+                                                    @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">اختر الفرع</label>
+                                            <select name="subDepartment_id" class="form-control">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
 
-                                <div class="col-md-3 my-1">
-                                    <div class="form-group">
-                                        <label for="">القسم</label>
-                                        <select class="form-control" required name="department_id" id="department_id">
-                                            <option selected disabled>اختر القسم</option>
-                                            @foreach($departments as $department)
-                                            <option value="{{$department->id}}">{{$department->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 my-1">
-                                    <div class="form-group">
-                                        <label for="">اختر الفرع</label>
-                                        <select name="subDepartment" class="form-control">
-                                            <option value="0">اختيار فرع</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 my-1">
+                                <div class="col-md-4 my-1">
                                     <div class="form-group">
                                         <label for="">الصورة</label>
                                         <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
@@ -282,8 +340,8 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">رقم الواتساب</label>
-                                        <input id="whatsapp"  name="whatsapp" type="text" class="form-control" placeholder="ادخل رقم الواتساب">
+                                        <label for="">الواتساب</label>
+                                        <input id="whatsapp" name="whatsapp" type="text" class="form-control" placeholder="ادخل رقم الواتساب">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
@@ -292,7 +350,7 @@
                                 <div class="row">
                                     <div class="col-md-6 my-1">
                                         <div class="form-group">
-                                            <label for="">تقييم الشركة</label>
+                                            <label for="">وصف الشركة</label>
                                             <textarea class="form-control" name="evaluation" id="evaluation" cols="20" rows="5"></textarea>
                                             <div class="invalid-tooltip">
                                                 الرجاء املئ الحقل
@@ -302,7 +360,7 @@
                                     <div class="col-md-2 my-1">
                                         <div class="form-group">
                                             <label for="">عدد المنتجات</label>
-                                            <input name="products" min="0" required class="form-control" type="number"  id="products">
+                                            <input name="products" min="0" class="form-control" type="number"  id="products">
                                             <div class="invalid-tooltip">
                                                 الرجاء املئ الحقل
                                             </div>
@@ -318,7 +376,7 @@
                                     <div class="col-md-2 my-1">
                                         <div class="form-group">
                                             <label for="">عدد الخدمات</label>
-                                            <input name="services" min="0" required class="form-control" type="number"  id="services">
+                                            <input name="services" min="0" class="form-control" type="number"  id="services">
                                             <div class="invalid-tooltip">
                                                 الرجاء املئ الحقل
                                             </div>
@@ -347,9 +405,60 @@
 
     </div>
     <script>
-        // $('select[name="subDepartment"]').hide();
         $(document).ready(function () {
             $('select[name="department_id"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/subDepartment/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="subDepartment_id"]').empty();
+                            $('select[name="subDepartment_id"]').append('<option value="0">اختر فرع</option>');
+                            $.each(data,function(index,subDep){
+                                $('select[name="subDepartment_id"]').append('<option value ="'+subDep.id+'">'+subDep.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+
+            $('select[name="Country"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coCitiesSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="City"]').empty();
+                            $('select[name="City"]').append('<option disabled selected value="0">اختر المدينة</option>');
+                            $.each(data,function(index,city){
+                                $('select[name="City"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+            $('select[name="City"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coDepsSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="Department"]').empty();
+                            $('select[name="Department"]').append('<option disabled selected value="0">اختر القسم</option>');
+                            $.each(data,function(index,city){
+                                $('select[name="Department"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+            $('select[name="Department"]').on('change', function (e) {
                 var catId = e.target.value;
                 if (catId) {
                     $('select[name="subDepartment"]').show();
@@ -488,11 +597,6 @@
                         if (response.responseJSON.errors.latitude) {
                             for(let i = 0; i<response.responseJSON.errors.latitude.length;i++){
                                 document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.latitude[i]}</li>`
-                            }
-                        }
-                        if (response.responseJSON.errors.department_id) {
-                            for(let i = 0; i<response.responseJSON.errors.department_id.length;i++){
-                                document.getElementById('errors').innerHTML += `<li class="text-danger" >${response.responseJSON.errors.department_id[i]}</li>`
                             }
                         }
                         swal.hideLoading();

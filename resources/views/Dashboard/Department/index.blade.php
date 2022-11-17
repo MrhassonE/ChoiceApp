@@ -149,6 +149,32 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-create'))
+                                    <div class="col-md-3 my-1">
+                                        <div class="form-group">
+                                            <label for="">الدولة</label>
+                                            <select class="form-control" required name="Country">
+                                                <option disabled selected value="0">اختيار الدولة</option>
+                                                @foreach($countries as $country)
+                                                    <option value="{{$country->id}}">{{$country->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 my-1">
+                                        <div class="form-group">
+                                            <label for="">المدينة</label>
+                                            <select class="form-control" required name="City">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
                                 <div class="col-md-5 my-1">
                                     <div class="form-group">
                                         <label for="">المدينة</label>
@@ -159,6 +185,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
                                         <div class="form-check form-switch">
@@ -183,6 +210,26 @@
     </div>
 
     <script>
+        $(document).ready(function () {
+            $('select[name="Country"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coCitiesSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="City"]').empty();
+                            $('select[name="City"]').append('<option disabled selected value="0">اختر المدينة</option>');
+                            $.each(data,function(index,city){
+                                $('select[name="City"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+        });
+
         let validateForm = false;
         (function () {
             'use strict';

@@ -40,29 +40,52 @@ class DepartmentController extends Controller
                 })->get();
             $cities = City::where('is_active',1)->where('country_id',auth()->user()->country_id)->get();
         }
-        return view('Dashboard.Department.index',compact('departments','cities'));
+        $countries = Country::where('is_active',1)->get();
+        return view('Dashboard.Department.index',compact('departments','cities','countries'));
     }
 
     public function store(Request $request){
-        $request->validate([
-            'name'=>'required|max:500',
-            'city_id'=>'required',
-            'image' => 'required|mimes:jpeg,jpg,png|max:5000',
-        ]);
-        $fileName = null;
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = time() . '.' .$file->getClientOriginalName();
-            $store = $file->storeAs('Department',$fileName,'public');
+        if (auth()->user()->hasPermission('all-department-create')) {
+            $request->validate([
+                'name' => 'required|max:500',
+                'City' => 'required',
+                'Country'=>'required',
+                'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+            ]);
+            $fileName = null;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' . $file->getClientOriginalName();
+                $store = $file->storeAs('Department', $fileName, 'public');
+            }
+            $department = Department::create([
+                'id' => rand(100000, 999999),
+                'name' => $request->name,
+                'city_id' => $request->City,
+                'country_id' => $request->Country,
+                'image' => $fileName,
+            ]);
+        }elseif (auth()->user()->hasPermission('country-department-create')){
+            $request->validate([
+                'name' => 'required|max:500',
+                'city_id' => 'required',
+                'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+            ]);
+            $fileName = null;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' . $file->getClientOriginalName();
+                $store = $file->storeAs('Department', $fileName, 'public');
+            }
+            $city = City::find($request->city_id);
+            $department = Department::create([
+                'id' => rand(100000, 999999),
+                'name' => $request->name,
+                'city_id' => $request->city_id,
+                'country_id' => $city->Country->id,
+                'image' => $fileName,
+            ]);
         }
-        $city = City::find($request->city_id);
-        $department = Department::create([
-            'id'=>rand(100000,999999),
-            'name'=>$request->name,
-            'city_id'=>$request->city_id,
-            'country_id'=>$city->Country->id,
-            'image'=>$fileName,
-        ]);
         $text = 'تم اضافة قسم بعنوان '.$department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
 

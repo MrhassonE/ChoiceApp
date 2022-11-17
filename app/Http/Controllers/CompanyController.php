@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\ActivityLog;
+use App\Models\City;
 use App\Models\Company;
 use App\Models\CompanyImages;
+use App\Models\Country;
 use App\Models\Department;
 use App\Models\FCMToken;
 use App\Models\GeneralSetting;
@@ -25,6 +27,13 @@ class CompanyController extends Controller
         $this->middleware('permission:all-company-delete|country-company-delete')->only('DisActive','Active','destroy');
         $this->middleware('permission:image-create')->only('storeImage');
         $this->middleware('permission:image-delete')->only('deleteImage');
+    }
+
+    public function coCitiesSuper(Country $country){
+        return City::where('country_id',$country->id)->where('is_active',1)->get();
+    }
+    public function coDepsSuper(City $city){
+        return Department::where('city_id',$city->id)->where('is_active',1)->get();
     }
 
     public function index(Request $request){
@@ -61,60 +70,113 @@ class CompanyController extends Controller
                 ->get();
             $departments = Department::where('is_active',1)->where('country_id',auth()->user()->country_id)->get();
         }
-        return view('Dashboard.Company.index',compact('companies','departments'));
+        $countries = Country::where('is_active',1)->get();
+        return view('Dashboard.Company.index',compact('companies','departments','countries'));
     }
 
     public function store(Request $request){
-        $request->validate([
-            'name'=>'required|max:100',
-            'image' => 'required|mimes:jpeg,jpg,png|max:5000',
-            'email'=>'required|email|max:100',
-            'phone'=>'required|max:30',
-            'address'=>'required|max:500',
-            'facebook'=>'max:150',
-            'instagram'=>'max:150',
-            'telegram'=>'max:150',
-            'whatsapp'=>'max:150',
-            'evaluation'=>'max:1500',
-            'department_id'=>'required',
-            'products'=>'numeric|min:0',
-            'services'=>'numeric|min:0',
-        ]);
+        if (auth()->user()->hasPermission('all-company-create')){
+            $request->validate([
+                'name'=>'required|max:100',
+                'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+                'email'=>'required|email|max:100',
+                'phone'=>'required|max:30',
+                'address'=>'required|max:500',
+                'facebook'=>'max:150',
+                'instagram'=>'max:150',
+                'telegram'=>'max:150',
+                'whatsapp'=>'max:150',
+                'City' => 'required',
+                'Country'=>'required',
+                'department_id'=>'required',
+                'products'=>'min:0',
+                'services'=>'min:0',
+            ]);
 
-        $fileName = null;
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = time() . '.' .$file->getClientOriginalName();
-            $store = $file->storeAs('Company',$fileName,'public');
+            $fileName = null;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' .$file->getClientOriginalName();
+                $store = $file->storeAs('Company',$fileName,'public');
+            }
+            $subDepartment = 0;
+            if ($request->subDepartment_id){
+                $subDepartment = $request->subDepartment;
+            }
+            $company = Company::create([
+                'id'=>rand(100000,999999),
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'phone'=>$request->phone,
+                'address'=>$request->address,
+                'facebook'=>$request->facebook,
+                'instagram'=>$request->instagram,
+                'telegram'=>$request->telegram,
+                'whatsapp'=>$request->whatsapp,
+                'city_id'=>$request->City,
+                'country_id'=>$request->Country,
+                'department_id'=>$request->Department,
+                'sub_department_id'=>$subDepartment,
+                'image'=>$fileName,
+                'evaluation'=>$request->evaluation,
+                'products'=>$request->products,
+                'services'=>$request->services,
+                'latitude'=>$request->latitude,
+                'longitude'=>$request->longitude,
+            ]);
+        }elseif (auth()->user()->hasPermission('country-company-create')){
+            $request->validate([
+                'name'=>'required|max:100',
+                'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+                'email'=>'required|email|max:100',
+                'phone'=>'required|max:30',
+                'address'=>'required|max:500',
+                'facebook'=>'max:150',
+                'instagram'=>'max:150',
+                'telegram'=>'max:150',
+                'whatsapp'=>'max:150',
+                'evaluation'=>'max:1500',
+                'department_id'=>'required',
+                'products'=>'min:0',
+                'services'=>'min:0',
+            ]);
+
+
+            $fileName = null;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $fileName = time() . '.' .$file->getClientOriginalName();
+                $store = $file->storeAs('Company',$fileName,'public');
+            }
+            $department = Department::find($request->department_id);
+
+            $subDepartment = 0;
+            if ($request->subDepartment){
+                $subDepartment = $request->subDepartment;
+            }
+            $company = Company::create([
+                'id'=>rand(100000,999999),
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'phone'=>$request->phone,
+                'address'=>$request->address,
+                'facebook'=>$request->facebook,
+                'instagram'=>$request->instagram,
+                'telegram'=>$request->telegram,
+                'whatsapp'=>$request->whatsapp,
+                'department_id'=>$department->id,
+                'sub_department_id'=>$subDepartment,
+                'city_id'=>$department->City->id,
+                'country_id'=>$department->Country->id,
+                'image'=>$fileName,
+                'evaluation'=>$request->evaluation,
+                'products'=>$request->products,
+                'services'=>$request->services,
+                'latitude'=>$request->latitude,
+                'longitude'=>$request->longitude,
+            ]);
         }
-        $department = Department::find($request->department_id);
 
-
-        $subDepartment = 0;
-        if ($request->subDepartment){
-            $subDepartment = $request->subDepartment;
-        }
-        $company = Company::create([
-            'id'=>rand(100000,999999),
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'address'=>$request->address,
-            'facebook'=>$request->facebook,
-            'instagram'=>$request->instagram,
-            'telegram'=>$request->telegram,
-            'whatsapp'=>$request->whatsapp,
-            'department_id'=>$department->id,
-            'sub_department_id'=>$subDepartment,
-            'city_id'=>$department->City->id,
-            'country_id'=>$department->Country->id,
-            'image'=>$fileName,
-            'evaluation'=>$request->evaluation,
-            'products'=>$request->products,
-            'services'=>$request->services,
-            'latitude'=>$request->latitude,
-            'longitude'=>$request->longitude,
-        ]);
         $text = 'تم اضافة شركة بعنوان '.$company->name.' الى قسم '.$company->Department->name;
         Event::dispatch(new ActivityLog($text,Auth::id()));
 
@@ -131,7 +193,7 @@ class CompanyController extends Controller
     }
 
     public function edit(Company $company){
-        $departments = Department::where('is_active',1)->get();
+        $departments = Department::where('is_active',1)->where('city_id',$company->City->id)->get();
         return view('Dashboard.Company.edit',compact('company','departments'));
     }
     public function update(Request $request, Company $company){

@@ -70,6 +70,10 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>الصورة</th>
+                                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-read'))
+                                                    <th>الدولة</th>
+                                                @endif
+                                                <th>المدينة</th>
                                                 <th>أسم الشركة</th>
                                                 <th></th>
                                             </tr>
@@ -80,6 +84,14 @@
                                                     <td class="fw-semibold">{{$key + 1}}</td>
                                                     <td>
                                                         <img src="{{$ad->img_path}}" class="avatar-md  card-img-top" alt="">
+                                                    </td>
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-read'))
+                                                        <td>
+                                                            {{$ad->Country->name}}
+                                                        </td>
+                                                    @endif
+                                                    <td>
+                                                        {{$ad->City->name}}
                                                     </td>
                                                     <td>
                                                         {{$ad->Company->name}}
@@ -123,7 +135,7 @@
                         <form method="post" class="needs-validation" novalidate id="CreateForm" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-md-6 my-1">
+                                <div class="col-md-4 my-1">
                                     <div class="form-group">
                                         <label for="">الصورة</label>
                                         <input name="image" required type="file" accept="image/png, image/jpeg, image/jpg" class="form-control">
@@ -132,19 +144,67 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 my-1">
-                                    <div class="form-group">
-                                        <label for="">الشركة</label>
-                                        <select class="form-control" required name="company_id" id="company_id">
-                                            @foreach($companies as $company)
-                                            <option value="{{$company->id}}">{{$company->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            الرجاء املئ الحقل
+                                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-advertisement-create'))
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">الدولة</label>
+                                            <select class="form-control" required name="Country">
+                                                <option disabled selected value="0">اختيار الدولة</option>
+                                                @foreach($countries as $country)
+                                                    <option value="{{$country->id}}">{{$country->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">المدينة</label>
+                                            <select class="form-control" required name="City">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 my-1">
+                                        <div class="form-group">
+                                            <label for="">الشركة</label>
+                                            <select class="form-control" required name="Company">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="col-md-2 my-1">
+                                        <div class="form-group">
+                                            <label for="">المدينة</label>
+                                            <select class="form-control" required name="City">
+                                                <option value="0" disabled selected>أختر المدينة</option>
+                                                @foreach($countries->City as $city)
+                                                    <option value="{{$city->id}}">{{$city->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 my-1">
+                                        <div class="form-group">
+                                            <label for="">الشركة</label>
+                                            <select class="form-control" required name="Company">
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                الرجاء املئ الحقل
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
 
                                 <div class="col-md-12 my-1">
                                     <ul id="errors"></ul>
@@ -161,6 +221,43 @@
 
     </div>
     <script>
+        $(document).ready(function () {
+
+            $('select[name="Country"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coCitiesSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="City"]').empty();
+                            $('select[name="City"]').append('<option disabled selected value="0">اختر المدينة</option>');
+                            $.each(data, function (index, city) {
+                                $('select[name="City"]').append('<option value ="' + city.id + '">' + city.name + '</option>');
+                            });
+                        }
+                    })
+                }
+            });
+            $('select[name="City"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/cosFromCitySuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="Company"]').empty();
+                            $.each(data, function (index, city) {
+                                $('select[name="Company"]').append('<option value ="' + city.id + '">' + city.name + '</option>');
+                            });
+                        }
+                    })
+                }
+            });
+        });
+
         let validateForm = false;
         (function () {
             'use strict';

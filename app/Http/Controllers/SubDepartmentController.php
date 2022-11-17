@@ -17,7 +17,7 @@ class SubDepartmentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:all-department-create|country-department-create')->only('store');
+        $this->middleware('permission:all-department-create|country-department-create')->only('index','store');
         $this->middleware('permission:all-department-update|country-department-update')->only('edit','update');
         $this->middleware('permission:all-department-delete|country-department-delete')->only('DisActive','Active','destroy');
     }

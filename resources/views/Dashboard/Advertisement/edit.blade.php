@@ -3,21 +3,21 @@
         <form method="post" class="needs-validation" novalidate id="UpdateForm" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="row">
-                    <div class="col-md-6 my-1">
-                        <div class="form-group">
-                            <label for="">الشركة</label>
-                            <select class="form-control" required name="company_id" id="company_id">
-                                @foreach($companies as $company)
-                                    <option @if( $advertisement->Company->id == $company->id) selected @endif value="{{$company->id}}">{{$company->name}}</option>
-                                @endforeach
-                            </select>
-                            <div class="invalid-feedback">
-                                الرجاء املئ الحقل
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="row">--}}
+{{--                    <div class="col-md-6 my-1">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label for="">الشركة</label>--}}
+{{--                            <select class="form-control" required name="company_id" id="company_id">--}}
+{{--                                @foreach($companies as $company)--}}
+{{--                                    <option @if( $advertisement->Company->id == $company->id) selected @endif value="{{$company->id}}">{{$company->name}}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                            <div class="invalid-feedback">--}}
+{{--                                الرجاء املئ الحقل--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-6 my-1">
                     <div class="form-group">
                         <label for="">الصورة</label>

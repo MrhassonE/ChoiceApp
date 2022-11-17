@@ -38,7 +38,7 @@ class APIController extends Controller
     }
     protected function getDepartmentCityById($cId,$id){
         if ($id =='allcities') {
-            return Department::where('country_id', $cId)->where('is_active', 1)->where('is_main', 1)->orderByDesc('created_at')
+            return Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')
                 ->with(['SubDepartment' => function ($query) {
                     $query->with(['Company' => function ($query) {
                         $query->with(['CompanyImages' => function ($query) {
@@ -71,7 +71,7 @@ class APIController extends Controller
                 }])->select('id', 'name', 'image')->get();
 
         }else{
-            return Department::where('country_id', $cId)->where('is_active', 1)->where('is_main', 1)->orderByDesc('created_at')->where('city_id', $id)
+            return Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')->where('city_id', $id)
                 ->with(['SubDepartment' => function ($query) {
                     $query->with(['Company' => function ($query) {
                         $query->with(['CompanyImages' => function ($query) {
