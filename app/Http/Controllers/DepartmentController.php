@@ -28,9 +28,14 @@ class DepartmentController extends Controller
     public function index(Request $request){
         if (auth()->user()->hasPermission('all-department-read')) {
             $departments = Department::orderByDesc('created_at')
-                ->when($request->city, function ($city) use ($request) {
-                    return $city->where('city_id', $request->city);
+                ->when($request->filterCountry, function ($country) use ($request) {
+                    return $country->where('country_id', $request->filterCountry);
+                })
+                ->when($request->filterCity, function ($city) use ($request) {
+                    return $city->where('city_id', $request->filterCity);
                 })->get();
+
+            $filterCountries = Country::where('is_active',1)->get();
             $cities = City::where('is_active',1)->get();
 
         }elseif (auth()->user()->hasPermission('country-department-read')){
@@ -39,9 +44,11 @@ class DepartmentController extends Controller
                     return $city->where('city_id', $request->city);
                 })->get();
             $cities = City::where('is_active',1)->where('country_id',auth()->user()->country_id)->get();
+            $filterCountries = Country::where('id',auth()->user()->country_id)->where('is_active',1)->first();
+
         }
         $countries = Country::where('is_active',1)->get();
-        return view('Dashboard.Department.index',compact('departments','cities','countries'));
+        return view('Dashboard.Department.index',compact('departments','cities','countries','filterCountries'));
     }
 
     public function store(Request $request){

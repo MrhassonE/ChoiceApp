@@ -35,6 +35,32 @@
                     <div class="modal-body">
                         <form action="{{route('Department')}}" method="get" enctype="multipart/form-data">
                             <div class="row">
+                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-read'))
+                                <div class="col-md-3 my-1">
+                                    <div class="form-group">
+                                        <label for="">الدولة</label>
+                                        <select class="form-control" name="filterCountry">
+                                            <option disabled selected value="0">اختيار الدولة</option>
+                                            @foreach($filterCountries as $country)
+                                                <option value="{{$country->id}}">{{$country->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 my-1">
+                                    <div class="form-group">
+                                        <label for="">المدينة</label>
+                                        <select class="form-control" name="filterCity">
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
                                 <div class="col-md-12 my-1">
                                     <div class="form-group">
                                         <label class="">المدينة</label>
@@ -46,6 +72,8 @@
                                         </select>
                                     </div>
                                 </div>
+                            @endif
+
                                 <div class="col-md-12 my-3">
                                     <button id="submitButton" type="submit" class=" btn btn-primary btn-round">فرز</button>
                                     <button type="reset" onclick="this.closest('form').reset();window.location.replace('{{route('Department')}}')" class="btn btn-primary">عرض الكل</button>
@@ -69,6 +97,9 @@
                                         <th>#</th>
                                         <th>الشعار</th>
                                         <th>القسم</th>
+                                        @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-read'))
+                                        <th>الدولة</th>
+                                        @endif
                                         <th>المدينة</th>
                                         <th></th>
                                     </tr>
@@ -83,6 +114,11 @@
                                             <td>
                                                 {{$department->name}}
                                             </td>
+                                            @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-department-read'))
+                                            <td>
+                                                {{$department->Country->name}}
+                                            </td>
+                                            @endif
                                             <td>
                                                 {{$department->City->name}}
                                             </td>
@@ -223,6 +259,23 @@
                             $('select[name="City"]').append('<option disabled selected value="0">اختر المدينة</option>');
                             $.each(data,function(index,city){
                                 $('select[name="City"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+            $('select[name="filterCountry"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coCitiesSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="filterCity"]').empty();
+                            $('select[name="filterCity"]').append('<option disabled selected>اختر المدينة</option>');
+                            $.each(data,function(index,city){
+                                $('select[name="filterCity"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
                             });
                         }
                     })

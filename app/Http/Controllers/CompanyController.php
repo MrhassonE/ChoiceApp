@@ -88,7 +88,7 @@ class CompanyController extends Controller
                 'whatsapp'=>'max:150',
                 'City' => 'required',
                 'Country'=>'required',
-                'department_id'=>'required',
+                'Department'=>'required',
                 'products'=>'min:0',
                 'services'=>'min:0',
             ]);
@@ -151,8 +151,8 @@ class CompanyController extends Controller
             $department = Department::find($request->department_id);
 
             $subDepartment = 0;
-            if ($request->subDepartment){
-                $subDepartment = $request->subDepartment;
+            if ($request->subDepartment_id){
+                $subDepartment = $request->subDepartment_id;
             }
             $company = Company::create([
                 'id'=>rand(100000,999999),
