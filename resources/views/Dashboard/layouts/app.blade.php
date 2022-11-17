@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="{{asset('assetsDashboard/images/favicon.ico')}}">
+{{--        <link rel="shortcut icon" href="{{asset('assetsDashboard/images/favicon.ico')}}">--}}
+        <link rel="shortcut icon" href="{{\App\Models\GeneralSetting::first()->company_logo_path}}" type="image/x-icon">
+
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{\App\Models\GeneralSetting::first()->company_name}}</title>
         <meta content="{{\App\Models\GeneralSetting::first()->company_name}}" name="description" />

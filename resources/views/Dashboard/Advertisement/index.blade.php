@@ -179,7 +179,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @else
+                                @elseif(\Illuminate\Support\Facades\Auth::user()->hasPermission('country-advertisement-create'))
                                     <div class="col-md-2 my-1">
                                         <div class="form-group">
                                             <label for="">المدينة</label>

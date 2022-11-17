@@ -28,6 +28,7 @@
                 <span class="block text-gray-700 mt-4">الأدوار</span>
                 <div class="flex flex-wrap justify-start mb-4">
                     @foreach ($roles as $role)
+                        @if($role->id != 1)
                         <label class="inline-flex items-center mr-6 my-2 text-sm" style="flex: 1 0 20%;">
                             <input
                                 type="checkbox"
@@ -45,6 +46,7 @@
                 {{$role->display_name ?? $role->name}}
               </span>
                         </label>
+                        @endif
                     @endforeach
                 </div>
                 @if ($permissions)
