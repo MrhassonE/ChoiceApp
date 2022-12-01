@@ -38,6 +38,42 @@
                         <div class="modal-body">
                             <form action="{{route('Company')}}" method="get" enctype="multipart/form-data">
                                 <div class="row">
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-company-read'))
+                                        <div class="col-md-3 my-1">
+                                            <div class="form-group">
+                                                <label for="">الدولة</label>
+                                                <select class="form-control" name="filterCountry">
+                                                    <option disabled selected value="0">اختيار الدولة</option>
+                                                    @foreach($filterCountries as $country)
+                                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    الرجاء املئ الحقل
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 my-1">
+                                            <div class="form-group">
+                                                <label for="">المدينة</label>
+                                                <select class="form-control" name="filterCity">
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    الرجاء املئ الحقل
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 my-1">
+                                            <div class="form-group">
+                                                <label for="">القسم</label>
+                                                <select class="form-control" name="filterDep">
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    الرجاء املئ الحقل
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
                                     <div class="col-md-12 my-1">
                                         <div class="form-group">
                                             <label class="">القسم</label>
@@ -51,6 +87,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @endif
 
                                     <div class="col-md-3 my-2">
                                         <input name="new" @if(request()->new == 1) checked @endif class="form-check-input" type="checkbox" value="1" >
@@ -476,8 +513,42 @@
                     })
                 }
             });
-        });
 
+            $('select[name="filterCountry"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coCitiesSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="filterCity"]').empty();
+                            $('select[name="filterCity"]').append('<option disabled selected>اختر المدينة</option>');
+                            $.each(data,function(index,city){
+                                $('select[name="filterCity"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+            $('select[name="filterCity"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coDepsSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="filterDep"]').empty();
+                            $('select[name="filterDep"]').append('<option disabled selected>اختر القسم</option>');
+                            $.each(data,function(index,city){
+                                $('select[name="filterDep"]').append('<option value ="'+city.id+'">'+city.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+        });
 
         let validateForm = false;
         (function () {

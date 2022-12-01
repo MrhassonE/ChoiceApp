@@ -128,7 +128,7 @@
                                                         @if($department->is_main ==0)
                                                             <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اضافة الى الواجهة الرئيسية" class="mx-2 btn btn-soft-primary btn-round"><i class="fa fa-solid fa-plus"></i></a>
                                                         @elseif($department->is_main ==1)
-                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اخفاء من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-solid fa-trash-alt"></i></a>
+                                                            <a href="javascript:;" onclick="MainSection({{$department->id}})" title="اخفاء من الواجهة الرئيسية" class="mx-2 btn btn-soft-danger btn-round"><i class="fa fa-times"></i></a>
                                                         @endif
                                                         <a href="{{route('Department.show',$department->id)}}" title="عرض الفروع" class="mx-2 btn btn-secondary btn-round" ><i class="fa fa-eye"></i></a>
                                                         <a href="{{route('Department.edit',$department->id)}}" title="تعديل" class="mx-2 btn btn-primary btn-round" ><i class="fa fa-pen"></i></a>

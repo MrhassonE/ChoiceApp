@@ -39,8 +39,14 @@ class CompanyController extends Controller
     public function index(Request $request){
         if (auth()->user()->hasPermission('all-company-read')) {
             $companies = Company::orderByDesc('created_at')
-                ->when($request->dep, function ($dep) use ($request) {
-                    return $dep->where('department_id', $request->dep);
+                ->when($request->FilterCountry, function ($FilterCountry) use ($request) {
+                    return $FilterCountry->where('country_id', $request->FilterCountry);
+                })
+                ->when($request->FilterCity, function ($FilterCity) use ($request) {
+                    return $FilterCity->where('city_id', $request->FilterCity);
+                })
+                ->when($request->filterDep, function ($dep) use ($request) {
+                    return $dep->where('department_id', $request->filterDep);
                 })
                 ->when($request->new, function ($new) use ($request) {
                     return $new->where('new', 1);
@@ -53,6 +59,8 @@ class CompanyController extends Controller
                 })
                 ->get();
             $departments = Department::where('is_active',1)->get();
+            $filterCountries = Country::where('is_active',1)->get();
+
         }elseif (auth()->user()->hasPermission('country-company-read')){
             $companies = Company::orderByDesc('created_at')->where('country_id',auth()->user()->country_id)
                 ->when($request->dep, function ($dep) use ($request) {
@@ -69,9 +77,10 @@ class CompanyController extends Controller
                 })
                 ->get();
             $departments = Department::where('is_active',1)->where('country_id',auth()->user()->country_id)->get();
+            $filterCountries = Country::where('id',auth()->user()->country_id)->where('is_active',1)->first();
         }
         $countries = Country::where('is_active',1)->get();
-        return view('Dashboard.Company.index',compact('companies','departments','countries'));
+        return view('Dashboard.Company.index',compact('companies','departments','countries','filterCountries'));
     }
 
     public function store(Request $request){

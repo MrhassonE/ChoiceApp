@@ -92,7 +92,7 @@
             <script src="{{asset('assetsDashboard/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
             <script src="{{asset('assetsDashboard/libs/metismenujs/metismenujs.min.js')}}"></script>
             <script src="{{asset('assetsDashboard/libs/simplebar/simplebar.min.js')}}"></script>
-            <script src="{{asset('assetsDashboard/libs/eva-icons/eva.min.js')}}"></script>
+{{--            <script src="{{asset('assetsDashboard/libs/eva-icons/eva.min.js')}}"></script>--}}
             <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
             <script src="{{asset('assetsDashboard/libs/sweetalert2/sweetalert2.all.min.js')}}"></script>
 
