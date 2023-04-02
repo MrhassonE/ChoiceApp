@@ -124,11 +124,27 @@
                     </li>
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole('superAdministrator|administrator'))
-                    <li class="@if(request()->routeIs('laratrust.roles.index')) mm-active @endif">
-                        <a href="{{route('laratrust.roles.index')}}">
-                            <i class="fa fa-users-cog icon nav-icon"></i>
-                            <span class="menu-item" data-key="t-dashboard">الصلاحيات</span>
+                    <li class="nav-item">
+                        <a data-bs-toggle="collapse" href="#laratrust" class="nav-link @if(request()->routeIs('laratrust.*'))active @endif" aria-controls="dashboardsExamples" role="button" aria-expanded="@if(request()->routeIs('laratrust.*'))true @else false @endif">
+                            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="fa fa-users-cog icon nav-icon"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">الصلاحيات</span>
                         </a>
+                        <ul id="laratrust" class="nav ms-4 collapse @if(request()->routeIs('laratrust.*')) show @endif">
+                            <li class="@if(request()->routeIs('laratrust.roles.index')) mm-active @endif">
+                                <a class="nav-link" href="{{route('laratrust.roles.index')}}">
+                                    <i class="fa fa-users-cog icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-dashboard">الأدوار</span>
+                                </a>
+                            </li>
+                            <li class="@if(request()->routeIs('laratrust.roles-assignment.index')) mm-active @endif">
+                                <a class="active" href="{{route('laratrust.roles-assignment.index')}}">
+                                    <i class="fa fa-users-cog icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-dashboard">تعيين الأدوار والأذونات</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endif
             </ul>

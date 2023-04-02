@@ -426,6 +426,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6 my-1">
+                                        <div class="form-group">
+                                            <div class="form-check form-switch">
+                                                <label class="form-check-label" for="notification">أرسال أشعار</label>
+                                                <input class="form-check-input" name="notification" type="checkbox" id="notification" checked="">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-12 my-1">
                                     <ul id="errors"></ul>

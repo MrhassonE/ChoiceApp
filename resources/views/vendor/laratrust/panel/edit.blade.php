@@ -6,7 +6,7 @@
     <div>
     </div>
     <div class="flex flex-col">
-        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-32">
+        <div>
             <form
                 x-data="laratrustForm()"
                 x-init="{!! $model ? '' : '$watch(\'displayName\', value => onChangeDisplayName(value))'!!}"
@@ -38,7 +38,7 @@
                     <input
                         class="form-input mt-1 block w-full"
                         name="display_name"
-                        placeholder="أدخل الاسم"
+                        placeholder="تعديل الاسم"
                         x-model="displayName"
                         autocomplete="off"
                     >
@@ -70,14 +70,14 @@
                         @endforeach
                     </div>
                 @endif
-                <div class="flex justify-end">
+                <div class="flex justify-content-start">
                     <a
                         href="{{route("laratrust.{$type}s.index")}}"
-                        class="btn btn-red mr-4"
+                        class="btn btn-secondary mx-2"
                     >
                         الغاء
                     </a>
-                    <button class="btn btn-blue" type="submit">حفظ</button>
+                    <button class="btn btn-primary" type="submit">حفظ</button>
                 </div>
             </form>
         </div>

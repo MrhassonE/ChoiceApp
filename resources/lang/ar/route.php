@@ -33,4 +33,10 @@ return [
     'Profile' => 'الملف الشخصي',
     'Setting.activityLog' => 'سجل النشاطات',
 
+    'laratrust.roles.index'=>'الأدوار',
+    'laratrust.roles-assignment.index'=>'تعيين الأدوار والأذونات',
+    'laratrust.roles-assignment.edit'=>'تعديل الأدوار والأذونات',
+    'laratrust.roles.create'=>'أضافة دور',
+    'laratrust.roles.edit'=>'تعديل الدور',
+
 ];

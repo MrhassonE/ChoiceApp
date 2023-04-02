@@ -6,7 +6,7 @@
     <div>
     </div>
     <div class="flex flex-col">
-        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-32">
+        <div>
             <form
                 method="POST"
                 action="{{route('laratrust.roles-assignment.update', ['roles_assignment' => $user->getKey(), 'model' => $modelKey])}}"
@@ -28,7 +28,6 @@
                 <span class="block text-gray-700 mt-4">الأدوار</span>
                 <div class="flex flex-wrap justify-start mb-4">
                     @foreach ($roles as $role)
-                        @if($role->id != 1)
                         <label class="inline-flex items-center mr-6 my-2 text-sm" style="flex: 1 0 20%;">
                             <input
                                 type="checkbox"
@@ -46,7 +45,6 @@
                 {{$role->display_name ?? $role->name}}
               </span>
                         </label>
-                        @endif
                     @endforeach
                 </div>
                 @if ($permissions)
@@ -66,14 +64,14 @@
                         @endforeach
                     </div>
                 @endif
-                <div class="flex justify-end">
+                <div class="flex justify-content-start">
                     <a
                         href="{{route("laratrust.roles-assignment.index", ['model' => $modelKey])}}"
-                        class="btn btn-red mr-4"
+                        class="btn btn-secondary mx-2"
                     >
                         ألغاء
                     </a>
-                    <button class="btn btn-blue" type="submit">حفظ</button>
+                    <button class="btn btn-primary" type="submit">حفظ</button>
                 </div>
             </form>
         </div>
