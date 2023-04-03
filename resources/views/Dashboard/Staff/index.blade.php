@@ -33,6 +33,7 @@
                                         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-users-read'))
                                             <th>الدولة</th>
                                         @endif
+                                            <th>الشركة</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -53,6 +54,11 @@
                                                         @endif
                                                     </td>
                                                 @endif
+                                                <td>
+                                                    @if($user->Company)
+                                                        {{$user->Company->name}}
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if($user->id != auth()->id() )
                                                         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-users-update|country-users-update'))
@@ -157,12 +163,41 @@
                                     </div>
                                 </div>
                                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-users-create'))
-                                <div class="col-md-6 my-1">
+                                <div class="col-md-3 my-1">
                                     <div class="form-group">
                                         <label for="">اختر الدولة</label>
-                                        <select name="country" id="" class="form-control">
+                                        <select name="country" class="form-control">
+                                            <option value="0" disabled selected>اختر الدولة</option>
                                             @foreach($countries as $country)
                                                 <option value="{{$country->id}}">{{$country->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 my-1">
+                                    <div class="form-group">
+                                        <label for="">الشركة</label>
+                                        <select class="form-control" name="company">
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            الرجاء املئ الحقل
+                                        </div>
+                                    </div>
+                                </div>
+                                @else
+
+                                <div class="col-md-3 my-1">
+                                    <div class="form-group">
+                                        <label for="">الشركة</label>
+                                        <select class="form-control" name="company">
+                                            <label for="">الشركة</label>
+                                            <option value="0" selected disabled>اختر الشركة</option>
+                                            @foreach($companies as $company)
+                                                <option value="{{$company->id}}">{{$company->name}}</option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">
@@ -198,6 +233,26 @@
         <!--  Extra Large modal example -->
     </div>
     <script>
+        $(document).ready(function () {
+            $('select[name="country"]').on('change', function (e) {
+                var catId = e.target.value;
+                if (catId) {
+                    $.ajax({
+                        url: '/coCountiesSuper/' + catId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('select[name="company"]').empty();
+                            $('select[name="company"]').append('<option selected value="0">اختر الشركة</option>');
+                            $.each(data,function(index,company){
+                                $('select[name="company"]').append('<option value ="'+company.id+'">'+company.name+'</option>');
+                            });
+                        }
+                    })
+                }
+            });
+        });
+
         let validateForm = false;
         (function () {
             'use strict';

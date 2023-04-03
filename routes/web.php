@@ -93,6 +93,7 @@ Route::middleware('auth')->group(function (){
 
 
 // Company
+    Route::get('/coCountiesSuper/{country}',[\App\Http\Controllers\CompanyController::class,'coCountiesSuper']);
     Route::get('/coCitiesSuper/{country}',[\App\Http\Controllers\CompanyController::class,'coCitiesSuper']);
     Route::get('/coDepsSuper/{city}',[\App\Http\Controllers\CompanyController::class,'coDepsSuper']);
     Route::get('/cosFromCitySuper/{city}',[\App\Http\Controllers\AdvertisementController::class,'cosFromCitySuper']);

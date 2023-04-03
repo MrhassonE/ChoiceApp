@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ActivityLog;
+use App\Models\Company;
 use App\Models\Country;
 use App\Models\Role;
 use App\Models\User;
@@ -32,13 +33,16 @@ class StaffController extends Controller
     public function index(){
         if (auth()->user()->hasPermission('all-users-read')) {
             $users = User::all();
+            $companies = Company::all();
             $roles = Role::all()->except(1);
         }elseif (auth()->user()->hasPermission('country-users-read')){
             $users = User::where('country_id',auth()->user()->country_id)->get();
+            $companies = Company::where('country_id',auth()->user()->country_id)->get();
             $roles = Role::all()->except([1,2]);
         }
+
         $countries = Country::where('is_active',1)->get();
-        return view('Dashboard.Staff.index',compact('users','roles','countries'));
+        return view('Dashboard.Staff.index',compact('users','companies','roles','countries'));
     }
 
     public function store(Request $request){

@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'is_manager',
+        'company_id',
         'country_id',
     ];
 
@@ -50,6 +52,9 @@ class User extends Authenticatable
     }
     public function Country(){
         return $this->belongsTo(Country::class,'country_id');
+    }
+    public function Company(){
+        return $this->belongsTo(Company::class,'company_id');
     }
 
 }

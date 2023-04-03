@@ -32,6 +32,9 @@ class CompanyController extends Controller
     public function coCitiesSuper(Country $country){
         return City::where('country_id',$country->id)->where('is_active',1)->get();
     }
+    public function coCountiesSuper(Country $country){
+        return Company::where('country_id',$country->id)->where('is_active',1)->get();
+    }
     public function coDepsSuper(City $city){
         return Department::where('city_id',$city->id)->where('is_active',1)->get();
     }
