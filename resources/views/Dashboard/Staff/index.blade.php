@@ -60,7 +60,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($user->id != auth()->id() )
+                                                    @if($user->id != auth()->id())
                                                         @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-users-update|country-users-update'))
                                                             @if($user->is_active == 1)
                                                                 <a href="{{route('Staff.edit',$user->id)}}" title="تعديل" class="btn btn-primary"><i class="bx bx-pencil"></i></a>
@@ -166,7 +166,7 @@
                                 <div class="col-md-3 my-1">
                                     <div class="form-group">
                                         <label for="">اختر الدولة</label>
-                                        <select name="country" class="form-control">
+                                        <select name="country" required class="form-control">
                                             <option value="0" disabled selected>اختر الدولة</option>
                                             @foreach($countries as $country)
                                                 <option value="{{$country->id}}">{{$country->name}}</option>

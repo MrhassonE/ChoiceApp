@@ -32,7 +32,7 @@ class StaffController extends Controller
     }
     public function index(){
         if (auth()->user()->hasPermission('all-users-read')) {
-            $users = User::all();
+            $users = User::all()->except([1,3]);
             $companies = Company::all();
             $roles = Role::all()->except(1);
         }elseif (auth()->user()->hasPermission('country-users-read')){
