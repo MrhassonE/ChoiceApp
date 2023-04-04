@@ -17,9 +17,14 @@ use Illuminate\Support\Facades\File;
 
 class CompanyBlogController extends Controller
 {
-    public function index(Company $company){
-        $blogs = CompanyBlog::where('company_id',$company->id)->orderByDesc('created_at')->get();
-        return view('Dashboard.Company.Blog.index',compact('blogs'));
+    public function index(){
+        if (auth()->user()->hasPermission('all-blog-read')) {
+            $blogs = CompanyBlog::orderByDesc('created_at')->get();
+        }elseif (auth()->user()->hasPermission('company-blog-read')){
+            $blogs = CompanyBlog::where('company_id',auth()->user()->company_id)->orderByDesc('created_at')->get();
+        }
+        return view('Dashboard.Blog.index',compact('blogs'));
+
     }
 
     public function store(Request $request, Company $company){

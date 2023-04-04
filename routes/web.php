@@ -98,7 +98,6 @@ Route::middleware('auth')->group(function (){
     Route::get('/coDepsSuper/{city}',[\App\Http\Controllers\CompanyController::class,'coDepsSuper']);
     Route::get('/cosFromCitySuper/{city}',[\App\Http\Controllers\AdvertisementController::class,'cosFromCitySuper']);
 
-
     Route::get('/company',[\App\Http\Controllers\CompanyController::class,'index'])->name('Company');
     Route::post('/company',[\App\Http\Controllers\CompanyController::class,'store'])->name('Company.store');
     Route::get('/Edit-Company/{company}',[\App\Http\Controllers\CompanyController::class,'edit'])->name('Company.edit');
@@ -114,6 +113,12 @@ Route::middleware('auth')->group(function (){
     Route::post('/MostViewedSection-Company/{company}',[\App\Http\Controllers\CompanyController::class,'MostViewedSection'])->name('Company.MostViewedSection');
     Route::post('/NewSection-Company/{company}',[\App\Http\Controllers\CompanyController::class,'NewSection'])->name('Company.NewSection');
     Route::post('/MainSection-Company/{company}',[\App\Http\Controllers\CompanyController::class,'mainSection'])->name('Company.mainSection');
+
+// Blog
+    Route::get('/Blog-Company',[\App\Http\Controllers\CompanyBlogController::class,'index'])->name('Blog');
+    Route::post('/Blog-Company/{company}',[\App\Http\Controllers\CompanyBlogController::class,'store'])->name('Blog.store');
+    Route::post('/Edit-Blog-Company/{companyBlog}',[\App\Http\Controllers\CompanyBlogController::class,'update'])->name('Blog.edit');
+    Route::post('/Delete-Blog-Company/{companyBlog}',[\App\Http\Controllers\CompanyBlogController::class,'destroy'])->name('Blog.delete');
 
 // Advertisement
     Route::get('/advertisement',[\App\Http\Controllers\AdvertisementController::class,'index'])->name('Advertisement');

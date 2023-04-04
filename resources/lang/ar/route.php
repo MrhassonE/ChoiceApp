@@ -18,6 +18,8 @@ return [
     'Company.edit' => 'تعديل الشركة',
     'Company.show' => 'معرض صور الشركة',
 
+    'Blog' => 'المقالات',
+
     'Advertisement' => 'الأعلانات',
     'Advertisement.edit' => 'تعديل الأعلان',
 

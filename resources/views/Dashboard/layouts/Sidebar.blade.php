@@ -67,6 +67,15 @@
                         </a>
                     </li>
                 @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('all-blog-read|company-blog-read'))
+                    <li class="@if(request()->routeIs('Blog*')) mm-active @endif">
+                        <a href="{{route('Blog')}}">
+                            <i class="fa fa-newspaper icon nav-icon"></i>
+                            <span class="menu-item" data-key="t-dashboard">المقالات</span>
+                        </a>
+                    </li>
+                @endif
+
                 @if(\Illuminate\Support\Facades\Auth::user()->hasPermission('whats-new-read'))
                     <li class="@if(request()->routeIs('WhatsNew*')) mm-active @endif">
                         <a href="{{route('WhatsNew')}}">

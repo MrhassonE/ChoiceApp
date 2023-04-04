@@ -3,7 +3,7 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <h5 class="card-title">الاخبار<span class="text-muted fw-normal ms-2"> ({{$blogs->count()}})</span></h5>
+                    <h5 class="card-title">المقالات<span class="text-muted fw-normal ms-2"> ({{$blogs->count()}})</span></h5>
                 </div>
             </div>
         </div>
@@ -11,7 +11,7 @@
             <div class="col-md-6" >
                 <div class="d-flex flex-wrap align-items-start justify-content-start gap-2 mb-3">
                     <div>
-                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>اضافة خبر</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i class="bx bx-plus me-1"></i>اضافة مقالة</a>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                                 </div>
 
                                 <div class="d-flex gap-2 pt-4">
-                                    <a href="{{route('CompanyBlog.edit',$new->id)}}"  class="btn btn-primary btn-sm w-50"><i class="bx bx-pencil me-1"></i> تعديل</a>
+                                    <a href="{{route('Blog.edit',$new->id)}}"  class="btn btn-primary btn-sm w-50"><i class="bx bx-pencil me-1"></i> تعديل</a>
                                     <button type="button" onclick="deleteLeader({{$new->id}})" class="btn btn-soft-danger btn-sm w-50"><i class="bx bx-trash me-1"></i> حذف</button>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myExtraLargeModalLabel">اضافة خبر</h5>
+                        <h5 class="modal-title" id="myExtraLargeModalLabel">اضافة مقالة</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -76,8 +76,8 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">الوصف</label>
-                                        <textarea name="description" required class="form-control" id="" cols="20" rows="5"></textarea>
+                                        <label for="">الصورة</label>
+                                        <input name="image" required accept="image/png, image/jpeg, image/jpg"  type="file" class="form-control">
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
@@ -85,8 +85,8 @@
                                 </div>
                                 <div class="col-md-6 my-1">
                                     <div class="form-group">
-                                        <label for="">الصورة</label>
-                                        <input name="image" required accept="image/png, image/jpeg, image/jpg"  type="file" class="form-control">
+                                        <label for="">الوصف</label>
+                                        <textarea name="description" required class="form-control" id="" cols="20" rows="5"></textarea>
                                         <div class="invalid-feedback">
                                             الرجاء املئ الحقل
                                         </div>
@@ -141,14 +141,14 @@
                 Swal.showLoading();
                 $.ajax({
                     type: 'post',
-                    url : '{{route('CompanyBlog.store')}}',
+                    url : '{{route('Blog.store',1)}}',
                     data: formData,
                     contentType:false,
                     processData:false,
                     success : function () {
                         Swal.fire(
                             'تم الانشاء',
-                            'تم انشاء خبر بنجاح',
+                            'تم انشاء مقالة بنجاح',
                             'success'
                         ).then((result)=>{
                             window.location.reload();
@@ -189,7 +189,7 @@
             });
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متاكد؟',
-                text: "هل تريد حذف هذا الخبر!",
+                text: "هل تريد حذف هذا المقالة!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'حذف',
@@ -199,11 +199,11 @@
                     Swal.showLoading();
                     $.ajax({
                         type: 'post',
-                        url: `/deleteCompanyBlog/${id}`,
+                        url: `/Delete-Blog-Company/${id}`,
                         success: function () {
                             Swal.fire(
                                 'تم الحذف!',
-                                'تم حذف الخبر بنجاح.',
+                                'تم حذف المقالة بنجاح.',
                                 'success'
                             ).then((results) => {
                                 window.location.reload();
