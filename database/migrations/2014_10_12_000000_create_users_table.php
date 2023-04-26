@@ -17,8 +17,11 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('username')->unique();
+            $table->string('phone')->unique()->nullable();
             $table->integer('is_active')->default(1);
             $table->integer('is_manager')->default(0);
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies');
 

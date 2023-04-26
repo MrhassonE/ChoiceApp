@@ -20,6 +20,8 @@ class GeneralSettingSeeder extends Seeder
         $user = User::create([
             'name'=>'Super Administrator',
             'email'=>'Administrator@app.com',
+            'username'=>'SuperAdministrator',
+            'phone'=>'07800000000',
             'password'=>Hash::make('Password'),
         ]);
         $roles = Role::all();

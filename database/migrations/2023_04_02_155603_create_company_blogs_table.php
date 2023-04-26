@@ -21,6 +21,7 @@ class CreateCompanyBlogsTable extends Migration
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->unsignedBigInteger('company_id');
+            $table->integer('is_main')->default(0);
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });
