@@ -15,23 +15,16 @@ class Company extends Model
         'phone',
         'address',
         'image',
+        'products',
+        'services',
+        'latitude',
+        'longitude',
         'facebook',
         'instagram',
         'telegram',
         'whatsapp',
         'department_id',
-        'sub_department_id',
-        'city_id',
-        'country_id',
-        'is_active',
-        'evaluation',
-        'most_viewed',
-        'new',
-        'is_main',
-        'products',
-        'services',
-        'latitude',
-        'longitude',
+        'city_id'
     ];
     protected $appends = ['img_path'];
     public function getImgPathAttribute() {
@@ -45,7 +38,7 @@ class Company extends Model
         return $this->hasMany(Advertisement::class,'company_id');
     }
     public function Department(){
-        return $this->belongsTo(Department::class,'department_id');
+        return $this->belongsTo(Department::class ,'department_id');
     }
     public function SubDepartment(){
         return $this->belongsTo(SubDepartment::class,'sub_department_id');

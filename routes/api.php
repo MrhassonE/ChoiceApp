@@ -24,6 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('apiToken')->group(function () {
     // your routes
     Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
+    Route::get('blogCompany/{coId}',[\App\Http\Controllers\APIController::class,'getBlogsbyCompany'])->name("BlogCompany");
+    Route::get('blog/{Id}',[\App\Http\Controllers\APIController::class,'getBlogsbyId'])->name("Blog");
+    Route::get('review/{Id}',[\App\Http\Controllers\APIController::class,'getReviewbyCompany'])->name("Review");
     Route::get('department/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getDepartmentCityById'])->name("DepartmentByCityId");
     Route::get('departments/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getDepartments'])->name("Departments");
     Route::get('settings',[\App\Http\Controllers\APIController::class,'getSettings'])->name("Settings");
@@ -35,4 +38,9 @@ Route::middleware('apiToken')->group(function () {
     Route::post('send',[\App\Http\Controllers\APIController::class,'send'])->name("send");
     Route::post('fcmToken',[\App\Http\Controllers\APIController::class,'fcmToken'])->name("fcmToken");
     Route::post('visit',[\App\Http\Controllers\APIController::class,'visit'])->name("visit");
+    Route::post('/login',[\App\Http\Controllers\Api\Auth\LoginController::class,'Login'])->name("login");
+    Route::post('/register',[\App\Http\Controllers\Api\Auth\RegisterController::class,'store'])->name("register");
+    Route::post('/image',[\App\Http\Controllers\APIController::class,'uploadprofileimage'])->name("image");
+    Route::post('/addblog',[\App\Http\Controllers\APIController::class,'addBlog'])->name("addblog");
+    Route::post('/addreview',[\App\Http\Controllers\APIController::class,'addReview'])->name("addreview");
 });
