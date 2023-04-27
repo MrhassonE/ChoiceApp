@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Models\AllVisit;
+use App\Models\City;
 use App\Models\Company;
 use App\Models\CompanyReview;
 use App\Models\CompanyService;
@@ -18,7 +19,6 @@ use App\Models\WhatsNew;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
 class APIController extends Controller
 {
     protected function fcmToken(Request $request){
