@@ -5,6 +5,8 @@ use App\Models\Advertisement;
 use App\Models\AllVisit;
 use App\Models\Company;
 use App\Models\CompanyReview;
+use App\Models\CompanyService;
+use App\Models\RequestMeet;
 use App\Models\User;
 use App\Models\CompanyBlog;
 use App\Models\ContactUs;
@@ -513,7 +515,52 @@ class APIController extends Controller
 
     }
 
+    public function RequestMeet(Request $request){
+        $request->validate([
+            'service_id'=>'required',
+            'date'=>'required',
+            'time'=>'required',
+        ]);
+        $service = CompanyService::first($request->service_id);
+        $result = RequestMeet::create([
+            'service_id'=>$request->service_id,
+            'date'=>$request->date,
+            'time'=>$request->time,
+            'company_id'=>$service->Company->id,
+            'user_id'=>Auth::id(),
+        ]);
+        return response()->json($result);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //namespace App\Http\Controllers;
 //use App\Models\Advertisement;

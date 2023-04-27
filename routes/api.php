@@ -43,4 +43,5 @@ Route::middleware('apiToken')->group(function () {
     Route::post('/image',[\App\Http\Controllers\APIController::class,'uploadprofileimage'])->name("image");
     Route::post('/addblog',[\App\Http\Controllers\APIController::class,'addBlog'])->name("addblog");
     Route::post('/addreview',[\App\Http\Controllers\APIController::class,'addReview'])->name("addreview");
+    Route::post('/RequestMeet',[\App\Http\Controllers\APIController::class,'RequestMeet'])->name("RequestMeet");
 });
