@@ -10,7 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-//Route::middleware('apiToken')->group(function () {
+Route::middleware('apiToken')->group(function () {
     // your routes
     Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
     Route::get('blogCompany/{coId}',[\App\Http\Controllers\APIController::class,'getBlogsbyCompany'])->name("BlogCompany");
@@ -32,9 +32,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::post('fcmToken',[\App\Http\Controllers\APIController::class,'fcmToken'])->name("fcmToken");
     Route::post('visit',[\App\Http\Controllers\APIController::class,'visit'])->name("visit");
     Route::post('/login',[\App\Http\Controllers\Api\Auth\LoginController::class,'Login'])->name("login");
+    Route::post('/logout',[\App\Http\Controllers\Api\Auth\LoginController::class,'logout'])->name("logout");
     Route::post('/register',[\App\Http\Controllers\Api\Auth\RegisterController::class,'store'])->name("register");
     Route::post('/image',[\App\Http\Controllers\APIController::class,'uploadprofileimage'])->name("image");
     Route::post('/addblog',[\App\Http\Controllers\APIController::class,'addBlog'])->name("addblog");
     Route::post('/addreview',[\App\Http\Controllers\APIController::class,'addReview'])->name("addreview");
     Route::post('/RequestMeet',[\App\Http\Controllers\APIController::class,'RequestMeet'])->name("RequestMeet");
-//});
+});
