@@ -226,7 +226,7 @@ class APIController extends Controller
     }
     protected function getReviewbyCompany($cId){
         $result=CompanyReview::where("company_id",$cId)->with(['User' => function ($query) {
-            $query->select('id','name')->get();
+            $query->select('id','name','image')->get();
         }])->get();
         return response()->json($result);
     }
