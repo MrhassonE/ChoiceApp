@@ -17,7 +17,11 @@ class CompanyBlog extends Model
     public function Department(){
         return $this->belongsTo(Department::class,'department_id');
     }
+//    public function SubDepartment(){
+//        return $this->belongsTo(SubDepartment::class,'sub_department_id');
+//    }
     public function Company(){
         return $this->belongsTo(Company::class,'company_id');
     }
+
 }
