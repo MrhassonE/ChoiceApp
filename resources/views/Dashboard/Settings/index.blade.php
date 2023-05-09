@@ -200,68 +200,68 @@
                     <div class="card-body">
                         <form method="post" class="needs-validation" novalidate id="emailForm" enctype="multipart/form-data">
                             @csrf
-                            <div class="row">
-                                <div class="col-md-4 my-1">
-                                    <div class="form-group" dir="ltr">
-                                        <label for="">Driver</label>
-                                        <input id="driver" value="{{$email->driver}}" required name="driver" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Host</label>
-                                        <input id="host" value="{{$email->host}}" required name="host" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Port</label>
-                                        <input id="port" value="{{$email->port}}" required name="port" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Encryption</label>
-                                        <input id="encryption" value="{{$email->encryption}}" required name="encryption" type="text" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Email</label>
-                                        <input id="username" value="{{$email->username}}" required name="username" type="email" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-1" dir="ltr">
-                                    <div class="form-group">
-                                        <label for="">Password</label>
-                                        <input id="password" value="" required name="password" type="password" class="form-control" placeholder="">
-                                        <div class="invalid-tooltip">
-                                            الرجاء املئ الحقل
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 my-1">
-                                    <ul id="errors2"></ul>
-                                </div>
-                                <div class="col-md-12 my-1">
-                                    <button type="submit" class="btn btn-primary btn-round">تعديل</button>
-                                </div>
-                            </div>
+{{--                            <div class="row">--}}
+{{--                                <div class="col-md-4 my-1">--}}
+{{--                                    <div class="form-group" dir="ltr">--}}
+{{--                                        <label for="">Driver</label>--}}
+{{--                                        <input id="driver" value="{{$email->driver}}" required name="driver" type="text" class="form-control" placeholder="">--}}
+{{--                                        <div class="invalid-tooltip">--}}
+{{--                                            الرجاء املئ الحقل--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 my-1" dir="ltr">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="">Host</label>--}}
+{{--                                        <input id="host" value="{{$email->host}}" required name="host" type="text" class="form-control" placeholder="">--}}
+{{--                                        <div class="invalid-tooltip">--}}
+{{--                                            الرجاء املئ الحقل--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 my-1" dir="ltr">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="">Port</label>--}}
+{{--                                        <input id="port" value="{{$email->port}}" required name="port" type="text" class="form-control" placeholder="">--}}
+{{--                                        <div class="invalid-tooltip">--}}
+{{--                                            الرجاء املئ الحقل--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 my-1" dir="ltr">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="">Encryption</label>--}}
+{{--                                        <input id="encryption" value="{{$email->encryption}}" required name="encryption" type="text" class="form-control" placeholder="">--}}
+{{--                                        <div class="invalid-tooltip">--}}
+{{--                                            الرجاء املئ الحقل--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 my-1" dir="ltr">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="">Email</label>--}}
+{{--                                        <input id="username" value="{{$email->username}}" required name="username" type="email" class="form-control" placeholder="">--}}
+{{--                                        <div class="invalid-tooltip">--}}
+{{--                                            الرجاء املئ الحقل--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 my-1" dir="ltr">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="">Password</label>--}}
+{{--                                        <input id="password" value="" required name="password" type="password" class="form-control" placeholder="">--}}
+{{--                                        <div class="invalid-tooltip">--}}
+{{--                                            الرجاء املئ الحقل--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-12 my-1">--}}
+{{--                                    <ul id="errors2"></ul>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-12 my-1">--}}
+{{--                                    <button type="submit" class="btn btn-primary btn-round">تعديل</button>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                         </form>
                     </div>
                 </div>

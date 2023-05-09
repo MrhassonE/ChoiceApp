@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+
+    public static function generateFromObject($object)
+    {
+        $myModel = new Company();
+        foreach($object as $k => $v)
+            $myModel->{$k} = $v; //for arrays $myModel[$k] = $v;
+        return $myModel;
+    }
+
     use HasFactory;
     protected $fillable = [
         'id',
@@ -15,18 +24,26 @@ class Company extends Model
         'phone',
         'address',
         'image',
-        'products',
-        'services',
-        'latitude',
-        'longitude',
         'facebook',
         'instagram',
         'telegram',
         'whatsapp',
         'department_id',
-        'city_id'
+        'sub_department_id',
+        'city_id',
+        'country_id',
+        'is_active',
+        'evaluation',
+        'most_viewed',
+        'new',
+        'is_main',
+        'products',
+        'services',
+        'latitude',
+        'longitude',
     ];
     protected $appends = ['img_path'];
+
     public function getImgPathAttribute() {
         return asset('storage/Company/'.$this->image);
     }
@@ -34,11 +51,20 @@ class Company extends Model
     public function CompanyImages(){
         return $this->hasMany(CompanyImages::class,'company_id');
     }
+    public function CompanyBlog(){
+        return $this->hasMany(CompanyBlog::class,'company_id');
+    }
+    public function CompanyReview(){
+        return $this->hasMany(CompanyReview::class,'company_id');
+    }
+    public function CompanyService(){
+        return $this->hasMany(CompanyService::class,'company_id');
+    }
     public function Advertisement(){
         return $this->hasMany(Advertisement::class,'company_id');
     }
     public function Department(){
-        return $this->belongsTo(Department::class ,'department_id');
+        return $this->belongsTo(Department::class,'department_id');
     }
     public function SubDepartment(){
         return $this->belongsTo(SubDepartment::class,'sub_department_id');

@@ -20,6 +20,9 @@ class SubDepartment extends Model
     public function Company(){
         return $this->hasMany(Company::class,'sub_department_id');
     }
+//    public function CompanyBlog(){
+//        return $this->hasMany(CompanyBlog::class,'sub_department_id');
+//    }
     public function CompanyMostViewed(){
         return $this->hasMany(Company::class,'sub_department_id');
     }

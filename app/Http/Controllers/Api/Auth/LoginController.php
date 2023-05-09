@@ -29,7 +29,10 @@ class LoginController extends Controller
         if(!$token = Auth::guard('api')->attempt($credentials)) {
             return response()->json(false);
         }
-        return response()->json($token);
+        $res=Collect(["user" => Auth::guard('api')->user()]);
+//        $res=Collect(["user" => Auth::user()]);
+        $res=$res->merge(["token" => $token]);
+        return $res;
     }
     public function logout(Request $request) {
         $token = $request->header('auth-token');

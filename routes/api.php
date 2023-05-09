@@ -6,22 +6,11 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::middleware('apiToken')->group(function () {
+//Route::middleware('apiToken')->group(function () {
     // your routes
     Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
     Route::get('blogCompany/{coId}',[\App\Http\Controllers\APIController::class,'getBlogsbyCompany'])->name("BlogCompany");
@@ -35,6 +24,10 @@ Route::middleware('apiToken')->group(function () {
     Route::get('department/company/{dep}',[\App\Http\Controllers\APIController::class,'getCompaniesCityByDep'])->name("CompanyByDepId");
     Route::get('advertisements/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getAdvertisements'])->name("Advertisements");
     Route::get('home/{cId}/{id}',[\App\Http\Controllers\APIController::class,'home'])->name("home");
+    Route::get('dephome/{cId}/{id}',[\App\Http\Controllers\APIController::class,'Dephome'])->name("home");
+    Route::get('search/{cId}/{id}',[\App\Http\Controllers\APIController::class,'search'])->name("search");
+    Route::get('searchByName/{cId}',[\App\Http\Controllers\APIController::class,'searchByName'])->name("search");
+    Route::get('getAllReview/{companyId}',[\App\Http\Controllers\APIController::class,'getAllReview'])->name("search");
     Route::post('send',[\App\Http\Controllers\APIController::class,'send'])->name("send");
     Route::post('fcmToken',[\App\Http\Controllers\APIController::class,'fcmToken'])->name("fcmToken");
     Route::post('visit',[\App\Http\Controllers\APIController::class,'visit'])->name("visit");
@@ -44,4 +37,4 @@ Route::middleware('apiToken')->group(function () {
     Route::post('/addblog',[\App\Http\Controllers\APIController::class,'addBlog'])->name("addblog");
     Route::post('/addreview',[\App\Http\Controllers\APIController::class,'addReview'])->name("addreview");
     Route::post('/RequestMeet',[\App\Http\Controllers\APIController::class,'RequestMeet'])->name("RequestMeet");
-});
+//});
