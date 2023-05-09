@@ -562,6 +562,7 @@ class APIController extends Controller
 
 
 
+
 //namespace App\Http\Controllers;
 //use App\Models\Advertisement;
 //use App\Models\AllVisit;
