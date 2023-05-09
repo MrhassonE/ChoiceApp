@@ -39,6 +39,7 @@ Route::middleware('apiToken')->group(function () {
     Route::post('fcmToken',[\App\Http\Controllers\APIController::class,'fcmToken'])->name("fcmToken");
     Route::post('visit',[\App\Http\Controllers\APIController::class,'visit'])->name("visit");
     Route::post('/login',[\App\Http\Controllers\Api\Auth\LoginController::class,'Login'])->name("login");
+    Route::post('/logout',[\App\Http\Controllers\Api\Auth\LoginController::class,'logout'])->name("logout");
     Route::post('/register',[\App\Http\Controllers\Api\Auth\RegisterController::class,'store'])->name("register");
     Route::post('/image',[\App\Http\Controllers\APIController::class,'uploadprofileimage'])->name("image");
     Route::post('/addblog',[\App\Http\Controllers\APIController::class,'addBlog'])->name("addblog");
