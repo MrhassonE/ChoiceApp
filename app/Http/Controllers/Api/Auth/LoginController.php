@@ -36,6 +36,7 @@ class LoginController extends Controller
     }
     public function logout(Request $request) {
         $token = $request->header('auth-token');
+
 //        JWTAuth::setToken($token)->invalidate();
 //        JWTAuth::invalidate($token);
 //        Auth::user()->tokens->each(function($token, $key) {
