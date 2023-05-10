@@ -217,8 +217,8 @@ class APIController extends Controller
             return $q->where('is_active',1)->get();
         })->get(["id","name"]);
 
-        $profile = User::where('id',Auth::guard('api')->id())
-            ->get();
+//        $profile = User::where('id',Auth::guard('api')->id())->get();
+        $profile = auth()->user();
         $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions','android_app','ios_app']);
         $whatsNew = WhatsNew::get(['title']);
         $res=Collect(["cities"=>$cities]);

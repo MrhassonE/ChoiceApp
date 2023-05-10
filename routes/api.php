@@ -10,16 +10,19 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::middleware('apiToken')->group(function () {
     // your routes
-    Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
+    Route::middleware('auth.token:api')->group(function () {
+        Route::get('settings',[\App\Http\Controllers\APIController::class,'getSettings'])->name("Settings");
+        Route::get('userProfile',[\App\Http\Controllers\APIController::class,'userProfile'])->name("userProfile");
+    });
+        Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
     Route::get('blogCompany/{coId}',[\App\Http\Controllers\APIController::class,'getBlogsbyCompany'])->name("BlogCompany");
     Route::get('blog/{Id}',[\App\Http\Controllers\APIController::class,'getBlogsbyId'])->name("Blog");
     Route::get('review/{Id}',[\App\Http\Controllers\APIController::class,'getReviewbyCompany'])->name("Review");
     Route::get('department/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getDepartmentCityById'])->name("DepartmentByCityId");
     Route::get('departments/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getDepartments'])->name("Departments");
-    Route::get('settings',[\App\Http\Controllers\APIController::class,'getSettings'])->name("Settings");
-    Route::get('userProfile',[\App\Http\Controllers\APIController::class,'userProfile'])->name("userProfile");
     Route::get('companies/{cId}',[\App\Http\Controllers\APIController::class,'getCompanies'])->name("Companies");
     Route::get('company/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getCompaniesCityById'])->name("CompanyByCityId");
     Route::get('department/company/{dep}',[\App\Http\Controllers\APIController::class,'getCompaniesCityByDep'])->name("CompanyByDepId");
