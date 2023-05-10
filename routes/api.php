@@ -10,14 +10,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('auth.token:api')->group(function () {
 
+});
 Route::middleware('apiToken')->group(function () {
     // your routes
-    Route::middleware('auth.token:api')->group(function () {
-        Route::get('settings',[\App\Http\Controllers\APIController::class,'getSettings'])->name("Settings");
-        Route::get('userProfile',[\App\Http\Controllers\APIController::class,'userProfile'])->name("userProfile");
-    });
-        Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
+
+    Route::get('cities',[\App\Http\Controllers\APIController::class,'getCities'])->name("Cities");
     Route::get('blogCompany/{coId}',[\App\Http\Controllers\APIController::class,'getBlogsbyCompany'])->name("BlogCompany");
     Route::get('blog/{Id}',[\App\Http\Controllers\APIController::class,'getBlogsbyId'])->name("Blog");
     Route::get('review/{Id}',[\App\Http\Controllers\APIController::class,'getReviewbyCompany'])->name("Review");
@@ -27,7 +26,8 @@ Route::middleware('apiToken')->group(function () {
     Route::get('company/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getCompaniesCityById'])->name("CompanyByCityId");
     Route::get('department/company/{dep}',[\App\Http\Controllers\APIController::class,'getCompaniesCityByDep'])->name("CompanyByDepId");
     Route::get('advertisements/{cId}/{id}',[\App\Http\Controllers\APIController::class,'getAdvertisements'])->name("Advertisements");
-    Route::get('home/{cId}/{id}',[\App\Http\Controllers\APIController::class,'home'])->name("home");
+    Route::get('settings',[\App\Http\Controllers\APIController::class,'getSettings'])->name("Settings");
+    Route::get('userProfile',[\App\Http\Controllers\APIController::class,'userProfile'])->name("userProfile"); Route::get('home/{cId}/{id}',[\App\Http\Controllers\APIController::class,'home'])->name("home");
     Route::get('dephome/{cId}/{id}',[\App\Http\Controllers\APIController::class,'Dephome'])->name("home");
     Route::get('search/{cId}/{id}',[\App\Http\Controllers\APIController::class,'search'])->name("search");
     Route::get('searchByName/{cId}',[\App\Http\Controllers\APIController::class,'searchByName'])->name("search");

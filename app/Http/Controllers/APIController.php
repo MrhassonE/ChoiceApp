@@ -19,7 +19,6 @@ use App\Models\FCMToken;
 use App\Models\GeneralSetting;
 use App\Models\WhatsNew;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 class APIController extends Controller
 {
     protected function fcmToken(Request $request){
@@ -36,11 +35,12 @@ class APIController extends Controller
         }
         return response()->json(['success'=>'true'], 200);
     }
-    protected function userProfile(){
-        $profile = User::where('id',Auth::guard('api')->id())
-            ->get();
-        $res=Collect(["profile"=>$profile]);
-        return $res->all();
+    public function userProfile(){
+        $user = User::where('id',Auth::id());
+
+        return response()->json([
+            'profile'=>$user,
+        ]);
     }
 
     protected function RequestMeet(Request $request){
@@ -59,15 +59,13 @@ class APIController extends Controller
         ]);
         return response()->json($result);
 
-}
+    }
 
     protected function getCities(){
         return Country::where('is_active',1)->with('City',function ($q){
             return $q->where('is_active',1)->get();
         })->get(["id","name"]);
     }
-
-
 
     protected function getAllReview($companyId){
         $res=CompanyReview::where('company_id',$companyId)->with(['User' => function ($query) {
@@ -155,19 +153,19 @@ class APIController extends Controller
     }
 
     protected function uploadprofileimage(Request $request){
-            $request->validate([
-                'image' => 'required|mimes:jpeg,jpg,png|max:5000',
-            ]);
-            $fileName = null;
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $fileName = time() . '.' .$file->getClientOriginalName();
-                $store = $file->storeAs('User',$fileName,'public');
-            }
-            $user = User::find($request->id);
-            $user->image=$fileName;
-            $user->save();
-            return response()->json([$user]);
+        $request->validate([
+            'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+        ]);
+        $fileName = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '.' .$file->getClientOriginalName();
+            $store = $file->storeAs('User',$fileName,'public');
+        }
+        $user = User::find($request->id);
+        $user->image=$fileName;
+        $user->save();
+        return response()->json([$user]);
     }
 
     protected function addReview(Request $request) {
@@ -180,35 +178,35 @@ class APIController extends Controller
         $result=CompanyReview::create([
             "number"=>$request->number,
             "title"=>$request->title,
-            "user_id"=>Auth::guard('api')->id(),
+            "user_id"=>3,//Auth::guard('api')->id(),
             "company_id"=>$request->company_id,
         ]);
         return response()->json($result);
     }
 
     protected function addBlog(Request $request){
-            $request->validate([
-                'title'=>"required",
-                'description'=>"required",
-                'company_id'=>"required",
-                'department_id'=>"required",
-                'image' => 'required|mimes:jpeg,jpg,png|max:5000',
-            ]);
+        $request->validate([
+            'title'=>"required",
+            'description'=>"required",
+            'company_id'=>"required",
+            'department_id'=>"required",
+            'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+        ]);
 
-            $fileName = null;
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $fileName = time() . '.' .$file->getClientOriginalName();
-                $store = $file->storeAs('CompanyBlog',$fileName,'public');
-            }
+        $fileName = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '.' .$file->getClientOriginalName();
+            $store = $file->storeAs('CompanyBlog',$fileName,'public');
+        }
         $result=CompanyBlog::create([
             'title'=>$request->title,
             'description'=>$request->description,
             'department_id'=>$request->department_id,
             'company_id'=>$request->company_id,
             'image'=>$fileName,
-            ]);
-            return response()->json([$result]);
+        ]);
+        return response()->json([$result]);
     }
 
     protected function getSettings() {
@@ -217,8 +215,8 @@ class APIController extends Controller
             return $q->where('is_active',1)->get();
         })->get(["id","name"]);
 
-//        $profile = User::where('id',Auth::guard('api')->id())->get();
-        $profile = auth()->user();
+        $profile = User::where('id',1)//Auth::guard('api')->user()->id)
+        ->get();
         $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions','android_app','ios_app']);
         $whatsNew = WhatsNew::get(['title']);
         $res=Collect(["cities"=>$cities]);
@@ -232,11 +230,11 @@ class APIController extends Controller
         if ($id == 'allcities'){
             $dep = Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')
                 ->select('id', 'name', 'image')->get();
-         }
+        }
 
         else {
             $dep = Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')->where('city_id', $id)->
-                select('id', 'name', 'image')->get();
+            select('id', 'name', 'image')->get();
         }
         $res = Collect(["dep" => $dep]);
         return $res->all();
@@ -244,32 +242,32 @@ class APIController extends Controller
     }
 
     protected function searchByName($cId,Request $request){
-            $dep = Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')
-                ->with(['Company' => function ($query) {
-                    $query->
-                    with(['CompanyBlog'=>function($query) {
-                        $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+        $dep = Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')
+            ->with(['Company' => function ($query) {
+                $query->
+                with(['CompanyBlog'=>function($query) {
+                    $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                    get();
+                }])->
+
+                with(['CompanyService'=>function($query) {
+                    $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                }])->
+                with(['CompanyReview'=>function($query) {
+                    $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                    with(['User' => function ($query) {
+                        $query->select('id','name')->get();
+                    }])->get();
+                }])->
+
+                with(['CompanyImages' => function ($query) {
+                    $query->select('id', 'image', 'company_id')
+                        ->
                         get();
-                    }])->
-
-                    with(['CompanyService'=>function($query) {
-                        $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
-                    }])->
-                    with(['CompanyReview'=>function($query) {
-                        $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
-                        with(['User' => function ($query) {
-                            $query->select('id','name')->get();
-                        }])->get();
-                    }])->
-
-                    with(['CompanyImages' => function ($query) {
-                        $query->select('id', 'image', 'company_id')
-                            ->
-                            get();
-                    }])->
-                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
-                        ->where('is_active', 1)->get();
-                }])->where('name', 'LIKE', '%'.$request->name.'%')->select('id', 'name', 'image')->get();
+                }])->
+                select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
+                    ->where('is_active', 1)->get();
+            }])->where('name', 'LIKE', '%'.$request->name.'%')->select('id', 'name', 'image')->get();
 
         $res = Collect(["dep" => $dep]);
         return $res->all();
@@ -360,10 +358,10 @@ class APIController extends Controller
 //            Mail::to($admin->email)->send(new \App\Mail\ContactUsForm($contactForm->name,$contactForm->email,$contactForm->message));
 
         }catch (\Exception $exception){
-        return response()->json([
-            'seccuss'=>false,
-            'message'=>null,
-            'errors'=>null], 403);}
+            return response()->json([
+                'seccuss'=>false,
+                'message'=>null,
+                'errors'=>null], 403);}
     }
     protected function getBlogsbyCompany($coId){
         $result=CompanyBlog::where('company_id',$coId)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->get();
@@ -396,12 +394,12 @@ class APIController extends Controller
                             with(['User' => function ($query) {
                                 $query->select('id','name')->get();
                             }])->get();
-                            }])->
+                        }])->
 
                         with(['CompanyImages' => function ($query) {
                             $query->select('id', 'image', 'company_id')
                                 ->
-                            get();
+                                get();
                         }])->
                         select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
                             ->where('is_active', 1)->get();
@@ -441,7 +439,7 @@ class APIController extends Controller
                         ->
 
 
-                       get();
+                        get();
                 }])
 
                 ->with(['CompanyBlog' => function ($query) {
@@ -486,8 +484,8 @@ class APIController extends Controller
 
             $company1 = Company::where('country_id', $cId)
                 ->where('is_active', 1)->where('most_viewed', 1)->orderByDesc('created_at')->where('is_main', 1)->with(['CompanyImages' => function ($query) {
-                $query->select('id', 'image', 'company_id')->get();
-            }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')->
+                    $query->select('id', 'image', 'company_id')->get();
+                }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')->
                 with(['CompanyBlog'=>function($query) {
                     $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
                 }])->with(['CompanyService'=>function($query) {
@@ -498,7 +496,8 @@ class APIController extends Controller
                     }])->get();
                 }])->get();
 
-            $company2 = Company::where('country_id', $cId)->where('is_active', 1)->where('new', 1)->orderByDesc('created_at')->with(['CompanyImages' => function ($query) {
+            $company2 = Company::where('country_id', $cId)->where('is_active', 1)->where('new', 1)->orderByDesc('created_at')->
+            with(['CompanyImages' => function ($query) {
                 $query->select('id', 'image', 'company_id')->get();
             }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')-> with(['CompanyBlog'=>function($query) {
                 $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
@@ -517,17 +516,92 @@ class APIController extends Controller
                 select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
                     ->get();
             }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
+
             $blog=CompanyBlog::where('is_main', 1)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(10)->get();
         }
         else {
+
             $blog=CompanyBlog::where('is_main', 1)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(10)->get();
 
-            $dep = Department::where('country_id', $cId)->where('is_active', 1)->where('is_main', 1)->orderByDesc('created_at')->where('city_id', $id)
-                ->with(['SubDepartment' => function ($query) {
-                    $query->with(['Company' => function ($query) {
+            $dep =
+                Department::where('country_id', $cId)->where('is_active', 1)->where('is_main', 1)->orderByDesc('created_at')->where('city_id', $id)
+                    ->with(['SubDepartment' => function ($query) {
+                        $query->
+
+                        with(['Company' => function ($query) {
+                            $query->
+                            with(['CompanyBlog'=>function($query) {
+                                $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                                get();
+                            }])->
+
+                            with(['CompanyService'=>function($query) {
+                                $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                            }])->with(['CompanyReview'=>function($query) {
+                                $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                                with(['User' => function ($query) {
+                                    $query->select('id','name')->get();
+                                }])->get();
+                            }])->
+
+                            with(['CompanyImages' => function ($query) {
+                                $query->select('id', 'image', 'company_id')
+                                    ->
+                                    get();
+                            }])->
+                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
+                                ->where('is_active', 1)->get();
+                        }])
+                            ->with(['CompanyMostViewed' => function ($query) {
+                                $query->with(['CompanyImages' => function ($query) {
+                                    $query->select('id', 'image', 'company_id')->get();
+                                }])->
+                                select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                                    ->where('most_viewed', 1)->where('is_active', 1)->
+                                    get();
+                            }])->where('is_active', 1)
+
+
+
+
+
+                            ->with(['CompanyMostViewed' => function ($query) {
+                                $query->with(['CompanyImages' => function ($query) {
+                                    $query->select('id', 'image', 'company_id')->get();
+                                }])->with(['CompanyBlog'=>function($query) {
+                                    $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                                    get();
+                                }])->
+
+                                with(['CompanyService'=>function($query) {
+                                    $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                                }])->with(['CompanyReview'=>function($query) {
+                                    $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                                    with(['User' => function ($query) {
+                                        $query->select('id','name')->get();
+                                    }])->get();
+                                }])->
+                                select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                                    ->where('most_viewed', 1)->where('is_active', 1)->get();
+                            }])->where('is_active', 1)
+                            ->
+
+
+                            get();
+                    }])
+
+                    ->with(['CompanyBlog' => function ($query) {
+                        $query->select('id','title','description','image','department_id','company_id')->get();
+                    }])
+                    ->with(['Company'=>function($query){
                         $query->with(['CompanyImages' => function ($query) {
-                            $query->select('id', 'image', 'company_id')-> with(['CompanyBlog'=>function($query) {
-                                $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
+                            $query->select('id', 'image', 'company_id')->get();
+                        }])->
+                        select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                            ->where('is_active', 1)->
+                            with(['CompanyBlog'=>function($query) {
+                                $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                                get();
                             }])->with(['CompanyService'=>function($query) {
                                 $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
                             }])->with(['CompanyReview'=>function($query) {
@@ -535,52 +609,44 @@ class APIController extends Controller
                                     $query->select('id','name')->get();
                                 }])->get();
                             }])->get();
-                        }])->
-                        select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
-                            ->where('is_active', 1)->get();
                     }])
-                        ->with(['CompanyMostViewed' => function ($query) {
-                            $query->with(['CompanyImages' => function ($query) {
-                                $query->select('id', 'image', 'company_id')->get();
-                            }])->
-                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
-                                ->where('most_viewed', 1)->where('is_active', 1)-> with(['CompanyBlog'=>function($query) {
-                                    $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
-                                }])->with(['CompanyService'=>function($query) {
-                                    $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
-                                }])->with(['CompanyReview'=>function($query) {
-                                    $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
-                                        $query->select('id','name')->get();
-                                    }])->get();
+                    ->with(['CompanyMostViewed' => function ($query) {
+                        $query->with(['CompanyImages' => function ($query) {
+                            $query->select('id', 'image', 'company_id')->get();
+                        }])->
+                        select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                            ->where('most_viewed', 1)->where('is_active', 1)-> with(['CompanyBlog'=>function($query) {
+                                $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
+                            }])->with(['CompanyService'=>function($query) {
+                                $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                            }])->with(['CompanyReview'=>function($query) {
+                                $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                                with(['User' => function ($query) {
+                                    $query->select('id','name')->get();
                                 }])->get();
-                        }])->where('is_active', 1)->get();
-                }])
-                ->with(['Company'=>function($query){
-                    $query->with(['CompanyImages' => function ($query) {
-                        $query->select('id', 'image', 'company_id')-> with(['CompanyBlog'=>function($query) {
-                            $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
-                        }])->with(['CompanyService'=>function($query) {
-                            $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
-                        }])->with(['CompanyReview'=>function($query) {
-                            $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
-                                $query->select('id','name')->get();
                             }])->get();
-                        }])->get();
-                    }])->
-                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                        ->where('is_active', 1)->get();
-                }])
-                ->with(['CompanyMostViewed' => function ($query) {
-                    $query->with(['CompanyImages' => function ($query) {
+                    }])->select('id', 'name', 'image')->get();
+
+            $company1 =
+                Company::where('country_id', $cId)->where('is_active', 1)->where('most_viewed', 1)->orderByDesc('created_at')->where('is_main', 1)->where('city_id', $id)
+                    ->with(['CompanyImages' => function ($query) {
                         $query->select('id', 'image', 'company_id')->get();
-                    }])->
-                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                        ->where('most_viewed', 1)->where('is_active', 1)->get();
-                }])
-                ->select('id', 'name', 'image')->get();
+                    }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')->
+                    with(['CompanyBlog'=>function($query) {
+                        $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
+                    }])->with(['CompanyService'=>function($query) {
+                        $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                    }])->with(['CompanyReview'=>function($query) {
+                        $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
+                            $query->select('id','name')->get();
+                        }])->get();
+                    }])->get();
 
-            $company1 = Company::where('country_id', $cId)->where('is_active', 1)->where('most_viewed', 1)->orderByDesc('created_at')->where('is_main', 1)->where('city_id', $id)->with(['CompanyImages' => function ($query) {
-                $query->select('id', 'image', 'company_id')-> with(['CompanyBlog'=>function($query) {
+            $company2 =
+                Company::where('country_id', $cId)->where('is_active', 1)->where('new', 1)->orderByDesc('created_at')->where('city_id', $id)->
+                with(['CompanyImages' => function ($query) {
+                    $query->select('id', 'image', 'company_id')->get();
+                }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')-> with(['CompanyBlog'=>function($query) {
                     $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
                 }])->with(['CompanyService'=>function($query) {
                     $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
@@ -589,28 +655,15 @@ class APIController extends Controller
                         $query->select('id','name')->get();
                     }])->get();
                 }])->get();
-            }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')->get();
-
-            $company2 = Company::where('country_id', $cId)->where('is_active', 1)->where('new', 1)->orderByDesc('created_at')->where('city_id', $id)->with(['CompanyImages' => function ($query) {
-                $query->select('id', 'image', 'company_id')-> with(['CompanyBlog'=>function($query) {
-                    $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
-                }])->with(['CompanyService'=>function($query) {
-                    $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
-                }])->with(['CompanyReview'=>function($query) {
-                    $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
-                        $query->select('id','name')->get();
-                    }])->get();
-                }])->get();
-            }])->select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp')->get();
 
             $ad = Advertisement::where('country_id', $cId)->where('city_id', $id)
                 ->with(['Company' => function ($query) {
-                $query->where('is_active', 1)->with(['CompanyImages' => function ($query) {
-                    $query->select('id', 'image', 'company_id')->get();
-                }])->
-                select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                    ->get();
-            }])->orderByDesc('created_at')
+                    $query->where('is_active', 1)->with(['CompanyImages' => function ($query) {
+                        $query->select('id', 'image', 'company_id')->get();
+                    }])->
+                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                        ->get();
+                }])->orderByDesc('created_at')
                 ->get(['image', 'company_id', 'created_at']);
 
         }
@@ -733,18 +786,30 @@ class APIController extends Controller
         }
         else {
             $dep = Department::where('country_id', $cId)->where('is_active', 1)->orderByDesc('created_at')->where('city_id', $id)
-                ->with(['SubDepartment' => function ($query) {
-                    $query->with(['Company' => function ($query) {
-                        $query->with(['CompanyImages' => function ($query) {
-                            $query->select('id', 'image', 'company_id')->with(['CompanyBlog' => function ($query) {
-                                $query->select('id', 'title', 'description', 'image', 'company_id', 'created_at')->orderByDesc('created_at')->take(5)->get();
-                            }])->with(['CompanyService' => function ($query) {
-                                $query->select('id', 'price', 'title', 'company_id')->orderByDesc('created_at')->get();
-                            }])->with(['CompanyReview' => function ($query) {
-                                $query->select('id', 'number', 'title', 'user_id', 'company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
-                                    $query->select('id', 'name')->get();
-                                }])->get();
+                ->
+                with(['SubDepartment' => function ($query) {
+                    $query->
+
+                    with(['Company' => function ($query) {
+                        $query->
+                        with(['CompanyBlog'=>function($query) {
+                            $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                            get();
+                        }])->
+
+                        with(['CompanyService'=>function($query) {
+                            $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                        }])->with(['CompanyReview'=>function($query) {
+                            $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                            with(['User' => function ($query) {
+                                $query->select('id','name')->get();
                             }])->get();
+                        }])->
+
+                        with(['CompanyImages' => function ($query) {
+                            $query->select('id', 'image', 'company_id')
+                                ->
+                                get();
                         }])->
                         select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
                             ->where('is_active', 1)->get();
@@ -753,41 +818,76 @@ class APIController extends Controller
                             $query->with(['CompanyImages' => function ($query) {
                                 $query->select('id', 'image', 'company_id')->get();
                             }])->
-                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id', 'sub_department_id')
-                                ->where('most_viewed', 1)->where('is_active', 1)->with(['CompanyBlog' => function ($query) {
-                                    $query->select('id', 'title', 'description', 'image', 'company_id', 'created_at')->orderByDesc('created_at')->take(5)->get();
-                                }])->with(['CompanyService' => function ($query) {
-                                    $query->select('id', 'price', 'title', 'company_id')->orderByDesc('created_at')->get();
-                                }])->with(['CompanyReview' => function ($query) {
-                                    $query->select('id', 'number', 'title', 'user_id', 'company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
-                                        $query->select('id', 'name')->get();
-                                    }])->get();
+                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                                ->where('most_viewed', 1)->where('is_active', 1)->
+                                get();
+                        }])->where('is_active', 1)
+
+
+
+
+
+                        ->with(['CompanyMostViewed' => function ($query) {
+                            $query->with(['CompanyImages' => function ($query) {
+                                $query->select('id', 'image', 'company_id')->get();
+                            }])->with(['CompanyBlog'=>function($query) {
+                                $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                                get();
+                            }])->
+
+                            with(['CompanyService'=>function($query) {
+                                $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                            }])->with(['CompanyReview'=>function($query) {
+                                $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                                with(['User' => function ($query) {
+                                    $query->select('id','name')->get();
                                 }])->get();
-                        }])->where('is_active', 1)->get();
+                            }])->
+                            select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id','sub_department_id')
+                                ->where('most_viewed', 1)->where('is_active', 1)->get();
+                        }])->where('is_active', 1)
+                        ->
+
+
+                        get();
                 }])
-                ->with(['Company' => function ($query) {
+
+                ->with(['CompanyBlog' => function ($query) {
+                    $query->select('id','title','description','image','department_id','company_id')->get();
+                }])
+                ->with(['Company'=>function($query){
                     $query->with(['CompanyImages' => function ($query) {
-                        $query->select('id', 'image', 'company_id')->with(['CompanyBlog' => function ($query) {
-                            $query->select('id', 'title', 'description', 'image', 'company_id', 'created_at')->orderByDesc('created_at')->take(5)->get();
-                        }])->with(['CompanyService' => function ($query) {
-                            $query->select('id', 'price', 'title', 'company_id')->orderByDesc('created_at')->get();
-                        }])->with(['CompanyReview' => function ($query) {
-                            $query->select('id', 'number', 'title', 'user_id', 'company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
-                                $query->select('id', 'name')->get();
-                            }])->get();
-                        }])->get();
+                        $query->select('id', 'image', 'company_id')->get();
                     }])->
                     select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                        ->where('is_active', 1)->get();
+                        ->where('is_active', 1)->
+                        with(['CompanyBlog'=>function($query) {
+                            $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->
+                            get();
+                        }])->with(['CompanyService'=>function($query) {
+                            $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                        }])->with(['CompanyReview'=>function($query) {
+                            $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
+                                $query->select('id','name')->get();
+                            }])->get();
+                        }])->get();
                 }])
                 ->with(['CompanyMostViewed' => function ($query) {
                     $query->with(['CompanyImages' => function ($query) {
                         $query->select('id', 'image', 'company_id')->get();
                     }])->
                     select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                        ->where('most_viewed', 1)->where('is_active', 1)->get();
-                }])
-                ->select('id', 'name', 'image')->get();
+                        ->where('most_viewed', 1)->where('is_active', 1)-> with(['CompanyBlog'=>function($query) {
+                            $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
+                        }])->with(['CompanyService'=>function($query) {
+                            $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                        }])->with(['CompanyReview'=>function($query) {
+                            $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->
+                            with(['User' => function ($query) {
+                                $query->select('id','name')->get();
+                            }])->get();
+                        }])->get();
+                }])->select('id', 'name', 'image')->get();
         }
         $res = Collect(["dep" => $dep]);
 
