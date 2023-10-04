@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Models\AllVisit;
 use App\Models\City;
+use App\Models\HomeTitle;
 use App\Models\RequestMeet;
 use App\Models\CompanyService;
-use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\CompanyImages;
 use App\Models\Company;
 use App\Models\CompanyReview;
 use App\Models\User;
@@ -18,7 +18,10 @@ use App\Models\Department;
 use App\Models\FCMToken;
 use App\Models\GeneralSetting;
 use App\Models\WhatsNew;
+use App\Notifications\RequestNotify;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class APIController extends Controller
 {
     protected function fcmToken(Request $request){
@@ -35,12 +38,27 @@ class APIController extends Controller
         }
         return response()->json(['success'=>'true'], 200);
     }
+
     public function userProfile(){
-        $user = User::where('id',Auth::id());
+        $user = User::find(Auth::guard('api')->user()->id);
 
         return response()->json([
             'profile'=>$user,
         ]);
+    }
+
+    protected function deleteAccount(){
+
+        $user =User::where('id',Auth::guard('api')->user()->id);
+
+        $user->update([
+            'is_active'=>0
+        ]);
+
+        return response()->json([
+            'profile'=>$user,
+        ]);
+
     }
 
     protected function RequestMeet(Request $request){
@@ -49,16 +67,114 @@ class APIController extends Controller
             'date'=>'required',
             'time'=>'required',
         ]);
-        $service = CompanyService::first($request->service_id);
-        $result = RequestMeet::create([
-            'service_id'=>$request->service_id,
-            'date'=>$request->date,
-            'time'=>$request->time,
-            'company_id'=>$service->Company->id,
-            'user_id'=>Auth::id(),
-        ]);
-        return response()->json($result);
+        $service = CompanyService::where('id',$request->service_id)->get();
+        try {
+            $result = RequestMeet::create([
+                'service_id' => $request->service_id,
+                'date' => $request->date,
+                'time' => $request->time,
+                'company_id' => $service[0]->company_id,
+                'user_id' => Auth::guard('api')->user()->id
+            ]);
+            return response()->json($result);
+        }
+        catch (\Exception $exception){
+            return response()->json("Error");
+        }
+    }
 
+    protected function DashReview(){
+
+        $user = User::find(Auth::guard('api')->user()->id);
+        $result = CompanyReview::where('company_id',$user->company_id)->with(['User' => function ($query) {
+            $query->select('id','name','image','created_at')->get();
+        }])->get();
+        return response()->json($result);
+    }
+
+    protected function DashReviewDelete($id){
+        try{
+            $user = User::find(Auth::guard('api')->user()->id);
+            $result = CompanyReview::where('company_id',$user->company_id)->where('id',$id);
+            $result->delete();
+            return response()->json(true);
+        }
+
+        catch (\Exception $exception){
+            return response()->json(false);}
+    }
+
+    protected function DashRequests(Request $request){
+        $user = User::find(Auth::guard('api')->user()->id);
+        $result = RequestMeet::where('company_id',$user->company_id)->with('CompanyService',function ($q){
+            return $q->select('id','title')->get();
+        })->
+        with('User',function ($q){
+            return $q->select('id','name','image','phone')->
+            get();
+        })->get();
+
+        return response()->json(["Requests"=>$result]);
+    }
+
+    protected function DashRequestsApprove($id){
+        try{
+            $user = User::find(Auth::guard('api')->user()->id);
+            $result = RequestMeet::where('id',$id)->where('company_id',$user->company_id);
+            $result->update([
+                "status"=>'1'
+            ]);
+            $g = GeneralSetting::first();
+            if ($g->notification ==1){
+                try {
+                    foreach (FCMToken::all() as $user){
+                        $user->notify(new RequestNotify('تمت الموافقة على حجزك'));
+                    }
+                }catch (\Exception $exception) {
+                }
+            }
+            return response()->json(true);
+        }
+        catch (\Exception $exception){
+            return response()->json(false);
+        }
+    }
+
+    protected function DashHome(){
+        $user = User::find(Auth::guard('api')->user()->id);
+        $result = RequestMeet::where('company_id',$user->company_id)->get()->count();
+        $result1 = CompanyReview::where('company_id',$user->company_id)->get()->count();
+        $result2 = CompanyImages::where('company_id',$user->company_id)->get()->count();
+        $result3 = CompanyBlog::where('company_id',$user->company_id)->get()->count();
+        $res=Collect(["requests"=>$result]);
+        $res=$res->merge(["reviews"=>$result1]);
+        $res=$res->merge(["images"=>$result2]);
+        $res=$res->merge(["blogs"=>$result3]);
+        return $res->all();
+    }
+
+    protected function DashRequestsReject($id){
+        try{
+            $user = User::find(Auth::guard('api')->user()->id);
+            $result = RequestMeet::where('id',$id)->where('company_id',$user->company_id);
+            $result->update([
+
+                "status"=>"-1"
+            ]);
+            $g = GeneralSetting::first();
+            if ($g->notification ==1){
+                try {
+                    foreach (FCMToken::all() as $user){
+                        $user->notify(new RequestNotify('تم رفض حجزك'));
+                    }
+                }catch (\Exception $exception) {
+                }
+            }
+            return response()->json(true);
+        }
+        catch (\Exception $exception){
+            return response()->json(false);
+        }
     }
 
     protected function getCities(){
@@ -68,10 +184,18 @@ class APIController extends Controller
     }
 
     protected function getAllReview($companyId){
+
+
         $res=CompanyReview::where('company_id',$companyId)->with(['User' => function ($query) {
-            $query->select('id','name','image')->get();
+            $query->select('id','name','image','created_at')->get();
         }])->get();
         return response()->json(["Review"=>$res]);
+    }
+
+    protected function getAllBlogs(){
+        $user = User::find(Auth::guard('api')->user()->id);
+        $res=CompanyBlog::where('company_id',$user->company_id??0)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->get();
+        return response()->json(["blogs"=>$res]);
     }
 
     protected function getDepartmentCityById($cId,$id){
@@ -162,9 +286,10 @@ class APIController extends Controller
             $fileName = time() . '.' .$file->getClientOriginalName();
             $store = $file->storeAs('User',$fileName,'public');
         }
-        $user = User::find($request->id);
-        $user->image=$fileName;
-        $user->save();
+        $user = User::where('id',Auth::guard('api')->user()->id);
+        $user->update([
+            'image'=>$fileName
+        ]);
         return response()->json([$user]);
     }
 
@@ -178,7 +303,7 @@ class APIController extends Controller
         $result=CompanyReview::create([
             "number"=>$request->number,
             "title"=>$request->title,
-            "user_id"=>3,//Auth::guard('api')->id(),
+            "user_id"=>Auth::guard('api')->user()->id,
             "company_id"=>$request->company_id,
         ]);
         return response()->json($result);
@@ -188,8 +313,6 @@ class APIController extends Controller
         $request->validate([
             'title'=>"required",
             'description'=>"required",
-            'company_id'=>"required",
-            'department_id'=>"required",
             'image' => 'required|mimes:jpeg,jpg,png|max:5000',
         ]);
 
@@ -199,30 +322,106 @@ class APIController extends Controller
             $fileName = time() . '.' .$file->getClientOriginalName();
             $store = $file->storeAs('CompanyBlog',$fileName,'public');
         }
+
+        $user = User::find(Auth::guard('api')->user()->id);
+        $c=Company::where('id',$user->company_id)->get();
         $result=CompanyBlog::create([
             'title'=>$request->title,
             'description'=>$request->description,
-            'department_id'=>$request->department_id,
-            'company_id'=>$request->company_id,
+            'department_id'=>$c[0]->department_id,
+            'company_id'=>$user->company_id,
             'image'=>$fileName,
         ]);
         return response()->json([$result]);
     }
 
+    protected function addimg(Request $request){
+        $request->validate([
+            'image' => 'required|mimes:jpeg,jpg,png|max:5000',
+        ]);
+
+        $fileName = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '.' .$file->getClientOriginalName();
+            $store = $file->storeAs('Company',$fileName,'public');
+        }
+
+        $user = User::find(Auth::guard('api')->user()->id);
+        $result=CompanyImages::create([
+            'company_id'=>$user->company_id,
+            'image'=>$fileName,
+        ]);
+        return response()->json([$result]);
+    }
+
+    protected function editBlog(Request $request){
+
+        $request->validate([
+            'id'=>"required",
+            'title'=>"required",
+            'description'=>"required",
+            'image' => 'mimes:jpeg,jpg,png|max:5000',
+        ]);
+
+        $fileName = null;
+        $user = User::find(Auth::guard('api')->user()->id);
+        $result=CompanyBlog::where('id',$request->id)->where('company_id',$user->company_id);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '.' .$file->getClientOriginalName();
+            $store = $file->storeAs('CompanyBlog',$fileName,'public');
+
+            $result->update([
+                'title'=>$request->title,
+                'description'=>$request->description,
+                'image'=>$fileName,
+            ]);
+
+        }
+        else{
+            $result->update([
+                'title'=>$request->title,
+                'description'=>$request->description,
+            ]);
+        }
+        return response()->json(true);
+    }
+
+    protected function deleteBlog(Request $request){
+
+        $request->validate([
+            'id'=>"required",
+        ]);
+
+        $user = User::find(Auth::guard('api')->user()->id);
+        $result=CompanyBlog::where('id',$request->id)->where('company_id',$user->company_id);
+
+        $result->delete();
+        return response()->json(true);
+    }
+
     protected function getSettings() {
+
+        $profile = User::where('id',Auth::guard('api')->user()->id)->get();
+
+        $requests=RequestMeet::where('user_id',Auth::guard('api')->user()->id)->
+
+        with(['CompanyService'=>function($query) {
+            $query->select('id','price','title')->orderByDesc('created_at')->get();
+        }])->
+        select('id','date','time','service_id','status')->get();
 
         $cities=Country::where('is_active',1)->with('City',function ($q){
             return $q->where('is_active',1)->get();
         })->get(["id","name"]);
-
-        $profile = User::where('id',1)//Auth::guard('api')->user()->id)
-        ->get();
         $setting= GeneralSetting::get(['company_name','company_logo','email','phone','phone2','facebook','instagram','telegram','whatsapp','policy','conditions','android_app','ios_app']);
         $whatsNew = WhatsNew::get(['title']);
         $res=Collect(["cities"=>$cities]);
         $res=$res->merge(["settings"=>$setting]);
         $res=$res->merge(["whatsNew"=>$whatsNew]);
         $res=$res->merge(["profile"=>$profile]);
+        $res=$res->merge(["requests"=>$requests]);
         return $res->all();
     }
 
@@ -296,12 +495,14 @@ class APIController extends Controller
             //'city_id'
         ]);
     }
+
     protected function getReviewbyCompany($cId){
         $result=CompanyReview::where("company_id",$cId)->with(['User' => function ($query) {
             $query->select('id','name')->get();
         }])->get();
         return response()->json($result);
     }
+
     protected function getCompaniesCityById($cId,$id){
         if ($id =='allcities'){
             return Company::where('is_active',1)->where('country_id',$cId)->orderByDesc('created_at')->get([
@@ -320,11 +521,13 @@ class APIController extends Controller
         }
 
     }
+
     protected function getCompaniesCityByDep($dep){
         return Company::where('is_active',1)->where('department_id', $dep)->with(['CompanyImages'=>function($query) {
             $query->select('id','image','company_id')->orderByDesc('created_at')->get();
         }])->orderByDesc('created_at')->select('id','name','email','phone','address','image','evaluation','products','services', 'facebook', 'instagram', 'telegram', 'whatsapp')->get();
     }
+
     protected function getAdvertisements($cId,$id){
         if ($id == 'allcities') {
             return Advertisement::where('country_id', $cId)->with(['Company' => function ($query) {
@@ -336,6 +539,7 @@ class APIController extends Controller
             }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
         }
     }
+
     protected function send(Request $request){
         //$validator =
         $request->validate([
@@ -363,15 +567,16 @@ class APIController extends Controller
                 'message'=>null,
                 'errors'=>null], 403);}
     }
+
     protected function getBlogsbyCompany($coId){
         $result=CompanyBlog::where('company_id',$coId)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->get();
         return response()->json($result);
     }
+
     protected function getBlogsbyId($Id){
         $result=CompanyBlog::where('id',$Id)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->get();
         return response()->json($result);
     }
-
 
     protected function home($cId,$id){
         if ($id == 'allcities'){
@@ -443,7 +648,7 @@ class APIController extends Controller
                 }])
 
                 ->with(['CompanyBlog' => function ($query) {
-                    $query->select('id','title','description','image','department_id','company_id')->get();
+                    $query->select('id','title','description','image','department_id','company_id','created_at')->get();
                 }])
                 ->with(['Company'=>function($query){
                     $query->with(['CompanyImages' => function ($query) {
@@ -514,7 +719,16 @@ class APIController extends Controller
                     $query->select('id', 'image', 'company_id')->get();
                 }])->
                 select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                    ->get();
+                    -> with(['CompanyBlog'=>function($query) {
+                        $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
+                    }])->with(['CompanyService'=>function($query) {
+                        $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                    }])->with(['CompanyReview'=>function($query) {
+                        $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
+                            $query->select('id','name')->get();
+                        }])->get();
+                    }])->
+                    get();
             }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
 
             $blog=CompanyBlog::where('is_main', 1)->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(10)->get();
@@ -591,7 +805,7 @@ class APIController extends Controller
                     }])
 
                     ->with(['CompanyBlog' => function ($query) {
-                        $query->select('id','title','description','image','department_id','company_id')->get();
+                        $query->select('id','title','description','image','department_id','company_id','created_at')->get();
                     }])
                     ->with(['Company'=>function($query){
                         $query->with(['CompanyImages' => function ($query) {
@@ -656,27 +870,36 @@ class APIController extends Controller
                     }])->get();
                 }])->get();
 
-            $ad = Advertisement::where('country_id', $cId)->where('city_id', $id)
-                ->with(['Company' => function ($query) {
-                    $query->where('is_active', 1)->with(['CompanyImages' => function ($query) {
-                        $query->select('id', 'image', 'company_id')->get();
+            $ad = Advertisement::where('country_id', $cId)->where('city_id', $id)->
+            with(['Company' => function ($query) {
+                $query->where('is_active', 1)->with(['CompanyImages' => function ($query) {
+                    $query->select('id', 'image', 'company_id')->get();
+                }])->
+                select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
+                    -> with(['CompanyBlog'=>function($query) {
+                        $query->select('id','title','description','image','company_id','created_at')->orderByDesc('created_at')->take(5)->get();
+                    }])->with(['CompanyService'=>function($query) {
+                        $query->select('id','price','title','company_id')->orderByDesc('created_at')->get();
+                    }])->with(['CompanyReview'=>function($query) {
+                        $query->select('id','number','title','user_id','company_id')->orderByDesc('created_at')->with(['User' => function ($query) {
+                            $query->select('id','name')->get();
+                        }])->get();
                     }])->
-                    select('id', 'name', 'email', 'phone', 'address', 'image', 'evaluation', 'products', 'services', 'latitude', 'longitude', 'facebook', 'instagram', 'telegram', 'whatsapp', 'department_id')
-                        ->get();
-                }])->orderByDesc('created_at')
-                ->get(['image', 'company_id', 'created_at']);
+                    get();
+            }])->orderByDesc('created_at')->get(['image', 'company_id', 'created_at']);
 
         }
+        $names= HomeTitle::all();
         $res = Collect(["dep" => $dep]);
         $res = $res->merge(["ad" => $ad]);
         $res = $res->merge(["company_most_viewed" => $company1]);
         $res = $res->merge(["company_new" => $company2]);
         $res = $res->merge(["blogs" => $blog]);
+        $res = $res->merge(["names" => $names]);
 
         return $res->all();
 
     }
-
 
     protected function Dephome($cId,$id){
         if ($id == 'allcities'){
@@ -748,7 +971,7 @@ class APIController extends Controller
                 }])
 
                 ->with(['CompanyBlog' => function ($query) {
-                    $query->select('id','title','description','image','department_id','company_id')->get();
+                    $query->select('id','title','description','image','department_id','company_id','created_at')->get();
                 }])
                 ->with(['Company'=>function($query){
                     $query->with(['CompanyImages' => function ($query) {
@@ -853,7 +1076,7 @@ class APIController extends Controller
                 }])
 
                 ->with(['CompanyBlog' => function ($query) {
-                    $query->select('id','title','description','image','department_id','company_id')->get();
+                    $query->select('id','title','description','image','department_id','company_id','created_at')->get();
                 }])
                 ->with(['Company'=>function($query){
                     $query->with(['CompanyImages' => function ($query) {
@@ -894,6 +1117,7 @@ class APIController extends Controller
         return $res->all();
 
     }
+
     protected function visit(Request $request){
         $request->validate([
             'ip_address'=>'required',
@@ -908,3 +1132,5 @@ class APIController extends Controller
     }
 
 }
+
+
